@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int     @id @default(autoincrement())
+  name       String
+  password   String  @unique
+  management Boolean @default(false)
+
+  @@map("user")
+}
+
+model Driver {
+  id         Int          @id @default(autoincrement())
+  name       String
+  available  Boolean      @default(true)
+  cnh        String       @unique
+  Operations Operations[]
+
+  @@map("driver")
+}
+
+model Car {
+  id          Int           @id @default(autoincrement())
+  model       String
+  plate       String        @unique
+  available   Boolean       @default(true)
+  Maintenance Maintenance[]
+  Operations  Operations[]
+
+  @@map("car")
+}
+
+model Maintenance {
+  id           Int        @id @default(autoincrement())
+  date         DateTime
+  carId        Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  description  String
+  car          Car        @relation(fields: [carId], references: [id], onDelete: Cascade)
+  operationsId Int
+  operations   Operations @relation(fields: [operationsId], references: [id])
+
+  @@map("maintenance")
+}
+
+model Operations {
+  id          Int           @id @default(autoincrement())
+  date        DateTime  
+  driverId    Int
+  driver      Driver        @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  carId       Int
+  car         Car           @relation(fields: [carId], references: [id], onDelete: Cascade)
+  Maintenance Maintenance[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("operations")
+}
