@@ -1,0 +1,13 @@
+body {
+  background-color: #c200fd;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.container {
+  height: 50vh;
+}
+
+form {
+  gap: 10px;
+}/*# sourceMappingURL=login.css.map */
