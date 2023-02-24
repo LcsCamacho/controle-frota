@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { prisma } from "../dao/prismaClient";
+import { prisma } from "../database/prismaClient";
 
-export const listar = async (req: Request, res: Response) => {
+export const listar = (req: Request, res: Response) => {
     prisma.car.findMany().then((carros) => {
         res.json(carros).status(200).end();
     }).catch((err) => {
@@ -9,7 +9,7 @@ export const listar = async (req: Request, res: Response) => {
     });
 };
 
-export const listarUm = async (req: Request, res: Response) => {
+export const listarUm = (req: Request, res: Response) => {
     prisma.car.findUnique({
         where: {
             id: Number(req.params.id),
@@ -21,7 +21,19 @@ export const listarUm = async (req: Request, res: Response) => {
     });
 };
 
-export const inserir = async (req: Request, res: Response) => {
+export const buscarDisponivel = (req: Request, res: Response) => {
+    prisma.car.findMany({
+        where: {
+            available: true,
+        },
+    }).then((carros) => {
+        res.json(carros).status(200).end();
+    }).catch((err) => {
+        res.status(404).end();
+    });
+};
+
+export const inserir = (req: Request, res: Response) => {
     prisma.car.create({
         data: {
             model: req.body.model,
@@ -35,7 +47,7 @@ export const inserir = async (req: Request, res: Response) => {
     });
 }
 
-export const alterar = async (req: Request, res: Response) => {
+export const alterar = (req: Request, res: Response) => {
     prisma.car.update({
         where: {
             id: Number(req.params.id),
@@ -52,7 +64,23 @@ export const alterar = async (req: Request, res: Response) => {
     });
 }
 
-export const deletar = async (req: Request, res: Response) => {
+const alterarDisponibilidade = (req: Request, res: Response) => {
+    prisma.car.update({
+        where: {
+            id: Number(req.params.id),
+        },
+        data: {
+            available: req.body.avaliable,
+        },
+    }).then((carro) => {
+        res.json(carro).status(201).end();
+    }).catch((err) => {
+        res.status(500).end();
+    });
+}
+
+
+export const deletar = (req: Request, res: Response) => {
     prisma.car.delete({
         where: {
             id: Number(req.params.id),
