@@ -26,17 +26,26 @@ export const listarUm = (req: Request, res: Response) => {
 }
 
 export const inserir = (req: Request, res: Response) => {
-    prisma.maintenance.create({
-        data: {
-            date: req.body.date,
-            carId: req.body.carId,
-            description: req.body.description,
-            createdAt: req.body.createdAt,
-            updatedAt: req.body.updatedAt,
-            cost: req.body.cost,
-            operationsId: req.body.operationsId
-        }
-    }).then((manutencao) => {
+    prisma.$transaction([
+        prisma.maintenance.create({
+            data: {
+                date: req.body.date,
+                carId: req.body.carId,
+                description: req.body.description,
+                createdAt: req.body.createdAt,
+                updatedAt: req.body.updatedAt,
+                cost: req.body.cost,
+            }
+        }),
+        prisma.car.update({
+            where: {
+                id: req.body.carId
+            },
+            data: {
+                avaliable: false
+            }
+        })
+    ]).then((manutencao) => {
         res.json(manutencao).status(201).end();
     }).catch((err) => {
         res.status(404).end();
@@ -49,7 +58,6 @@ export const alterar = (req: Request, res: Response) => {
             id: Number(req.params.id)
         },
         data: {
-            carId: req.body.carId,
             description: req.body.description,
             updatedAt: req.body.updatedAt,
             cost: req.body.cost,

@@ -13,6 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 //routes
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+});
 app.use(routerUsuario);
 app.use(routerOperacoes);
 app.use(routerMotorista);

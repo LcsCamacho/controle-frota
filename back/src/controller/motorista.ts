@@ -26,7 +26,7 @@ export const inserir = (req: Request, res: Response) => {
         data: {
             name: req.body.name,
             cnh: req.body.cnh,
-            available: req.body.available,
+            avaliable: req.body.avaliable,
         },
     }).then((motorista) => {
         res.json(motorista).status(201).end();
@@ -45,7 +45,7 @@ export const alterar = (req: Request, res: Response) => {
         data: {
             name: req.body.name,
             cnh: req.body.cnh,
-            available: req.body.available,
+            avaliable: req.body.avaliable,
         },
     }).then((motorista) => {
         res.json(motorista).status(201).end();
@@ -60,7 +60,7 @@ export const alterarDisponibilidade = (req: Request, res: Response) => {
             id: Number(req.params.id),
         },
         data: {
-            available: req.body.available,
+            avaliable: req.body.avaliable,
         },
     }).then((motorista) => {
         res.json(motorista).status(201).end();

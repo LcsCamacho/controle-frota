@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id         Int     @id @default(autoincrement())
-  name       String
+  name       String  @unique
   password   String  @unique
   management Boolean @default(false)
 
@@ -22,7 +22,7 @@ model User {
 model Driver {
   id         Int          @id @default(autoincrement())
   name       String
-  available  Boolean      @default(true)
+  avaliable  Boolean      @default(true)
   cnh        String       @unique
   Operations Operations[]
 
@@ -33,7 +33,7 @@ model Car {
   id          Int           @id @default(autoincrement())
   model       String
   plate       String        @unique
-  available   Boolean       @default(true)
+  avaliable   Boolean       @default(true)
   Maintenance Maintenance[]
   Operations  Operations[]
 
@@ -41,30 +41,27 @@ model Car {
 }
 
 model Maintenance {
-  id           Int        @id @default(autoincrement())
-  date         DateTime
-  cost         Float
-  carId        Int
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  description  String
-  car          Car        @relation(fields: [carId], references: [id], onDelete: Cascade)
-  operationsId Int
-  operations   Operations @relation(fields: [operationsId], references: [id])
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  cost        Float
+  carId       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String
+  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
 
   @@map("maintenance")
 }
 
 model Operations {
-  id          Int           @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   date        DateTime
   driverId    Int
-  driver      Driver        @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  driver      Driver   @relation(fields: [driverId], references: [id], onDelete: Cascade)
   carId       Int
-  car         Car           @relation(fields: [carId], references: [id], onDelete: Cascade)
-  Maintenance Maintenance[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   description String
 
   @@map("operations")

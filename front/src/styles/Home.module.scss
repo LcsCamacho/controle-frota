@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+  gap: 2rem;
+  background-image: linear-gradient(to bottom, #0b2e00, #00420ecc, #005212, #01861e, #01a121 100%);
+}

@@ -24,21 +24,33 @@ export const listarUm = (req: Request, res: Response) => {
 export const buscarDisponivel = (req: Request, res: Response) => {
     prisma.car.findMany({
         where: {
-            available: true,
+            avaliable: true,
         },
     }).then((carros) => {
         res.json(carros).status(200).end();
     }).catch((err) => {
-        res.status(404).end();
+        res.send(err).status(404).end();
     });
 };
+
+export const buscarIndisponivel = (req: Request, res: Response) => {
+    prisma.car.findMany({
+        where: {
+            avaliable: false,
+        },
+    }).then((carros) => {
+        res.json(carros).status(200).end();
+    }).catch((err) => {
+        res.send(err).status(404).end();
+    });
+}
 
 export const inserir = (req: Request, res: Response) => {
     prisma.car.create({
         data: {
             model: req.body.model,
             plate: req.body.plate,
-            available: req.body.avaliable,
+            avaliable: req.body.avaliable,
         },
     }).then((carro) => {
         res.json(carro).status(201).end();
@@ -55,7 +67,7 @@ export const alterar = (req: Request, res: Response) => {
         data: {
             model: req.body.model,
             plate: req.body.plate,
-            available: req.body.avaliable,
+            avaliable: req.body.avaliable,
         },
     }).then((carro) => {
         res.json(carro).status(201).end();
@@ -64,13 +76,13 @@ export const alterar = (req: Request, res: Response) => {
     });
 }
 
-const alterarDisponibilidade = (req: Request, res: Response) => {
+export const alterarDisponibilidade = (req: Request, res: Response) => {
     prisma.car.update({
         where: {
             id: Number(req.params.id),
         },
         data: {
-            available: req.body.avaliable,
+            avaliable: req.body.avaliable,
         },
     }).then((carro) => {
         res.json(carro).status(201).end();

@@ -1,6 +1,28 @@
 import { Request, Response } from "express";
 import { prisma } from "../database/prismaClient";
 
+export const login = (req: Request, res: Response) => {
+
+    prisma.user.findFirst({
+        where: {
+            name: req.body.name,
+        },
+    }).then((usuario) => {
+        if (usuario) {
+            if (usuario.password === req.body.password) {
+                res.json(usuario).status(200).end();
+            } else {
+                res.status(401).end();
+            }
+        } else {
+            res.status(401).end();
+        }
+    }).catch((err) => {
+        res.status(404).end();
+    });
+
+}
+
 export const listar = (req: Request, res: Response) => {
     prisma.user.findMany().then((usuarios) => {
         res.json(usuarios).status(200).end();
@@ -10,9 +32,9 @@ export const listar = (req: Request, res: Response) => {
 };
 
 export const listarUm = (req: Request, res: Response) => {
-    prisma.user.findUnique({
+    prisma.user.findFirst({
         where: {
-            id: Number(req.params.id),
+            name : String(req.params.username)
         },
     }).then((usuario) => {
         res.json(usuario).status(201).end();
@@ -31,7 +53,7 @@ export const inserir = (req: Request, res: Response) => {
     }).then((usuario) => {
         res.json(usuario).status(201).end();
     }).catch((err) => {
-        res.status(500).end();
+        res.status(404).end();
     });
 }
 
