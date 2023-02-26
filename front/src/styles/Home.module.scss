@@ -5,5 +5,17 @@
   padding: 6rem;
   min-height: 100vh;
   gap: 2rem;
-  background-image: linear-gradient(to bottom, #0b2e00, #00420ecc, #005212, #01861e, #01a121 100%);
+  background-image: linear-gradient(37deg, #0b2e00, #00420ecc, #005212, #01861e, #01a121 100%);
+}
+
+@media(max-width:500px) {
+  .main {
+    padding: 5rem;
+  }
+}
+
+@media (max-width:400px) {
+  .main {
+    padding: 4rem;
+  }
 }

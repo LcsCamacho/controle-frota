@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react';
-import styles from './dashboard.module.scss';
-import ListarCarro from 'components/listar-carros';
 import InserirCarro from 'components/inserir-carro';
+import ListarCarro from 'components/listar-carros';
+import ListarIndisponiveis from 'components/listar-carros-indisponiveis';
 import ListarDisponiveis from './../listar-carros-disponiveis/index';
+import styles from './dashboard.module.scss';
+import { useState } from 'react';
 
-type Car = {
-    id: Number,
-    model: String,
-    plate: String,
-    avaliable: Boolean,
-}
+
 
 export default function DashboardCar() {
     const [listarCarro, setListarCarro] = useState(false);
@@ -22,16 +18,15 @@ export default function DashboardCar() {
             <div className={styles.dashboardCarContainer}>
                 <div className={styles.dashboardCarContent}>
                     <nav>
-                        <h1 onClick={()=> setListarCarro(!listarCarro)}>Listar Todos Carros</h1>
-                        <h1 onClick={()=> setListarCarroDisp(!listarCarroDisp)}>Listar Disponíveis</h1>
-                        <h1 onClick={()=> setListarCarroIndisp(!listarCarroIndisp)}>Listar Indisponíveis</h1>
-                        <h1 onClick={()=> setInserirCarro(!inserirCarro)}>Adicionar Carro</h1>
+                        <h1 onClick={() => setListarCarro(!listarCarro)}>Listar Todos Carros</h1>
+                        <h1 onClick={() => setListarCarroDisp(!listarCarroDisp)}>Listar Disponíveis</h1>
+                        <h1 onClick={() => setListarCarroIndisp(!listarCarroIndisp)}>Listar Indisponíveis</h1>
+                        <h1 onClick={() => setInserirCarro(!inserirCarro)}>Adicionar Carro</h1>
                     </nav>
                     {inserirCarro && < InserirCarro />}
                     {listarCarroDisp && <ListarDisponiveis />}
                     {listarCarro && <ListarCarro />}
-                    {listarCarroIndisp && <span>Carro Indisp</span>}
-
+                    {listarCarroIndisp && <ListarIndisponiveis />}
                 </div>
             </div>
         </>

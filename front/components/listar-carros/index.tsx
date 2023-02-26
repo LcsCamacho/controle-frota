@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import styles from './style.module.scss';
+import { useEffect, useState } from 'react';
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
+import styles from './style.module.scss';
 
 type Car = {
     id: Number,
@@ -11,7 +11,7 @@ type Car = {
 }
 
 export default function ListarCarro() {
-    const user = useSelector((state: any) => state.user);
+    const { user } = useSelector((state: any) => state.user);
 
     const [carList, setCarList] = useState<Car[]>([]);
 
@@ -38,13 +38,13 @@ export default function ListarCarro() {
                                 <h2>Id:{String(car.id)}</h2>
                                 <h2>{car.model}</h2>
                                 <h2>{car.plate}</h2>
-                                <h2>{car.avaliable ? <FcApproval/> : <FcCancel/>}</h2>
+                                <h2>{car.avaliable ? <FcApproval /> : <FcCancel />}</h2>
 
                                 {user.management && (
                                     <div className={styles.carItemButtons}>
-                                    <button>Editar</button>
-                                    <button>Excluir</button>
-                                </div>
+                                        <button>Editar</button>
+                                        <button>Excluir</button>
+                                    </div>
                                 )}
                             </div>
                         ))}
