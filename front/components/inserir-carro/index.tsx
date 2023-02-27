@@ -1,6 +1,10 @@
+import { openDashboardReducerCar } from 'features/redux/car-slice';
+import { useDispatch } from 'react-redux';
 import styles from './style.module.scss';
 
+
 export default function InserirCarro() {
+    const dispatch = useDispatch();
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -16,13 +20,16 @@ export default function InserirCarro() {
                 plate
             })
         });
+
         let status = response.status === 200 ? true : false;
+
         alert(
-            status ? 
-            'Carro inserido com sucesso' : 
-            'Erro ao inserir carro'
+            status ?
+                'Carro inserido com sucesso' :
+                'Erro ao inserir carro'
         );
-        if(status) {
+        if (status) {
+            dispatch(openDashboardReducerCar())
             event.target.model.value = '';
             event.target.plate.value = '';
         }

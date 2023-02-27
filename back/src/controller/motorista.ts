@@ -21,6 +21,29 @@ export const listarUm = (req: Request, res: Response) => {
     });
 };
 
+export const listarDisponiveis = (req: Request, res: Response) => {
+    prisma.driver.findMany({
+        where: {
+            avaliable: true,
+        },
+    }).then((motoristas) => {
+        res.json(motoristas).status(200).end();
+    }).catch((err) => {
+        res.status(404).end();
+    });
+}
+
+export const ListarIndisponiveis = (req: Request, res: Response) => {
+    prisma.driver.findMany({
+        where: {
+            avaliable: false,
+        },
+    }).then((motoristas) => {
+        res.json(motoristas).status(200).end();
+    }).catch((err) => {
+        res.status(404).end();
+    });
+}
 export const inserir = (req: Request, res: Response) => {
     prisma.driver.create({
         data: {

@@ -2,13 +2,7 @@ import { useEffect, useState } from 'react';
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import styles from './style.module.scss';
-
-type Car = {
-    id: Number,
-    model: String,
-    plate: String,
-    avaliable: Boolean,
-}
+import { Car } from 'types';
 
 export default function ListarCarro() {
     const { user } = useSelector((state: any) => state.user);

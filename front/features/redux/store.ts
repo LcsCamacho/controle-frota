@@ -3,6 +3,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 import { storage } from './storage';
 import { carReducer } from "./car-slice";
 import { userReducer } from "./user-slice";
+import { driverReducer } from "./driver-slice";
 
 const persistConfig = {
     key: 'root',
@@ -12,7 +13,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     car: carReducer,
-    user: userReducer
+    user: userReducer,
+    driver: driverReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

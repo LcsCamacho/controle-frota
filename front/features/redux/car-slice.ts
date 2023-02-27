@@ -12,7 +12,7 @@ export const carSlice = createSlice({
     name: 'car',
     initialState,
     reducers: {
-        openDashboardReducer: (state) => {
+        openDashboardReducerCar: (state) => {
            state.open = !state.open
         },
 
@@ -20,5 +20,5 @@ export const carSlice = createSlice({
 
 })
 
-export const { openDashboardReducer } = carSlice.actions
+export const { openDashboardReducerCar } = carSlice.actions
 export const carReducer = carSlice.reducer
