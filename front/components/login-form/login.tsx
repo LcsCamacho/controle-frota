@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './login.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
@@ -6,6 +6,7 @@ import logo from '/public/logo.jpg';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { setUserReducer } from 'features/redux/user-slice';
+import { CadastroForm } from './../cad-form/cadastro';
 
 
 type usuario = {
@@ -17,6 +18,7 @@ type usuario = {
 export function LoginForm() {
     const router = useRouter();
     const dispatch = useDispatch();
+    const [cadastroUsuario, setCadastroUsuario] = useState(false)
 
 
     const setUser = async (username:string) => {
@@ -75,6 +77,8 @@ export function LoginForm() {
                 {errors.password && errors.password.type === "minLength" && <i>A senha deve ter no mínimo 6 caracteres</i>}
                 <button type="submit">Entrar</button>
             </form>
+            <button onClick={() => setCadastroUsuario(!cadastroUsuario)}>Registrar usuario</button>
+            {cadastroUsuario && <CadastroForm modal={cadastroUsuario} onRequestClose={() => setCadastroUsuario(false)} />}
         </div>
     );
 }

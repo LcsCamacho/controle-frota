@@ -53,6 +53,7 @@ export const inserir = (req: Request, res: Response) => {
     }).then((usuario) => {
         res.json(usuario).status(201).end();
     }).catch((err) => {
+        console.log(err)
         res.status(404).end();
     });
 }
