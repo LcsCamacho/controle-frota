@@ -10,11 +10,12 @@ export interface reduxUsuario {
     }
 }
 
-export type Car = {
+export type Vehicle = {
     id: Number,
     model: String,
     plate: String,
     avaliable: Boolean,
+    type: String,
 }
 
 export type Driver = {

@@ -2,46 +2,41 @@ import { useState, useEffect } from 'react';
 import styles from './style.module.scss';
 import { FcApproval } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
+import { Vehicle } from 'types';
 
-type Car = {
-    id: Number,
-    model: String,
-    plate: String,
-    avaliable: Boolean,
-}
 
 export default function ListarDisponiveis() {
     const {user} = useSelector((state: any) => state.user);
 
-    const [carList, setCarList] = useState<Car[]>([]);
+    const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
 
-    const listarCarros = async () => {
-        const response = await fetch('http://localhost:3000/car-disp',
+    const listarVeiculos = async () => {
+        const response = await fetch('http://localhost:3000/veiculo-disp',
             { cache: 'default' });
         const data = await response.json();
-        setCarList(data);
+        setVehicleList(data);
     }
 
     useEffect(() => {
-        listarCarros();
+        listarVeiculos();
     }, []);
 
     return (
         <>
-            <div className={styles.listCarContainer}>
-                <div className={styles.listCarContent}>
-                    <h1>Lista de Carros</h1>
-                    <h2>Quantidade: {carList.length}</h2>
+            <div className={styles.listVehicleContainer}>
+                <div className={styles.listVehicleContent}>
+                    <h1>Lista de Veiculos</h1>
+                    <h2>Quantidade: {vehicleList.length}</h2>
                     <div className={styles.carList}>
-                        {carList.map((car: Car, index: any) => (
+                        {vehicleList.map((vehicle: Vehicle, index: any) => (
                             <div className={styles.carItem} key={index}>
-                                <h2>Id:{String(car.id)}</h2>
-                                <h2>{car.model}</h2>
-                                <h2>{car.plate}</h2>
+                                <h2>Id:{String(vehicle.id)}</h2>
+                                <h2>{vehicle.model}</h2>
+                                <h2>{vehicle.plate}</h2>
                                 <h2><FcApproval/></h2>
 
                                 {user.management && (
-                                    <div className={styles.carItemButtons}>
+                                    <div className={styles.vehicleItemButtons}>
                                     <button>Editar</button>
                                     <button>Excluir</button>
                                 </div>

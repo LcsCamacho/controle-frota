@@ -1,5 +1,3 @@
-
-
 -- CreateTable
 CREATE TABLE `user` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -7,7 +5,7 @@ CREATE TABLE `user` (
     `password` VARCHAR(191) NOT NULL,
     `management` BOOLEAN NOT NULL DEFAULT false,
 
-    UNIQUE INDEX `user_password_key`(`password`),
+    UNIQUE INDEX `user_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -15,7 +13,7 @@ CREATE TABLE `user` (
 CREATE TABLE `driver` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `available` BOOLEAN NOT NULL DEFAULT true,
+    `avaliable` BOOLEAN NOT NULL DEFAULT true,
     `cnh` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `driver_cnh_key`(`cnh`),
@@ -27,7 +25,8 @@ CREATE TABLE `car` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `model` VARCHAR(191) NOT NULL,
     `plate` VARCHAR(191) NOT NULL,
-    `available` BOOLEAN NOT NULL DEFAULT true,
+    `avaliable` BOOLEAN NOT NULL DEFAULT true,
+    `type` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `car_plate_key`(`plate`),
     PRIMARY KEY (`id`)
@@ -42,7 +41,6 @@ CREATE TABLE `maintenance` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `description` VARCHAR(191) NOT NULL,
-    `operationsId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -62,9 +60,6 @@ CREATE TABLE `operations` (
 
 -- AddForeignKey
 ALTER TABLE `maintenance` ADD CONSTRAINT `maintenance_carId_fkey` FOREIGN KEY (`carId`) REFERENCES `car`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `maintenance` ADD CONSTRAINT `maintenance_operationsId_fkey` FOREIGN KEY (`operationsId`) REFERENCES `operations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `operations` ADD CONSTRAINT `operations_driverId_fkey` FOREIGN KEY (`driverId`) REFERENCES `driver`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

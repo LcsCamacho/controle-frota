@@ -1,4 +1,4 @@
-export class Frota {
+export class Veiculo {
     private id: number
     private model: string
     private plate: string

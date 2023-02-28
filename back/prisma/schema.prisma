@@ -13,7 +13,7 @@ datasource db {
 model User {
   id         Int     @id @default(autoincrement())
   name       String  @unique
-  password   String  
+  password   String
   management Boolean @default(false)
 
   @@map("user")
@@ -21,7 +21,7 @@ model User {
 
 model Driver {
   id         Int          @id @default(autoincrement())
-  name       String       
+  name       String
   avaliable  Boolean      @default(true)
   cnh        String       @unique
   Operations Operations[]
@@ -29,26 +29,27 @@ model Driver {
   @@map("driver")
 }
 
-model Car {
+model Vehicle {
   id          Int           @id @default(autoincrement())
   model       String
   plate       String        @unique
   avaliable   Boolean       @default(true)
+  type        String
   Maintenance Maintenance[]
   Operations  Operations[]
 
-  @@map("car")
+  @@map("vehicle")
 }
 
 model Maintenance {
   id          Int      @id @default(autoincrement())
   date        DateTime
   cost        Float
-  carId       Int
+  VehicleId   Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   description String
-  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  Vehicle     Vehicle  @relation(fields: [VehicleId], references: [id], onDelete: Cascade)
 
   @@map("maintenance")
 }
@@ -58,8 +59,8 @@ model Operations {
   date        DateTime
   driverId    Int
   driver      Driver   @relation(fields: [driverId], references: [id], onDelete: Cascade)
-  carId       Int
-  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  VehicleId   Int
+  Vehicle     Vehicle  @relation(fields: [VehicleId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   description String
