@@ -27,9 +27,9 @@ export default function ListarDisponiveis() {
                 <div className={styles.listVehicleContent}>
                     <h1>Lista de Veiculos</h1>
                     <h2>Quantidade: {vehicleList.length}</h2>
-                    <div className={styles.carList}>
+                    <div className={styles.vehicleList}>
                         {vehicleList.map((vehicle: Vehicle, index: any) => (
-                            <div className={styles.carItem} key={index}>
+                            <div className={styles.vehicleItem} key={index}>
                                 <h2>Id:{String(vehicle.id)}</h2>
                                 <h2>{vehicle.model}</h2>
                                 <h2>{vehicle.plate}</h2>

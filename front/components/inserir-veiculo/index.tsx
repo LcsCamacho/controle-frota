@@ -14,7 +14,7 @@ export default function InserirCarro() {
         const model = event.target.model.value;
         const plate = event.target.plate.value;
         
-        const response = await fetch('http://localhost:3000/carro', {
+        const response = await fetch('http://localhost:3000/veiculo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

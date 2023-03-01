@@ -1,18 +1,41 @@
 import { Request, Response } from "express";
 import { prisma } from "../database/prismaClient";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
-export const login = (req: Request, res: Response) => {
 
-    prisma.user.findFirst({
+export const login = async (req: Request, res: Response) => {
+    // let usuario = await prisma.user.findUnique({
+    //     where: {
+    //         name: req.body.name,
+    //     },
+    // });
+    // if (usuario) {
+    //     console.log(usuario)
+    // }
+
+    prisma.user.findUnique({
         where: {
             name: req.body.name,
         },
     }).then((usuario) => {
         if (usuario) {
             if (usuario.password === req.body.password) {
-                res.json(usuario).status(200).end();
+                let data = {    
+                    id: usuario.id,
+                    name: usuario.name,
+                    management: usuario.management,
+                    token: ''
+                };
+                // const token = jwt.sign(data,
+                //     process.env.JWT_PRIVATE_KEY ?? '',
+                //     { expiresIn: '1h' });
+                // if (!token) return res.status(401).send('Access denied. No token provided.');
+                // data.token = token;
+                res.json(data).status(200).end();
             } else {
-                res.status(401).end();
+                res.json("Error: Usuario ou senha inválidos ").status(401).end();
             }
         } else {
             res.status(401).end();
@@ -34,7 +57,7 @@ export const listar = (req: Request, res: Response) => {
 export const listarUm = (req: Request, res: Response) => {
     prisma.user.findFirst({
         where: {
-            name : String(req.params.username)
+            name: String(req.params.username)
         },
     }).then((usuario) => {
         res.json(usuario).status(201).end();

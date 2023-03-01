@@ -3,8 +3,10 @@ import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import styles from './style.module.scss';
 import { Vehicle } from 'types';
+import { useRemoveVehicle } from 'hooks/UseRemoveVehicle';
 
 export default function ListarCarro() {
+    const { removeVehicle } = useRemoveVehicle();
     const { user } = useSelector((state: any) => state.user);
 
     const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
@@ -38,7 +40,7 @@ export default function ListarCarro() {
                                 {user.management && (
                                     <div className={styles.vehicleItemButtons}>
                                         <button>Editar</button>
-                                        <button>Excluir</button>
+                                        <button onClick={() => removeVehicle(String(vehicle.id))}>Excluir</button>
                                     </div>
                                 )}
                             </div>

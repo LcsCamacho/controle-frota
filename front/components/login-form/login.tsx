@@ -7,13 +7,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { setUserReducer } from 'features/redux/user-slice';
 import { CadastroForm } from './../cad-form/cadastro';
-
-
-type usuario = {
-    name: string;
-    password: string;
-    management?: boolean;
-}
+import { usuario } from 'types';
 
 export function LoginForm() {
     const router = useRouter();
@@ -51,7 +45,7 @@ export function LoginForm() {
             .then(async (res) => {
                 res.status === 200 ?
                 setUser(data.name) :
-                alert('Usuario ou senha inválido')
+                alert('Usuario ou senha inválido. Status: ' + res.status)
             })
             .catch(err => console.log(err))
     };

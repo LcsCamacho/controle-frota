@@ -12,8 +12,9 @@ export default function HeaderUser() {
     const router = useRouter();
 
     const logout = () => {
-        dispatch(logOffReducer());
         router.push('/');
+        dispatch(logOffReducer());
+
     }
 
     return (

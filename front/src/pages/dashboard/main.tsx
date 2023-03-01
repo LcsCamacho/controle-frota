@@ -4,6 +4,15 @@ import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
 import DashboardVeiculos from 'components/dashboard-veiculos/dashboard';
 import DashboardMotorista from 'components/dashboard-motorista/dashboard';
+import { GetServerSideProps } from 'next';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+    return {
+        props: {
+        },
+    }
+}
 
 export default function Dashboard() {
     const dashboardVeiculos = useSelector((state: any) => state.vehicle.open);
