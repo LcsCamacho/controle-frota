@@ -4,6 +4,13 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
+type token = {
+    id: number,
+    name: string,
+    management: boolean,
+    token?: string
+}
+
 
 export const login = async (req: Request, res: Response) => {
     // let usuario = await prisma.user.findUnique({
@@ -22,18 +29,27 @@ export const login = async (req: Request, res: Response) => {
     }).then((usuario) => {
         if (usuario) {
             if (usuario.password === req.body.password) {
-                let data = {    
+                let data:token = {    
                     id: usuario.id,
                     name: usuario.name,
                     management: usuario.management,
                     token: ''
                 };
+
+                jwt.sign(data, "secret", { expiresIn: '1m' },function(err, token) {
+                    if(err == null) {
+                        data.token = token;
+                        res.status(200).json(data).end();
+                    }else {
+                        res.status(404).json(err).end();
+                    }
+                });
                 // const token = jwt.sign(data,
                 //     process.env.JWT_PRIVATE_KEY ?? '',
                 //     { expiresIn: '1h' });
                 // if (!token) return res.status(401).send('Access denied. No token provided.');
                 // data.token = token;
-                res.json(data).status(200).end();
+                //res.json(data).status(200).end();
             } else {
                 res.json("Error: Usuario ou senha inválidos ").status(401).end();
             }
