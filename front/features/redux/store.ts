@@ -4,6 +4,7 @@ import { storage } from './storage';
 import { vehicleReducer } from "./vehicle-slice";
 import { userReducer } from "./user-slice";
 import { driverReducer } from "./driver-slice";
+import { MaintenanceReducer } from "./maintence";
 
 const persistConfig = {
     key: 'root',
@@ -14,7 +15,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     vehicle: vehicleReducer,
     user: userReducer,
-    driver: driverReducer
+    driver: driverReducer,
+    maintenance: MaintenanceReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

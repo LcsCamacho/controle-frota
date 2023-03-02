@@ -1,5 +1,6 @@
 import express from 'express'
 import { listar, inserir, alterar, deletar, login, listarUm} from '../controller/usuario'
+import { auth } from '../middlewares/middlewares'
 
 export const routerUsuario = express.Router()
 

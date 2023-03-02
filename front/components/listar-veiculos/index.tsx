@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import styles from './style.module.scss';
 import { Vehicle } from 'types';
 import { useRemoveVehicle } from 'hooks/UseRemoveVehicle';
+import { useListVehicle } from 'hooks/UseListVehicle';
 
 export default function ListarCarro() {
     const { removeVehicle } = useRemoveVehicle();
@@ -11,16 +12,12 @@ export default function ListarCarro() {
 
     const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
 
-    const listarVeiculos = async () => {
-        const response = await fetch('http://localhost:3000/veiculo',
-            { cache: 'default' });
-        const data = await response.json();
-        setVehicleList(data);
-    }
 
     useEffect(() => {
-        listarVeiculos();
+        useListVehicle()
+        .then(({vehicles}) => setVehicleList(vehicles));
     }, []);
+
 
     return (
         <>

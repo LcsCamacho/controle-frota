@@ -1,5 +1,6 @@
 import express from 'express'
 import { listar, listarDisponiveis, ListarIndisponiveis, listarUm, inserir, alterar, deletar } from '../controller/motorista'
+import { auth } from '../middlewares/middlewares'
 
 export const routerMotorista = express.Router()
 

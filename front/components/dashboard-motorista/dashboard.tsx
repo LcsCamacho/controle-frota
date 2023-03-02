@@ -98,7 +98,7 @@ export default function DashboardMotorista() {
                                             position: 'bottom',
                                             alignment: 'center',
                                             textStyle: {
-                                                color: '233238',
+                                                color: '#233238',
                                                 fontSize: 14
                                             }
                                         }

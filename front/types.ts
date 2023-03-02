@@ -1,7 +1,9 @@
 export type usuario = {
+    id: Number;
     name: string;
     password: string;
     management?: boolean;
+    token?: string;
 }
 
 export interface reduxUsuario {
@@ -11,7 +13,7 @@ export interface reduxUsuario {
 }
 
 export type Vehicle = {
-    id: Number,
+    id?: Number,
     model: String,
     plate: String,
     avaliable: Boolean,
@@ -19,8 +21,19 @@ export type Vehicle = {
 }
 
 export type Driver = {
-    id: Number,
+    id?: Number,
     name: String,
+    cnh: String,
     avaliable: Boolean,
+}
+
+export interface Maintenance {
+    id?: Number,
+    date: String,
+    description: String,
+    vehicleId: Number,
+    cost: Number,
+    createdAt?: String,
+    updatedAt?: String,
 }
 

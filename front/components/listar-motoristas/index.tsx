@@ -9,16 +9,11 @@ export default function ListarMotoristas() {
     const { user } = useSelector((state: any) => state.user);
     const [driverList, setDriverList] = useState<Driver[]>([]);
 
-    const listarDrivers = async () => {
-        const response = await fetch('http://localhost:3000/motorista',
-            { cache: 'default' });
-        const data = await response.json();
-        setDriverList(data);
-    }
+    let {drivers} = useSelector((state:any) => state.driver)
 
     useEffect(() => {
-        listarDrivers();
-    }, []);
+        console.log(drivers)
+    }, [drivers])
 
     return (
         <>

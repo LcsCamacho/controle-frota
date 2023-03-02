@@ -6,7 +6,7 @@ export const listar = (req: Request, res: Response) => {
         res.json(manutencoes).status(200).end();
     }
     ).catch((err) => {
-        res.status(404).end();
+        res.send(err).status(404).end();
     });
 
 };
@@ -29,17 +29,15 @@ export const inserir = (req: Request, res: Response) => {
     prisma.$transaction([
         prisma.maintenance.create({
             data: {
-                date: req.body.date,
-                carId: req.body.carId,
+                date: new Date(req.body.date),
+                VehicleId: req.body.vehicleId,
                 description: req.body.description,
-                createdAt: req.body.createdAt,
-                updatedAt: req.body.updatedAt,
                 cost: req.body.cost,
             }
         }),
-        prisma.car.update({
+        prisma.vehicle.update({
             where: {
-                id: req.body.carId
+                id: req.body.vehicleId
             },
             data: {
                 avaliable: false
@@ -48,7 +46,8 @@ export const inserir = (req: Request, res: Response) => {
     ]).then((manutencao) => {
         res.json(manutencao).status(201).end();
     }).catch((err) => {
-        res.status(404).end();
+        console.log(err)
+        res.json(err).status(404).end();
     });
 }
 

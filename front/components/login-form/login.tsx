@@ -15,11 +15,16 @@ export function LoginForm() {
     const [cadastroUsuario, setCadastroUsuario] = useState(false)
 
 
-    const setUser = async (username:string) => {
-        let userFetch = await fetch('http://localhost:3000/usuario/' + username)
+    const setUser = async ({token, name}:usuario) => {
+        let userFetch = await fetch('http://localhost:3000/usuario/' + name)
         let user:usuario = await userFetch.json()
-        console.log(user)
-        dispatch(setUserReducer(user))
+        let newUser = {
+            id: user.id,
+            name: user.name,
+            management:user.management,
+            token: token
+        }
+        dispatch(setUserReducer(newUser))
         router.push('/dashboard/main')
     }
 
@@ -43,9 +48,7 @@ export function LoginForm() {
             body: JSON.stringify(data)
         })
             .then(async (res) => {
-                res.status === 200 ?
-                setUser(data.name) :
-                alert('Usuario ou senha inválido. Status: ' + res.status)
+                res.status === 200 ? await setUser(await res.json()) : console.log('Falha no login')
             })
             .catch(err => console.log(err))
     };

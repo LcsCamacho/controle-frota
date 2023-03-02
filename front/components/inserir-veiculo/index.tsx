@@ -2,43 +2,25 @@ import { openDashboardReducerVehicle } from 'features/redux/vehicle-slice';
 import { useDispatch } from 'react-redux';
 import styles from './style.module.scss';
 import { useState } from 'react';
+import { useAddVehicle } from 'hooks/UseAddVehicle';
+import { Vehicle } from 'types';
 
 
 export default function InserirCarro() {
     const dispatch = useDispatch();
-    const [type, setType] = useState('Passeio');
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        const model = event.target.model.value;
-        const plate = event.target.plate.value;
-        
-        const response = await fetch('http://localhost:3000/veiculo', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model,
-                plate,
-                type
-            })
-        });
-
-        let status = response.status === 200 ? true : false;
-
-        alert(
-            status ?
-                'Carro inserido com sucesso' :
-                'Erro ao inserir veículo'
-        );
-        if (status) {
-            dispatch(openDashboardReducerVehicle())
-            event.target.model.value = '';
-            event.target.plate.value = '';
+        let data:Vehicle = {
+            model: event.target.model.value,
+            plate: event.target.plate.value,
+            type: event.target.type.value,
+            avaliable: true
         }
-
+        
+        useAddVehicle(data)
+        dispatch(openDashboardReducerVehicle())
     }
 
     return (
@@ -51,7 +33,7 @@ export default function InserirCarro() {
                     <label htmlFor="plate">Placa</label>
                     <input type="text" placeholder='Insira a Placa' name="plate" id="plate" />
                     <label htmlFor="type">Tipo:</label>
-                    <select onChange={(e)=> {setType(e.target.selectedOptions[0].value)}} name="type" id="type">
+                    <select  name="type" id="type">
                         <option value="Passeio">Passeio</option>
                         <option value="Carga">Carga</option>
                     </select>

@@ -1,11 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { Driver } from "types"
+import { useAddDriver } from "hooks/UseAddDriver"
+import { useListDriver } from "hooks/UseListDriver"
 
 interface driverSlice {
-    open:boolean
+    open: boolean,
+    drivers: Driver[]
 }
 
-const initialState = {
-    open: false
+interface driverPayload {
+    payload: Driver
+}
+
+const initialState:any = {
+    open: false,
+    drivers: useListDriver()
 }
 
 export const driverSlice = createSlice({
@@ -13,12 +22,15 @@ export const driverSlice = createSlice({
     initialState,
     reducers: {
         openDashboardReducerDriver: (state) => {
-           state.open = !state.open
+            state.open = !state.open
         },
-
+        setDrivers: (state, { payload }: driverPayload) => {
+            useAddDriver(payload)
+            state.drivers = [...state.drivers, payload]
+        },
     },
 
 })
 
-export const { openDashboardReducerDriver } = driverSlice.actions
+export const { openDashboardReducerDriver, setDrivers } = driverSlice.actions
 export const driverReducer = driverSlice.reducer

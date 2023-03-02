@@ -13,15 +13,6 @@ type token = {
 
 
 export const login = async (req: Request, res: Response) => {
-    // let usuario = await prisma.user.findUnique({
-    //     where: {
-    //         name: req.body.name,
-    //     },
-    // });
-    // if (usuario) {
-    //     console.log(usuario)
-    // }
-
     prisma.user.findUnique({
         where: {
             name: req.body.name,
@@ -36,20 +27,20 @@ export const login = async (req: Request, res: Response) => {
                     token: ''
                 };
 
-                jwt.sign(data, "secret", { expiresIn: '1m' },function(err, token) {
-                    if(err == null) {
+                if(process.env.JWT_PRIVATE_KEY === undefined) {
+                    console.log('Internal server error.');
+                    return res.status(500).send('Internal server error.');
+                }
+                jwt.sign(data, process.env.JWT_PRIVATE_KEY, { expiresIn: '60m' },(err, token) => {
+                    if(!err) {
                         data.token = token;
+                        process.env.JWT_PRIVATE_KEY = token;
                         res.status(200).json(data).end();
                     }else {
+                        console.log(err);
                         res.status(404).json(err).end();
                     }
                 });
-                // const token = jwt.sign(data,
-                //     process.env.JWT_PRIVATE_KEY ?? '',
-                //     { expiresIn: '1h' });
-                // if (!token) return res.status(401).send('Access denied. No token provided.');
-                // data.token = token;
-                //res.json(data).status(200).end();
             } else {
                 res.json("Error: Usuario ou senha inválidos ").status(401).end();
             }

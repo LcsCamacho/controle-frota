@@ -1,36 +1,22 @@
 import styles from './style.module.scss';
-import { useDispatch } from 'react-redux';
-import { openDashboardReducerDriver } from 'features/redux/driver-slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { openDashboardReducerDriver, setDrivers } from 'features/redux/driver-slice';
+import { Driver } from 'types';
 
 export default function InserirMotorista() {
     const dispatch = useDispatch();
+    const { user:{token} } = useSelector((state: any) => state.user);
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        const name = event.target.name.value;
-        const cnh = event.target.cnh.value;
-        const response = await fetch('http://localhost:3000/motorista', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name,
-                cnh
-            })
-        })
-        let status = response.status === 200 ? true : false;
-        alert(
-            status ?
-                'Motorista inserido com sucesso' :
-                'Erro ao inserir Motorista'
-        );
-        if (status) {
-            dispatch(openDashboardReducerDriver())
-            event.target.name.value = '';
-            event.target.cnh.value = '';
-        }
 
+        let data:Driver = {
+            name:event.target.name.value,
+            cnh:event.target.cnh.value,
+            avaliable: true
+        }
+        dispatch(setDrivers(data))
+        dispatch(openDashboardReducerDriver())
     }
 
     return (
