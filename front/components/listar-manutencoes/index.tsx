@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FcApproval, FcCancel } from 'react-icons/fc';
+import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import styles from './dashboard.module.scss';
 
@@ -15,9 +16,14 @@ export default function ListarManutencao() {
         setMaintenanceList(data);
     }
 
-    useEffect(() => {
-        listarManutencoes();
-    }, []);
+    let arr = ['', '', '']
+
+    let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
+
+    const { data, isError, isLoading } = useQuery('manutencao', listarManutencoes, queryOptions)
+
+    if(isLoading) return <h1>Carregando...</h1>
+    if(isError) return <h1>Erro ao carregar</h1>
 
     return (
         <>

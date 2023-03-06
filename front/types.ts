@@ -43,7 +43,7 @@ export interface Maintenance {
     id?: Number,
     date: String,
     description: String,
-    vehicleId: Number,
+    VehicleId: Number,
     cost: Number,
     createdAt?: String,
     updatedAt?: String,

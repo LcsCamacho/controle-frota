@@ -9,6 +9,22 @@ export const listar = (req: Request, res: Response) => {
     });
 };
 
+export const listarVarios = (req: Request, res: Response) => {
+    prisma.vehicle.findMany(
+        {
+            where: {
+                id: {
+                    in: req.body.id
+                }
+            }
+        }
+    ).then((vehicle) => {
+        res.json(vehicle).status(200).end();
+    }).catch((err) => {
+        res.status(404).end();
+    });
+};
+
 export const listarUm = (req: Request, res: Response) => {
     prisma.vehicle.findUnique({
         where: {

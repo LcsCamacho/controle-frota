@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { reduxUsuario, Vehicle } from 'types';
+import { reduxUsuario, Vehicle, Maintenance } from 'types';
 import styles from './dashboard.module.scss';
 import ListarManutencao from 'components/listar-manutencoes';
 import Chart from 'react-google-charts';
 import InserirManutencao from 'components/inserir-manutencao';
+import { useQuery } from 'react-query';
 
 export default function DashboardManutencao() {
     const { user } = useSelector((state: reduxUsuario) => state.user);
-    const [listaManutencao, setListaManutencao] = useState([]);
+    const [listaManutencao, setListaManutencao] = useState<Maintenance[]>([]);
     const [listaVeiculos, setListaVeiculos] = useState<Vehicle[]>([]);
+    const [listaVeiculosEmManutencao, setListaVeiculosEmManutencao] = useState<Vehicle[]>([]);
     const [listaVeiculosPasseio, setListaVeiculosPasseio] = useState<Vehicle[]>([]);
     const [listaVeiculosPesado, setListaVeiculosPesado] = useState<Vehicle[]>([]);
     const [listarManutencao, setListarManutencao] = useState(false);
@@ -17,10 +19,20 @@ export default function DashboardManutencao() {
 
 
     const procuraTiposVeiculos = () => {
-        const veiculosPasseio = listaVeiculos.filter((veiculo) => veiculo.type.toLowerCase() === 'passeio');
-        const veiculosPesado = listaVeiculos.filter((veiculo) => veiculo.type.toLowerCase() === 'pesado');
+        const veiculosPasseio = listaVeiculosEmManutencao.filter(
+            (veiculo) => veiculo.type.toLowerCase() === 'passeio');
+        const veiculosPesado = listaVeiculosEmManutencao.filter(
+            (veiculo) => veiculo.type.toLowerCase() === 'carga');
         setListaVeiculosPasseio(veiculosPasseio);
         setListaVeiculosPesado(veiculosPesado);
+    }
+
+    const procuraVeiculosEmManutencao = () => {
+        const veiculosEmManutencao = listaVeiculos.filter((veiculo) => {
+            return veiculo.id === listaManutencao.find(
+                (manutencao) => manutencao.VehicleId === veiculo.id)?.VehicleId
+        });
+        setListaVeiculosEmManutencao(veiculosEmManutencao);
     }
 
 
@@ -41,15 +53,21 @@ export default function DashboardManutencao() {
 
 
     useEffect(() => {
-        procuraTiposVeiculos();
+        procuraVeiculosEmManutencao();
     }, [listaVeiculos]);
 
-
-
     useEffect(() => {
-        fetchs()
-    }, []);
+        procuraTiposVeiculos();
+    }, [listaVeiculosEmManutencao]);
 
+    let arr = ['', '', '']
+
+    let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
+
+    const {isError, isLoading} = useQuery('manutencao', fetchs, queryOptions)
+
+    if(isLoading) return <h1>Carregando...</h1>
+    if(isError) return <h1>Erro ao carregar</h1>
 
     return (
         <>

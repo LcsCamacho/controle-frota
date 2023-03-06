@@ -1,30 +1,34 @@
 import styles from './header.module.scss';
 import Image from 'next/image';
 import logo from '/public/logo.jpg';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { openDashboardReducerVehicle } from '../../features/redux/vehicle-slice';
 import { openDashboardReducerDriver } from '../../features/redux/driver-slice';
 import { openDashboardReducerMaintenance } from 'features/redux/maintence';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Header() {
     const dispatch = useDispatch();
-    const [ styleMotorista, setStyleMotorista] = useState({
+    const vehicleOpen = useSelector((state: any) => state.vehicle.open);
+    const driverOpen = useSelector((state: any) => state.driver.open);
+    const maintenanceOpen = useSelector((state: any) => state.maintenance.open);
+
+    const [styleMotorista, setStyleMotorista] = useState({
         backgroundColor: 'transparent',
         color: '#000'
     });
-    const [ styleVeiculo, setStyleVeiculo] = useState({
+    const [styleVeiculo, setStyleVeiculo] = useState({
         backgroundColor: 'transparent',
         color: '#000'
     });
-    const [ styleManutencao, setStyleManutencao] = useState({
+    const [styleManutencao, setStyleManutencao] = useState({
         backgroundColor: 'transparent',
         color: '#000'
     });
 
     const openDashboardVehicle = () => {
         dispatch(openDashboardReducerVehicle())
-        if(styleVeiculo.backgroundColor === 'red') {
+        if (vehicleOpen) {
             setStyleVeiculo({
                 backgroundColor: 'transparent',
                 color: '#000'
@@ -39,7 +43,7 @@ export default function Header() {
 
     const openDashboardDriver = () => {
         dispatch(openDashboardReducerDriver())
-        if(styleMotorista.backgroundColor === 'red') {
+        if (driverOpen) {
             setStyleMotorista({
                 backgroundColor: 'transparent',
                 color: '#000'
@@ -54,7 +58,7 @@ export default function Header() {
 
     const openDashboardMaintenance = () => {
         dispatch(openDashboardReducerMaintenance())
-        if(styleManutencao.backgroundColor === 'red') {
+        if (maintenanceOpen) {
             setStyleManutencao({
                 backgroundColor: 'transparent',
                 color: '#000'
@@ -66,6 +70,27 @@ export default function Header() {
             color: '#fff'
         })
     }
+
+    useEffect(() => {
+        if (vehicleOpen) {
+            setStyleVeiculo({
+                backgroundColor: 'red',
+                color: '#fff'
+            })
+        }
+        if (driverOpen) {
+            setStyleMotorista({
+                backgroundColor: 'red',
+                color: '#fff'
+            })
+        }
+        if (maintenanceOpen) {
+            setStyleManutencao({
+                backgroundColor: 'red',
+                color: '#fff'
+            })
+        }
+    }, [])
 
     return (
         <header className={styles.container}>
