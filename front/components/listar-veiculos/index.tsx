@@ -1,22 +1,13 @@
-import { useEffect, useState } from 'react';
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import styles from './style.module.scss';
-import { Vehicle } from 'types';
+import { ListarCarroProps, Vehicle } from 'types';
 import { useRemoveVehicle } from 'hooks/UseRemoveVehicle';
-import { useListVehicle } from 'hooks/UseListVehicle';
 
-export default function ListarCarro() {
+
+export default function ListarCarro({vehiclesList}:ListarCarroProps) {
     const { removeVehicle } = useRemoveVehicle();
     const { user } = useSelector((state: any) => state.user);
-
-    const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
-
-
-    useEffect(() => {
-        useListVehicle()
-        .then(({vehicles}) => setVehicleList(vehicles));
-    }, []);
 
 
     return (
@@ -24,9 +15,10 @@ export default function ListarCarro() {
             <div className={styles.listVehicleContainer}>
                 <div className={styles.listVehicleContent}>
                     <h1>Lista de Carros</h1>
-                    <h2>Quantidade: {vehicleList.length}</h2>
+                    <h2>Quantidade: {vehiclesList.length}</h2>
                     <div className={styles.vehicleList}>
-                        {vehicleList.map((vehicle: Vehicle, index: any) => (
+                        {vehiclesList.map((vehicle: Vehicle, index: any) => {
+                            return (
                             <div className={styles.vehicleItem} key={index}>
                                 <h2>Id:{String(vehicle.id)}</h2>
                                 <h2>{vehicle.model}</h2>
@@ -41,7 +33,8 @@ export default function ListarCarro() {
                                     </div>
                                 )}
                             </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
             </div>

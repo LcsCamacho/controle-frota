@@ -16,11 +16,12 @@ export default function InserirCarro() {
             model: event.target.model.value,
             plate: event.target.plate.value,
             type: event.target.type.value,
-            avaliable: true
         }
-        
-        useAddVehicle(data)
-        dispatch(openDashboardReducerVehicle())
+        console.log(data)
+        useAddVehicle(data).then(res => {
+            event.target.model.value = ''
+            event.target.plate.value = ''
+        })
     }
 
     return (

@@ -1,24 +1,16 @@
-import { useEffect, useState } from 'react';
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import { Driver } from 'types';
 import styles from './style.module.scss';
 
 
-export default function ListarMotoristasIndisponiveis() {
+interface driverListProps {
+    driverListIndisp: Driver[]
+}
+
+export default function ListarMotoristasIndisponiveis({driverListIndisp: driverList}: driverListProps) {
     const { user } = useSelector((state: any) => state.user);
-    const [driverList, setDriverList] = useState<Driver[]>([]);
 
-    const listarDrivers = async () => {
-        const response = await fetch('http://localhost:3000/motoristas-indisp',
-            { cache: 'default' });
-        const data = await response.json();
-        setDriverList(data);
-    }
-
-    useEffect(() => {
-        listarDrivers();
-    }, []);
 
     return (
         <>

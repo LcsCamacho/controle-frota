@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react';
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import { Driver } from 'types';
 import styles from './style.module.scss';
 
+interface driverListProps {
+    driverList: Driver[];
+}
 
-export default function ListarMotoristas() {
+export default function ListarMotoristas({driverList}:driverListProps) {
     const { user } = useSelector((state: any) => state.user);
-    const [driverList, setDriverList] = useState<Driver[]>([]);
 
-    let {drivers} = useSelector((state:any) => state.driver)
-
-    useEffect(() => {
-        console.log(drivers)
-    }, [drivers])
 
     return (
         <>

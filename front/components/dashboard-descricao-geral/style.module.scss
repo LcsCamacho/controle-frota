@@ -1,0 +1,28 @@
+.dashboardGeralContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: #F5F5F5;
+    padding: 0 20px;
+}
+
+.dashboardGeralContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+
+    #charts {
+        width: 100%;
+        padding: 1rem;
+        box-shadow: 0 0 20px 1px #000;
+        display:flex;
+        flex-wrap: wrap;
+        
+    }
+}

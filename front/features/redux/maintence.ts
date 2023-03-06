@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { Maintenance } from "types"
 
 interface IMaintenance {
-    open:boolean
+    open: boolean
 }
 
-const initialState:IMaintenance = {
-    open: false
+const initialState: IMaintenance = {
+    open: false,
 }
 
 export const MaintenanceSlice = createSlice({
@@ -13,12 +14,14 @@ export const MaintenanceSlice = createSlice({
     initialState,
     reducers: {
         openDashboardReducerMaintenance: (state) => {
-           state.open = !state.open
+            state.open = !state.open
         },
-
     },
 
 })
 
-export const { openDashboardReducerMaintenance } = MaintenanceSlice.actions
+export const { 
+    openDashboardReducerMaintenance,
+
+} = MaintenanceSlice.actions
 export const MaintenanceReducer = MaintenanceSlice.reducer

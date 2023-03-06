@@ -1,9 +1,37 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.scss'
+import styles from '@/styles/Home.module.scss';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Driver, Maintenance, Vehicle } from 'types';
 import { LoginForm } from './../../components/login-form/login';
 
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const [listaVeiculos, setlistaVeiculos] = useState<Vehicle[]>([]);
+  const [ListaMotoristas, setListarMotoristas] = useState<Driver[]>([]);
+  const [listaManutencoes, setListaManutencoes] = useState<Maintenance[]>([]);
+  
+  const useListAll = async () => {
+    const [veiculos, motoristas, manutencoes ] = await Promise.all([
+        fetch('http://localhost:3000/veiculo'),
+        fetch('http://localhost:3000/motorista'),
+        fetch('http://localhost:3000/manutencao')
+    ]);
+    const [veiculosJson, motoristasJson, manutencoeslJson] = await Promise.all([
+        veiculos.json(),
+        motoristas.json(),
+        manutencoes.json()
+  
+    ]);
+    setlistaVeiculos(veiculosJson);
+    setListarMotoristas(motoristasJson);
+    setListaManutencoes(manutencoeslJson);
+
+    return { listaVeiculos, ListaMotoristas, listaManutencoes };
+  }
+
+
   return (
     <>
       <Head>
@@ -13,8 +41,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <LoginForm/>
-          
+        <LoginForm />
+
       </main>
     </>
   )

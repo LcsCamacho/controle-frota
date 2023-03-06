@@ -6,6 +6,18 @@ export type usuario = {
     token?: string;
 }
 
+export interface ListarCarroProps {
+    vehiclesList: Vehicle[];
+}
+
+export interface ListarCarroDispProps {
+    vehiclesListDisp:Vehicle[];
+}
+
+export interface ListarCarroIndispProps {
+    vehiclesListIndisp:Vehicle[];
+}
+
 export interface reduxUsuario {
     user: {
         user: usuario;
@@ -16,7 +28,7 @@ export type Vehicle = {
     id?: Number,
     model: String,
     plate: String,
-    avaliable: Boolean,
+    avaliable?: Boolean,
     type: String,
 }
 

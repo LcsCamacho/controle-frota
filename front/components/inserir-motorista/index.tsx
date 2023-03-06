@@ -1,10 +1,9 @@
+import { useAddDriver } from 'hooks/UseAddDriver';
 import styles from './style.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { openDashboardReducerDriver, setDrivers } from 'features/redux/driver-slice';
+import { useSelector } from 'react-redux';
 import { Driver } from 'types';
 
 export default function InserirMotorista() {
-    const dispatch = useDispatch();
     const { user:{token} } = useSelector((state: any) => state.user);
 
     const handleSubmit = async (event: any) => {
@@ -15,8 +14,11 @@ export default function InserirMotorista() {
             cnh:event.target.cnh.value,
             avaliable: true
         }
-        dispatch(setDrivers(data))
-        dispatch(openDashboardReducerDriver())
+        useAddDriver(data)
+        .then(res => {
+            event.target.name.value = ''
+            event.target.cnh.value = ''
+        })
     }
 
     return (
