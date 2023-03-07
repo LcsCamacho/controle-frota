@@ -4,7 +4,7 @@ import { Driver } from "types";
 
 export const useAddDriver = async (driver: Driver) => {
     console.log('Adding driver', driver);
-    const response = await fetch(`http://localhost:3000/motorista`, {
+    await fetch(`http://localhost:3000/motorista`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

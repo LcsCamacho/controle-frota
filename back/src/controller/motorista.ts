@@ -45,6 +45,7 @@ export const ListarIndisponiveis = (req: Request, res: Response) => {
     });
 }
 export const inserir = (req: Request, res: Response) => {
+    console.log(req.body)
     prisma.driver.create({
         data: {
             name: req.body.name,
@@ -55,7 +56,7 @@ export const inserir = (req: Request, res: Response) => {
         res.json(motorista).status(201).end();
     }
     ).catch((err) => {
-        res.status(500).end();
+        res.status(500).json(err).end();
     });
 
 }
