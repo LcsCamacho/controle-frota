@@ -82,4 +82,38 @@ export const deletar = (req: Request, res: Response) => {
     });
 }
 
+export const finalizar = (req: Request, res: Response) => {
+
+    prisma.maintenance.update({
+        where: {
+            id: Number(req.params.id)
+        },
+        data: {
+            checkout: req.body.checkout,
+        }
+    }).then((manutencao) => {
+        res.json(manutencao).status(200).end();
+    }
+    ).catch((err) => {
+        res.status(404).json(err).end();
+    });
+}
+
+export const listarVeiculoEmManutencao = (req: Request, res: Response) => {
+    prisma.maintenance.findMany({
+        where: {
+            checkout: null
+        },
+        include: {
+            Vehicle: true
+        }
+    }).then((manutencao) => {
+        res.json(manutencao).status(200).end();
+    }
+    ).catch((err) => {
+        res.status(404).json(err).end();
+    });
+}
+
+
 

@@ -1,11 +1,13 @@
 
 import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
-import Chart from 'react-google-charts';
 import { useEffect, useState } from 'react';
 import { Driver, Vehicle, Maintenance } from 'types';
 import { useQuery } from 'react-query';
-import ChartModel from 'components/Charts/ChartModel';
+import ChartModelPie from 'components/Charts/ChartModelPie';
+import { MdOutlineVisibility } from 'react-icons/md';
+import { AiOutlineEyeInvisible } from 'react-icons/ai';
+import ChartModelColumn from 'components/Charts/ChartModelColumn';
 
 interface DashboardGeralProps {
   dados: {
@@ -21,6 +23,9 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
   const [veiculosIndisp, setVeiculosIndisp] = useState<Vehicle[]>([]);
   const [motoristasEmViagem, setMotoristasEmViagem] = useState<Driver[]>([]);
   const [showData, setShowData] = useState<boolean>(false);
+  const [cargaVeiculos, setCargaVeiculos] = useState<Vehicle[]>([]);
+  const [passeioVeiculos, setPasseioVeiculos] = useState<Vehicle[]>([]);
+  
 
   const { isLoading, isError } = useQuery('vehiclesIndisp', async () => {
     const response = await fetch(`http://localhost:3000/veiculo-indisp`);
@@ -36,6 +41,16 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
     setVeiculosEmManutencao(x);
   }
 
+  const getVeiculosCarga = () => {
+    let x = vehicles.filter((vehicle) => vehicle.type === 'Carga')
+    setCargaVeiculos(x);
+  }
+
+  const getVeiculosPasseio = () => {
+    let x = vehicles.filter((vehicle) => vehicle.type === 'Passeio')
+    setPasseioVeiculos(x);
+  }
+
   const getMotoristasViagem = () => {
     let x = drivers.filter((driver) => !driver.avaliable)
     setMotoristasEmViagem(x);
@@ -43,9 +58,13 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
 
   useEffect(() => {
     getVeiculosManutencao()
-    getMotoristasViagem
+    getMotoristasViagem()
+    getVeiculosPasseio()
+    getVeiculosCarga()
   }, []);
 
+  if (isLoading) return <h1>Carregando...</h1>
+  if (isError) return <h1>Erro ao carregar</h1>
 
   return (
     <>
@@ -53,7 +72,7 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
         <div className={styles.dashboardGeralHeader}>
           <h1>Dashboard Geral</h1>
           <div className={styles.dashboardGeralHeaderButtons}>
-            <span onClick={() => setShowData(!showData)}>{showData ? 'Ocultar' : 'Mostrar'}</span>
+            <span onClick={() => setShowData(!showData)}>{showData ? <AiOutlineEyeInvisible /> : <MdOutlineVisibility />}</span>
           </div>
         </div>
         {showData && (
@@ -108,19 +127,21 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
             <div className={styles.chartsContainer}>
               <div className={styles.motoristasCharts}>
 
-                <ChartModel
-                  title="Motoristas Disponiveis"
+                <ChartModelPie
+                  strChartType='PieChart'
                   data={[
                     ['Total', 'Manutenções'],
                     ['Motoristas ', drivers.length - motoristasEmViagem.length],
                     ['Em viagem', motoristasEmViagem.length]
-                  ]} />
+                  ]}
+                  title="Motoristas Disponiveis" />
 
               </div>
 
               <div className={styles.veiculosCharts}>
 
-                <ChartModel
+                <ChartModelPie
+                  strChartType='PieChart'
                   data={[
                     ['Total', 'Manutenções'],
                     ['Veiculos ', vehicles.length - maintenances.length],
@@ -128,7 +149,8 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                   ]}
                   title='Status dos Veículos em manutenção' />
 
-                <ChartModel
+                <ChartModelPie
+                  strChartType='PieChart'
                   data={[
                     ['Total', 'Manutenções'],
                     ['Veiculos ', vehicles.length - (veiculosIndisp.length - veiculosEmManutencao.length)],
@@ -140,12 +162,24 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
 
               <div className={styles.manutencoesCharts}>
 
-                <ChartModel
+                <ChartModelColumn
+                  strChartType='ColumnChart'
                   data={[
-                    ['Total', 'Manutenções'],
-                    ['Manutenções ', maintenances.length],
+                    ['Tipo', 'Carga', { role: 'style' }],
+                    ['Carga', cargaVeiculos.length, 'blue'],
+                    ['Passeio', passeioVeiculos.length, 'red'],
                   ]}
-                  title='Status das Manutenções' />
+                  title='Tipos de Veículos em manutenção'
+                />
+
+                <ChartModelPie
+                  strChartType='PieChart'
+                  data={
+                    [
+                      ['Total', 'Manutenções'],
+                      ['Manutenções ', maintenances.length],
+                    ]}
+                  title='Status das Manutenções em andamento' />
 
               </div>
             </div>

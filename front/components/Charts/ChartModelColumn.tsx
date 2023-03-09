@@ -1,18 +1,23 @@
-import Chart from "react-google-charts";
+import Chart, { GoogleChartWrapperChartType } from "react-google-charts";
 
-type DataType = [string, number] | [string, string];
+type DataType = [string, number, string] |
+[string, string, string] |
+[string, number] | [string, string] |
+[string, number] |
+[string, string, { role: string }] |
+[string, string, string, { role: string }];
 
 interface ChartsProps {
     data: DataType[];
     title: string;
+    strChartType: GoogleChartWrapperChartType;
 }
 
-export default function ChartModel({ data, title }: ChartsProps) {
-
+export default function ChartModelColumn({ strChartType, data, title }: ChartsProps) {
 
     return (
         <Chart
-            chartType="PieChart"
+            chartType={strChartType}
             loader={<div>Loading Chart</div>}
             chartEvents={[
                 {
@@ -29,7 +34,6 @@ export default function ChartModel({ data, title }: ChartsProps) {
                 }
             ]}
             data={data}
-            legendToggle
             options={{
                 title: title,
                 is3D: true,

@@ -9,6 +9,7 @@ import { reduxUsuario } from 'types';
 import ListarDisponiveis from 'components/listar-veiculos-disponiveis';
 import styles from './dashboard.module.scss';
 import { setVeiculos } from 'features/redux/vehicle-slice';
+import { useToggleColor } from 'hooks/UseToogleColor';
 
 
 export default function DashboardVehicle() {
@@ -33,32 +34,36 @@ export default function DashboardVehicle() {
             veiculoIndisponivel.json()
         ]);
         dispatch(setVeiculos(listaVeiculos))
-        return {listaVeiculos, listaVeiculosDisp, listaVeiculosIndisp}
+        return { listaVeiculos, listaVeiculosDisp, listaVeiculosIndisp }
     }
-    let arr = ['','','','']
+    let arr = ['', '', '', '']
 
 
-    let queryOptions = {retry: 5,refetchOnWindowFocus: true,refetchInterval: 5000,initialState : arr}
+    let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
 
-    const { data, isLoading, isError } = useQuery('listVehicle', fetchs ,queryOptions)
+    const { data, isLoading, isError } = useQuery('listVehicle', fetchs, queryOptions)
 
     if (isError) {
         return <h1>Error...</h1>
     }
-    if( isLoading ) {
+    if (isLoading) {
         return <h1>Loading...</h1>
     }
-        return (
-            data !== undefined ? 
+    return (
+        data !== undefined ?
             <>
                 <div className={styles.dashboardVehicleContainer}>
                     <h1>Veiculos</h1>
                     <div className={styles.dashboardVehicleContent}>
                         <nav>
-                            <h1 onClick={() => setListarVeiculos(!listarVeiculos)}>Listar Todos Veículos</h1>
-                            <h1 onClick={() => setListarVeiculossDisp(!listarVeiculosDisp)}>Listar Disponíveis</h1>
-                            <h1 onClick={() => setListarVeiculossIndisp(!listarVeiculosIndisp)}>Listar Indisponíveis</h1>
-                            {user.management && <h1 onClick={() => setInserirVeiculo(!inserirVeiculo)}>Adicionar Veículo</h1>}
+                            <h1 onClick={() => setListarVeiculos(!listarVeiculos)}
+                                style={useToggleColor(listarVeiculos)}>Listar Todos Veículos</h1>
+                            <h1 onClick={() => setListarVeiculossDisp(!listarVeiculosDisp)}
+                                style={useToggleColor(listarVeiculosDisp)}>Listar Disponíveis</h1>
+                            <h1 onClick={() => setListarVeiculossIndisp(!listarVeiculosIndisp)}
+                                style={useToggleColor(listarVeiculosIndisp)}>Listar Indisponíveis</h1>
+                            {user.management && <h1 onClick={() => setInserirVeiculo(!inserirVeiculo)}
+                                style={useToggleColor(inserirVeiculo)}>Adicionar Veículo</h1>}
                         </nav>
                         <div className={styles.descContainer}>
                             <div className={styles.descContent}>
@@ -102,7 +107,7 @@ export default function DashboardVehicle() {
                                                     fontSize: 14
                                                 }
                                             }
-    
+
                                         }}
                                     />
                                 </div>
@@ -111,7 +116,7 @@ export default function DashboardVehicle() {
                                     <span>Quantidade de veiculos disponíveis : {data.listaVeiculosDisp === undefined ? 0 : data.listaVeiculosDisp.length}</span>
                                     <span>Quantidade de veiculos indisponíveis : {data.listaVeiculosIndisp === undefined ? 0 : data.listaVeiculosIndisp.length}</span>
                                 </div>
-    
+
                                 {/* 
                                 <p>Disponível: veiculos está disponível para realizar uma viagem.</p>
                                 <p>Indisponível: veiculos está indisponível para realizar uma viagem.</p>
@@ -120,16 +125,16 @@ export default function DashboardVehicle() {
                                 <p>Para listar todos os veiculos, basta clicar no botão "Listar Todos veiculos".</p>
                                 <p>Para listar os veiculos disponíveis, basta clicar no botão "Listar Disponíveis".</p>
                                 <p>Para listar os veiculos indisponíveis, basta clicar no botão "Listar Indisponíveis".</p> */}
-    
+
                             </div>
                         </div>
                         {user.management && inserirVeiculo && < InserirVeiculo />}
                         {listarVeiculosDisp && <ListarDisponiveis vehiclesListDisp={data.listaVeiculosDisp} />}
                         {listarVeiculos && <ListarVeiculos vehiclesList={data.listaVeiculos} />}
-                        {listarVeiculosIndisp && <ListarIndisponiveis vehiclesListIndisp={data.listaVeiculosIndisp}/>}
+                        {listarVeiculosIndisp && <ListarIndisponiveis vehiclesListIndisp={data.listaVeiculosIndisp} />}
                     </div>
                 </div>
             </>
-        : <h1>Carregando...</h1>
-        ) 
+            : <h1>Carregando...</h1>
+    )
 }

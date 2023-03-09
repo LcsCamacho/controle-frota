@@ -3,6 +3,7 @@ import InserirMotorista from 'components/inserir-motorista';
 import ListarMotoristas from 'components/listar-motoristas';
 import ListarMotoristasDisponiveis from 'components/listar-motoristas-disponiveis';
 import ListarMotoristasIndisponiveis from 'components/listar-motoristas-indisponiveis';
+import { useToggleColor } from 'hooks/UseToogleColor';
 import { useState } from 'react';
 import { Chart } from 'react-google-charts';
 import { useQuery } from 'react-query';
@@ -49,29 +50,24 @@ export default function DashboardMotorista() {
     }
 
 
-       return (
+    return (
         data !== undefined ?
             <>
                 <div className={styles.dashboardMotoristaContainer}>
                     <h1>Motoristas</h1>
                     <div className={styles.dashboardMotoristaContent}>
                         <nav>
-                            <h1 onClick={() => setListarMotorista(!listarMotorista)} style={{
-                                background: listarMotorista ? 'red' : 'transparent',
-                                color: listarMotorista? '#fff' : '#000'
-                            }}>Listar Todos Motoristas</h1>
-                            <h1 onClick={() => setListarMotoristaDisp(!listarMotoristaDisp)} style={{
-                                background: listarMotoristaDisp ? 'red' : 'transparent',
-                                color: listarMotoristaDisp? '#fff' : '#000'
-                            }}>Listar Disponíveis</h1>
-                            <h1 onClick={() => setListarMotoristaIndisp(!listarMotoristaIndisp)} style={{
-                                background: listarMotoristaIndisp ? 'red' : 'transparent',
-                                color: listarMotoristaIndisp? '#fff' : '#000'
-                            }}>Listar Indisponíveis</h1>
-                            {user.management && <h1 onClick={() => setInserirMotorista(!inserirMotorista)} style={{
-                                background: inserirMotorista ? 'red' : 'transparent',
-                                color: inserirMotorista? '#fff' : '#000'
-                            }}>Adicionar Motorista</h1>}
+                            <h1 onClick={() => setListarMotorista(!listarMotorista)}
+                                style={useToggleColor(listarMotorista)}>Listar Todos Motoristas</h1>
+
+                            <h1 onClick={() => setListarMotoristaDisp(!listarMotoristaDisp)}
+                                style={useToggleColor(listarMotoristaDisp)}>Listar Disponíveis</h1>
+
+                            <h1 onClick={() => setListarMotoristaIndisp(!listarMotoristaIndisp)}
+                                style={useToggleColor(listarMotoristaIndisp)}>Listar Indisponíveis</h1>
+
+                            {user.management && <h1 onClick={() => setInserirMotorista(!inserirMotorista)}
+                                style={useToggleColor(inserirMotorista)}>Adicionar Motorista</h1>}
                         </nav>
                         <div className={styles.descContainer}>
                             <div className={styles.descContent}>
@@ -137,12 +133,12 @@ export default function DashboardMotorista() {
                             </div>
                         </div>
                         {inserirMotorista && < InserirMotorista />}
-                        {data.listaMotoristaDisp !== undefined &&  listarMotoristaDisp && <ListarMotoristasDisponiveis driverListDisp={data.listaMotoristaDisp} />}
+                        {data.listaMotoristaDisp !== undefined && listarMotoristaDisp && <ListarMotoristasDisponiveis driverListDisp={data.listaMotoristaDisp} />}
                         {listarMotorista && <ListarMotoristas driverList={data.listaMotorista} />}
                         {listarMotoristaIndisp && <ListarMotoristasIndisponiveis driverListIndisp={data.listaMotoristaIndisp} />}
 
                     </div>
                 </div>
             </>
-        : <h1>Loading...</h1>)
+            : <h1>Loading...</h1>)
 }

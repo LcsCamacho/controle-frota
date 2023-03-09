@@ -42,14 +42,16 @@ model Vehicle {
 }
 
 model Maintenance {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   date        DateTime
+  checkin     DateTime  @default(now())
+  checkout    DateTime?
   cost        Float
-  VehicleId   Int 
-  createdAt   DateTime @default(now())
+  VehicleId   Int
+  createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   description String
-  Vehicle     Vehicle  @relation(fields: [VehicleId], references: [id], onDelete: Cascade)
+  Vehicle     Vehicle   @relation(fields: [VehicleId], references: [id], onDelete: Cascade)
 
   @@map("maintenance")
 }

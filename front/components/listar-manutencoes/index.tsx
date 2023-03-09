@@ -20,7 +20,7 @@ export default function ListarManutencao() {
 
     let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
 
-    const { data, isError, isLoading } = useQuery('manutencao', listarManutencoes, queryOptions)
+    const { isError, isLoading } = useQuery('manutencao', listarManutencoes, queryOptions)
 
     if(isLoading) return <h1>Carregando...</h1>
     if(isError) return <h1>Erro ao carregar</h1>

@@ -29,7 +29,7 @@ export default function InserirManutencao() {
             description: form.desc.value,
             cost: Number(form.cost.value),
             date,
-            vehicleId: Number(form.vehicle.value)
+            VehicleId: Number(form.vehicle.value)
         };
         console.log(data);
         useAddMaintenance(data);
