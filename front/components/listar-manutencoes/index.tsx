@@ -13,7 +13,8 @@ export default function ListarManutencao() {
         const response = await fetch('http://localhost:3000/manutencao',
             { cache: 'default' });
         const data = await response.json();
-        setMaintenanceList(data);
+        let x = data.filter((maintenance: any) => maintenance.checkout === null);
+        setMaintenanceList(x);
     }
 
     let arr = ['', '', '']
@@ -29,7 +30,7 @@ export default function ListarManutencao() {
         <>
             <div className={styles.listMaintenanceContainer}>
                 <div className={styles.listMaintenanceContent}>
-                    <h1>Lista de Manutenções</h1>
+                    <h1>Lista de Manutenções em Andamento</h1>
                     <h2>Quantidade: {maintenanceList.length}</h2>
                     <table className={styles.tableMaintenance}>
                         <thead>
@@ -47,7 +48,7 @@ export default function ListarManutencao() {
                             {maintenanceList.map((maintenance: any, index: any) => (
                                 <tr className={styles.maintenanceItem} key={index}>
                                     <td>Id:{String(maintenance.id)}</td>
-                                    <td>{maintenance.VehicleId}</td>
+                                    <td>{maintenance.Vehicle.plate}</td>
                                     <td>{maintenance.description}</td>
                                     <td>{maintenance.cost}</td>
                                     <td>{maintenance.date.slice(0,10)}</td>

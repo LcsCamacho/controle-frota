@@ -41,6 +41,17 @@ export type Driver = {
 
 export interface Maintenance {
     id?: Number,
+    date: String | Date,
+    description: String,
+    VehicleId: Number,
+    cost: Number,
+    createdAt?: String,
+    updatedAt?: String,
+}
+
+export interface VehiclesInMaintenance extends Maintenance {
+    Vehicle: Vehicle
+    id?: Number,
     date: String,
     description: String,
     VehicleId: Number,

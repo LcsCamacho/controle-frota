@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Vehicle } from "types"
 
 export const useListVehiclesInMaintenance = () => {

@@ -1,27 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Vehicle } from 'types';
+import { Vehicle, VehiclesInMaintenance } from 'types';
 import styles from './style.module.scss';
 import { useQuery } from 'react-query';
-import { useListVehiclesInMaintenance } from 'hooks/UseListVehiclesInMaintenance';
 
 
 export default function FinalizarManutencao() {
 
-  const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
+  const [vehicleList, setVehicleList] = useState<VehiclesInMaintenance[]>([]);
 
+  const fetchVehiclesInMaintenance = async () => {
+    const resp = await fetch('http://localhost:3000/veiculos-manutencao')
+    const data = await resp.json();
+    setVehicleList(data);
 
-  const fetchVeiculos = async () => {
-    const response = await fetch('http://localhost:3000/veiculo',
-      { cache: 'default' });
-    const data = await response.json();
-    useListVehiclesInMaintenance()
-    let avaliableVehicle = data.filter((veiculo: Vehicle) => !veiculo.avaliable)
-    setVehicleList(avaliableVehicle)
   }
 
-  let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000 }
+  let queryOptions = { retry: false, refetchOnWindowFocus: true, refetchInterval: 5000 }
 
-  const { isLoading, isError } = useQuery('finalizarManutencao', fetchVeiculos, queryOptions)
+  const { isLoading, isError } = useQuery('finalizarManutencao', fetchVehiclesInMaintenance, queryOptions)
 
   if (isLoading) return <h1>Carregando...</h1>
   if (isError) return <h1>Erro ao carregar</h1>
@@ -30,6 +26,7 @@ export default function FinalizarManutencao() {
     event.preventDefault();
 
     const vehicleId = event.target.vehicle.value;
+    const idMaintenance = vehicleList.find(({ Vehicle }) => Vehicle.id === Number(vehicleId))?.id;
 
     let options = {
       method: 'PUT',
@@ -37,14 +34,14 @@ export default function FinalizarManutencao() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        id: idMaintenance,
         checkout: new Date()
       })
     }
 
-    fetch(`http://localhost:3000/veiculo/finalizar/${vehicleId}`, options)
+    fetch(`http://localhost:3000/manutencao/finalizar/${vehicleId}`, options)
       .then(response => response.json())
       .then(data => {
-        event.target.vehicle.value = '';
         console.log(data)
       })
   }
@@ -57,11 +54,12 @@ export default function FinalizarManutencao() {
           <div className={styles.finalizarFormContent}>
             <label htmlFor="vehicle">Veículo:</label>
             <select name="vehicle" id={styles.vehicleSelect}>
-              {vehicleList.map((vehicle: Vehicle) => (
-                <option key={String(vehicle.id)} value={String(vehicle.id)}>
-                  {String(vehicle.id)}. {vehicle.model} {vehicle.plate}
+              {vehicleList.length > 0 ? vehicleList.map(({ Vehicle }) => (
+                <option key={String(Vehicle.id)} value={String(Vehicle.id)}>
+                  {String(Vehicle.id)}. {Vehicle.model} {Vehicle.plate}
                 </option>
-              ))}
+              ))
+              : <option value="0">Nenhum veículo em manutenção</option>}
             </select>
             <button type="submit">Adicionar</button>
           </div>

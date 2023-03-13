@@ -1,45 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Maintenance, Vehicle } from 'types';
 import styles from './style.module.scss';
 import { useAddMaintenance } from 'hooks/UseAddMaintenance';
+import { useQuery } from 'react-query';
 
 export default function InserirManutencao() {
-
+    const { addMaintenance } = useAddMaintenance();
     const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
 
     const fetchVeiculos = async () => {
         const response = await fetch('http://localhost:3000/veiculo',
             { cache: 'default' });
         const data = await response.json();
-        let avaliableVehicle = data.filter((veiculo:Vehicle) => veiculo.avaliable === true)
+        let avaliableVehicle = data.filter((veiculo: Vehicle) => veiculo.avaliable === true)
         setVehicleList(avaliableVehicle)
     }
+    let queryOptions = { retry: false, refetchOnWindowFocus: true, refetchInterval: 5000 }
 
-    useEffect(() => {
-        fetchVeiculos();
-    }, []);
+    const { isLoading, isError } = useQuery('inserirmanutencao', fetchVeiculos, queryOptions)
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const form = event.target;
-        const date = new Date().toLocaleString().slice(0, 10).replace('T', ' ');
-
         const data: Maintenance = {
             description: form.desc.value,
             cost: Number(form.cost.value),
-            date,
+            date: new Date(),
             VehicleId: Number(form.vehicle.value)
         };
         console.log(data);
-        useAddMaintenance(data);
-        fetchVeiculos().then(() => clearForm(form))
+        addMaintenance(data)
+            .then((res) => {
+                console.log(res)
+                setSuccess(true);
+                form.desc.value = '';
+                form.cost.value = '';
+                fetchVeiculos()
+            })
+            .catch((err) => {
+                console.log(err)
+                setError(true);
+            });
     }
 
-    const clearForm = (form: any) => {
-        form.desc.value = '';
-        form.cost.value = '';
-    }
+    if(isLoading) return <h1>Carregando...</h1>
+    if(isError) return <h1>Erro ao carregar</h1>
 
     return (
         <>
@@ -61,6 +69,8 @@ export default function InserirManutencao() {
                         <input placeholder="Insira o custo da Manutenção" type="text" id="cost" required />
                         <button type="submit">Adicionar</button>
                     </div>
+                    {success && <p>Manutenção adicionada com sucesso!</p>}
+                    {error && <p>Erro ao adicionar manutenção</p>}
                 </form>
             </div>
         </>

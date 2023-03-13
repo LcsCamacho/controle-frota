@@ -1,6 +1,6 @@
 import { Maintenance } from "types";
 
-export const useAddMaintenance = (maintenance: Maintenance) => {
+export const useAddMaintenance = () => {
     const addMaintenance = async (maintenance: Maintenance) => {
         await fetch(`http://localhost:3000/manutencao`, {
             method: 'POST',
@@ -11,5 +11,5 @@ export const useAddMaintenance = (maintenance: Maintenance) => {
         });
     };
 
-   addMaintenance(maintenance).then(() => {alert('Inserido com sucesso')});
+    return { addMaintenance };
 }

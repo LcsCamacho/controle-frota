@@ -38,16 +38,18 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
     vehicles.forEach((vehicle) => {
       x = maintenances.filter((maintenance) => maintenance.VehicleId === vehicle.id);
     });
+    console.log(x)
     setVeiculosEmManutencao(x);
   }
 
   const getVeiculosCarga = () => {
-    let x = vehicles.filter((vehicle) => vehicle.type === 'Carga')
+    console.log(veiculosEmManutencao)
+    let x = veiculosEmManutencao.filter((vehicle) => vehicle.type === 'Carga')
     setCargaVeiculos(x);
   }
 
   const getVeiculosPasseio = () => {
-    let x = vehicles.filter((vehicle) => vehicle.type === 'Passeio')
+    let x = veiculosEmManutencao.filter((vehicle) => vehicle.type === 'Passeio')
     setPasseioVeiculos(x);
   }
 
@@ -98,6 +100,8 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                 <div className={styles.totaisManutencoes}>
                   <h4>Manutenções</h4>
                   <span>Total: {maintenances.length}</span>
+                  <span>Em andamento: {maintenances.length}</span>
+
                 </div>
 
               </div>
@@ -117,7 +121,8 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
 
                 <div className={styles.derivadosManutencoes}>
                   <h4>Manutenções</h4>
-                  <span>Em andamento: {maintenances.length}</span>
+                  <span>Veiculos de carga: {cargaVeiculos.length}</span>
+                  <span>Veiculos de passeio: {passeioVeiculos.length}</span>
                 </div>
 
               </div>
