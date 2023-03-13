@@ -3,7 +3,7 @@ import { listar, listarUm, inserir, alterar, deletar, finalizar, listarVeiculoEm
 
 export const routerManutencao = express.Router()
 
-routerManutencao.get('/manutencao', listar)
+routerManutencao.get('/manutencao',listar)
 routerManutencao.get('/manutencao/:id', listarUm)
 routerManutencao.get('/veiculos-manutencao', listarVeiculoEmManutencao)
 routerManutencao.post('/manutencao', inserir)
