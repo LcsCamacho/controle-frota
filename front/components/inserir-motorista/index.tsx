@@ -2,6 +2,16 @@ import { useAddDriver } from 'hooks/UseAddDriver';
 import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
 import { Driver } from 'types';
+import { z } from 'zod';
+
+const driverReg = new RegExp('[0-9]{9}[-][0-9]{2}')
+
+
+const DriverSchema = z.object({
+    name: z.string(),
+    cnh: z.string().length(12).regex(driverReg),
+    avaliable: z.boolean()
+})
 
 export default function InserirMotorista({refetch}:any) {
     const { user:{token} } = useSelector((state: any) => state.user);
@@ -9,13 +19,18 @@ export default function InserirMotorista({refetch}:any) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        let data:Driver = {
+        let result = DriverSchema.safeParse({
             name:event.target.name.value,
             cnh:event.target.cnh.value,
             avaliable: true
+        })
+        if(!result.success) {
+            alert('Dados inválidos')
+            console.log(result)
+            return
         }
-        useAddDriver(data)
-        .then(res => {
+        useAddDriver(result.data, token)
+        .then(() => {
             event.target.name.value = ''
             event.target.cnh.value = ''
             refetch()

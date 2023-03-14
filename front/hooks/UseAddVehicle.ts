@@ -1,11 +1,13 @@
 import { Vehicle } from 'types';
 
-export const useAddVehicle = async ({ model, plate, type }: Vehicle) => {
+export const useAddVehicle = async ({ model, plate, type }: Vehicle, token:string) => {
+
     console.log('Adding vehicle', model, plate, type);
     const response = await fetch(`http://localhost:3000/veiculo`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'authorization': token
         },
         body: JSON.stringify({
             model,
@@ -13,6 +15,7 @@ export const useAddVehicle = async ({ model, plate, type }: Vehicle) => {
             type
         }),
     });
-    const data = response.ok? await response.json() : null;
+    const data = await response.json();
+    console.log('Vehicle added', data);
     return data;
 }

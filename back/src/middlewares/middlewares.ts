@@ -8,7 +8,6 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 
     if (!token) {
         console.log('Access denied. No token provided.');
-        console.log(token);
         return res.status(401).send('Access denied. No token provided.');
     }
 
@@ -19,9 +18,10 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 
             res.status(400).json({
                 message: 'Invalid token.',
-                err,
+                erro:err,
                 "key":process.env.JWT_PRIVATE_KEY,
-                token
+                token:token,
+                decoded:decoded
             });
         } else {
             next();

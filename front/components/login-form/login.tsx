@@ -24,6 +24,7 @@ export function LoginForm() {
             management:user.management,
             token: token
         }
+        console.log(newUser)
         dispatch(setUserReducer(newUser))
         router.push('/dashboard/main')
     }
@@ -48,7 +49,7 @@ export function LoginForm() {
             body: JSON.stringify(data)
         })
             .then(async (res) => {
-                res.status === 200 ? await setUser(await res.json()) : console.log('Falha no login')
+                res.ok ? await setUser(await res.json()) : alert('Falha no login')
             })
             .catch(err => console.log(err))
     };

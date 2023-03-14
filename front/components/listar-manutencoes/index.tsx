@@ -13,8 +13,7 @@ export default function ListarManutencao() {
         const response = await fetch('http://localhost:3000/manutencao',
             { cache: 'default' });
         const data = await response.json();
-        let x = data.filter((maintenance: any) => maintenance.checkout === null);
-        setMaintenanceList(x);
+        setMaintenanceList(data);
     }
 
     let arr = ['', '', '']
@@ -30,7 +29,7 @@ export default function ListarManutencao() {
         <>
             <div className={styles.listMaintenanceContainer}>
                 <div className={styles.listMaintenanceContent}>
-                    <h1>Lista de Manutenções em Andamento</h1>
+                    <h1>Lista de Manutenções</h1>
                     <h2>Quantidade: {maintenanceList.length}</h2>
                     <table className={styles.tableMaintenance}>
                         <thead>
@@ -42,6 +41,7 @@ export default function ListarManutencao() {
                                 <th>Data</th>
                                 <th>Criado em</th>
                                 <th>Atualizado em</th>
+                                <th>Finalizada</th>
                             </tr>
                         </thead>
                         <tbody className={styles.tbodyMaintenance}>
@@ -54,6 +54,7 @@ export default function ListarManutencao() {
                                     <td>{maintenance.date.slice(0,10)}</td>
                                     <td>{new Date(maintenance.createdAt).toLocaleString()}</td>
                                     <td>{new Date(maintenance.updatedAt).toLocaleString()}</td>
+                                    <td>{maintenance.checkout ? <FcApproval /> : <FcCancel />}</td>
                                     {user.management && (
                                     <>
                                         <td>Excluir</td>

@@ -3,7 +3,6 @@ import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Driver, Vehicle, Maintenance } from 'types';
-import { useQuery } from 'react-query';
 import ChartModelPie from 'components/Charts/ChartModelPie';
 import { MdOutlineVisibility } from 'react-icons/md';
 import { AiOutlineEyeInvisible } from 'react-icons/ai';
@@ -30,7 +29,7 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
 
 
   const getManutencoesFinalizadas = () => {
-    let x = maintenances.filter((maintenance) => maintenance.checkout)
+    let x = maintenances.filter((maintenance) => maintenance.checkOut)
     setManutencoesFinalizadas(x)
   }
 

@@ -8,7 +8,7 @@ export interface ListarCarroProps {
     refetch: any;
 }
 
-export default function ListarCarro({vehiclesList,refetch}:ListarCarroProps) {
+export default function ListarCarro({ vehiclesList, refetch }: ListarCarroProps) {
     const { removeVehicle } = useRemoveVehicle();
     const { user } = useSelector((state: any) => state.user);
     return (
@@ -20,24 +20,25 @@ export default function ListarCarro({vehiclesList,refetch}:ListarCarroProps) {
                     <div className={styles.vehicleList}>
                         {vehiclesList.map((vehicle: Vehicle, index: any) => {
                             return (
-                            <div className={styles.vehicleItem} key={index}>
-                                <h2>Id:{String(vehicle.id)}</h2>
-                                <h2>{vehicle.model}</h2>
-                                <h2>{vehicle.plate}</h2>
-                                <h2>{vehicle.type}</h2>
-                                <h2>{vehicle.avaliable ? <FcApproval /> : <FcCancel />}</h2>
+                                <div className={styles.vehicleItem} key={index}>
+                                    <h2>Id:{String(vehicle.id)}</h2>
+                                    <h2>{vehicle.model}</h2>
+                                    <h2>{vehicle.plate}</h2>
+                                    <h2>{vehicle.type}</h2>
+                                    <h2>{vehicle.avaliable ? <FcApproval /> : <FcCancel />}</h2>
 
-                                {user.management && (
-                                    <div className={styles.vehicleItemButtons}>
-                                        <button>Editar</button>
-                                        <button onClick={() => {
-                                            removeVehicle(String(vehicle.id)).then(()=>{
-                                                refetch()
-                                            })
-                                        }}>Excluir</button>
-                                    </div>
-                                )}
-                            </div>
+                                    {user.management && (
+                                        <div className={styles.vehicleItemButtons}>
+                                            <button>Editar</button>
+                                            <button onClick={() => {
+                                                removeVehicle(String(vehicle.id), user.token)
+                                                    .then(() => {
+                                                        refetch()
+                                                    })
+                                            }}>Excluir</button>
+                                        </div>
+                                    )}
+                                </div>
                             )
                         })}
                     </div>

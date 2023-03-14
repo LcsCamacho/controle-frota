@@ -6,10 +6,10 @@ import { useRemoveDriver } from 'hooks/UseRemoveDriver';
 
 interface driverListProps {
     driverList: Driver[];
-    refetch:any; 
+    refetch: any;
 }
 
-export default function ListarMotoristas({driverList, refetch}:driverListProps) {
+export default function ListarMotoristas({ driverList, refetch }: driverListProps) {
     const { user } = useSelector((state: any) => state.user);
     const { removeDriver } = useRemoveDriver();
 
@@ -30,9 +30,10 @@ export default function ListarMotoristas({driverList, refetch}:driverListProps) 
                                     <div className={styles.driverItemButtons}>
                                         <button>Editar</button>
                                         <button onClick={() => {
-                                            removeDriver(String(driver.id)).then(()=>{
-                                                refetch()
-                                            })
+                                            removeDriver(String(driver.id), user.token)
+                                                .then(() => {
+                                                    refetch()
+                                                })
                                         }}>Excluir</button>
                                     </div>
                                 )}

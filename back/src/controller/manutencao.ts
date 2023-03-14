@@ -53,7 +53,7 @@ export const inserir = (req: Request, res: Response) => {
             }
         })
     ]).then((manutencao) => {
-        res.json(manutencao).status(201).end();
+        res.json({response:manutencao}).status(201).end();
     }).catch((err) => {
         console.log(err)
         res.json(err).status(404).end();

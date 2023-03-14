@@ -8,6 +8,7 @@ import InserirManutencao from 'components/inserir-manutencao';
 import { useQuery } from 'react-query';
 import FinalizarManutencao from 'components/finalizar-manutencao';
 import { useToggleColor } from 'hooks/UseToogleColor';
+import ChartModelPie from 'components/Charts/ChartModelPie';
 
 export default function DashboardManutencao() {
     const { user } = useSelector((state: reduxUsuario) => state.user);
@@ -16,6 +17,7 @@ export default function DashboardManutencao() {
     const [listaVeiculosEmManutencao, setListaVeiculosEmManutencao] = useState<Vehicle[]>([]);
     const [listaVeiculosPasseio, setListaVeiculosPasseio] = useState<Vehicle[]>([]);
     const [listaVeiculosPesado, setListaVeiculosPesado] = useState<Vehicle[]>([]);
+
     const [listarManutencao, setListarManutencao] = useState(false);
     const [inserirManutencao, setInserirManutencao] = useState(false);
     const [finalizarManutencao, setFinalizarManutencao] = useState(false);
@@ -24,48 +26,34 @@ export default function DashboardManutencao() {
         const veiculosPasseio = listaVeiculosEmManutencao.filter(
             (veiculo) => veiculo.type.toLowerCase() === 'passeio');
         const veiculosPesado = listaVeiculosEmManutencao.filter(
-            (veiculo) => veiculo.type.toLowerCase() === 'carga');
+            (veiculo) => veiculo.type.toLowerCase() === 'pesado');
         setListaVeiculosPasseio(veiculosPasseio);
         setListaVeiculosPesado(veiculosPesado);
     }
 
-    const procuraVeiculosEmManutencao = () => {
-        const veiculosEmManutencao = listaVeiculos.filter((veiculo) => {
-            return veiculo.id === listaManutencao.find(
-                (manutencao) => manutencao.VehicleId === veiculo.id)?.VehicleId
-        });
-        setListaVeiculosEmManutencao(veiculosEmManutencao);
-    }
-
-
     const fetchs = async () => {
-        const [manutencao, veiculos] = await Promise.all([
-            fetch('http://localhost:3000/manutencao', { cache: 'default' }),
-            fetch('http://localhost:3000/veiculo', { cache: 'default' })
-
+        const [manutencao, veiculos, veiculosEmManutencao] = await Promise.all([
+            fetch('http://localhost:3000/manutencao'),
+            fetch('http://localhost:3000/veiculo'),
+            fetch('http://localhost:3000/veiculos-manutencao')
         ]);
-        const [manutencaoJson, veiculosJson] = await Promise.all([
+        const [manutencaoJson, veiculosJson, veiculosEmManutencaoJson] = await Promise.all([
             manutencao.json(),
-            veiculos.json()
-
+            veiculos.json(),
+            veiculosEmManutencao.json()
         ]);
         let x = manutencaoJson.filter((maintenance: any) => maintenance.checkout === null);
         setListaManutencao(x);
         setListaVeiculos(veiculosJson);
+        setListaVeiculosEmManutencao(veiculosEmManutencaoJson);
     }
-
-
-    useEffect(() => {
-        procuraVeiculosEmManutencao();
-    }, [listaVeiculos]);
 
     useEffect(() => {
         procuraTiposVeiculos();
     }, [listaVeiculosEmManutencao]);
 
-    let arr = ['', '', '']
 
-    let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
+    let queryOptions = { retry: 2, refetchOnWindowFocus: true, refetchInterval: 5000 }
 
     const {isError, isLoading} = useQuery('manutencao', fetchs, queryOptions)
 
@@ -89,50 +77,30 @@ export default function DashboardManutencao() {
                         <div className={styles.descContent}>
                             <h1>Status</h1>
                             <div className={styles.chart}>
-                                <Chart
-                                    legendToggle
-                                    chartType="PieChart"
-                                    loader={<div>Loading Chart</div>}
-                                    chartEvents={[
-                                        {
-                                            eventName: 'select',
-                                            callback: ({ chartWrapper }) => {
-                                                const chart = chartWrapper.getChart();
-                                                const selection = chart.getSelection();
-                                                if (selection.length === 0) return;
-                                                const [selectedItem] = selection;
-                                                const { row } = selectedItem;
-                                                const tipo = chartWrapper.getDataTable()?.getValue(row, 0);
-                                                console.log(tipo);
-                                            },
-                                        },
+                                <ChartModelPie
+                                    strChartType="PieChart"
+                                    data={[
+                                        ['tipos', 'quantidade'],
+                                        ['Em manutenção', listaVeiculosEmManutencao.length],
+                                        ['Disponiveis', listaVeiculos.length - listaVeiculosEmManutencao.length],
                                     ]}
+                                    title={'Veiculos em manutenção'}
+                                />
+                                <ChartModelPie
+                                    strChartType="PieChart"
                                     data={[
                                         ['tipos', 'quantidade'],
                                         ['Pesado', listaVeiculosPesado.length],
                                         ['Passeio', listaVeiculosPasseio.length],
-                                    ]}
-                                    options={{
-                                        title: 'Manutenções',
-                                        // Just add this option
-                                        is3D: true,
-                                        legend: {
-                                            position: 'bottom',
-                                            alignment: 'center',
-                                            textStyle: {
-                                                fontSize: 14
-                                            }
-                                        }
-                                    }}
-                                />
-
+                                    ]} 
+                                    title={'Tipos de veiculos em manutenção'}                                
+                                    />
                             </div>
                             <div className={styles.descText}>
                                     <span>Veiculos Pesados em manutenção : {listaVeiculosPesado.length}</span>
                                     <span>Veiculos de Passeio em manutenção : {listaVeiculosPasseio.length}</span>
                                     <span>Veiculos totais em Manutenção : {listaVeiculosPasseio.length + listaVeiculosPesado.length}</span>
                             </div>
-
                         </div>
                     </div>
                     <div className={styles.dados}>

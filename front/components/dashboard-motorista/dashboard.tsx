@@ -54,7 +54,7 @@ export default function DashboardMotorista() {
         data !== undefined ?
             <>
                 <div className={styles.dashboardMotoristaContainer}>
-                    <h1>Veículos</h1>
+                    <h1>Motorista</h1>
 
                     <div className={styles.header}>
                         <div className={styles.howUse}>

@@ -1,6 +1,7 @@
 import styles from './style.module.scss';
 import { useAddVehicle } from 'hooks/UseAddVehicle';
 import { z } from 'zod'
+import { useSelector } from 'react-redux';
 
 const plateReg = new RegExp('[a-zA-Z]{3}[-][0-9][a-z0-9A-Z][0-9]{2}')
 const VehicleSchema = z.object({
@@ -12,6 +13,7 @@ const VehicleSchema = z.object({
 type VehicleType = z.infer<typeof VehicleSchema>
 
 export default function InserirCarro({refetch}: {refetch: () => any}) {
+    const {user} = useSelector((state: any) => state.user)
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -23,7 +25,7 @@ export default function InserirCarro({refetch}: {refetch: () => any}) {
         })
         if (result.success) {
             const data: VehicleType = result.data
-            useAddVehicle(data).then((res) => {
+            useAddVehicle(data, user.token).then((res) => {
                 if (!res) alert('Erro ao inserir veículo')
                 event.target.model.value = ''
                 event.target.plate.value = ''
