@@ -8,6 +8,8 @@ export default function ListarManutencao() {
     const { user } = useSelector((state: any) => state.user);
 
     const [maintenanceList, setMaintenanceList] = useState<any[]>([]);
+    const [newMaintenanceList, setNewMaintenanceList] = useState<any[]>([]);
+    const [search, setSearch] = useState<String>('');
 
     const listarManutencoes = async () => {
         const response = await fetch('http://localhost:3000/manutencao',
@@ -16,20 +18,40 @@ export default function ListarManutencao() {
         setMaintenanceList(data);
     }
 
-    let arr = ['', '', '']
+    let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000}
 
-    let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
-
-    const { isError, isLoading } = useQuery('manutencao', listarManutencoes, queryOptions)
+    const { isError, isLoading } = useQuery('listarManutencoes', listarManutencoes, queryOptions)
 
     if(isLoading) return <h1>Carregando...</h1>
     if(isError) return <h1>Erro ao carregar</h1>
+
+    useEffect(() => {
+        if(search.length === 0) {
+            setNewMaintenanceList(maintenanceList)
+            return
+        }
+        let x = newMaintenanceList.filter((maintenance: any) => {
+            return maintenance.Vehicle.plate.toLowerCase().includes(search.toLowerCase())
+        })
+        setNewMaintenanceList(x)
+    }, [search])
+
+    useEffect(() => {
+        setNewMaintenanceList(maintenanceList)
+    }, [])
+
 
     return (
         <>
             <div className={styles.listMaintenanceContainer}>
                 <div className={styles.listMaintenanceContent}>
                     <h1>Lista de Manutenções</h1>
+                    <div className={styles.buscar}>
+                    <label htmlFor="search">Buscar por placa: </label>
+                    <input type='search' id='search' placeholder="Digite a placa do veiculo" onChange={(e)=> {
+                        setSearch(e.target.value)
+                    }} />
+                    </div>
                     <h2>Quantidade: {maintenanceList.length}</h2>
                     <table className={styles.tableMaintenance}>
                         <thead>
@@ -45,7 +67,7 @@ export default function ListarManutencao() {
                             </tr>
                         </thead>
                         <tbody className={styles.tbodyMaintenance}>
-                            {maintenanceList.map((maintenance: any, index: any) => (
+                            {newMaintenanceList.map((maintenance: any, index: any) => (
                                 <tr className={styles.maintenanceItem} key={index}>
                                     <td>Id:{String(maintenance.id)}</td>
                                     <td>{maintenance.Vehicle.plate}</td>

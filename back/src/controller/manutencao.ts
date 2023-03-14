@@ -41,12 +41,12 @@ export const inserir = (req: Request, res: Response) => {
                 VehicleId: req.body.vehicleId,
                 description: req.body.description,
                 cost: req.body.cost,
-                Vehicle: {}
+                Vehicle: {} 
             }
         }),
         prisma.vehicle.update({
             where: {
-                id: req.body.vehicleId,
+                id: Number(req.body.VehicleId),
             },
             data: {
                 avaliable: false

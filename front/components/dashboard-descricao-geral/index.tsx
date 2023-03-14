@@ -27,7 +27,6 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
   const [passeioVeiculos, setPasseioVeiculos] = useState<Vehicle[]>([]);
   const [manutencoesFinalizadas, setManutencoesFinalizadas] = useState<Maintenance[]>([])
 
-
   const getManutencoesFinalizadas = () => {
     let x = maintenances.filter((maintenance) => maintenance.checkOut)
     setManutencoesFinalizadas(x)

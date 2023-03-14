@@ -13,6 +13,22 @@ export default function ListarIndisponiveis({ vehiclesListIndisp: vehiclesList, 
     const { user } = useSelector((state: any) => state.user);
     const { removeVehicle } = useRemoveVehicle();
 
+    const [listaVeiculos, setListaVeiculos] = useState<Vehicle[]>([]);
+    const [search, setSearch] = useState<String>('');
+ useEffect(() => {
+        if(search.length === 0) {
+            setListaVeiculos(vehiclesList)
+            return
+        }
+        let x = listaVeiculos.filter((vehicle: Vehicle) => {
+            return vehicle.plate.toLowerCase().includes(search.toLowerCase())
+        })
+        setListaVeiculos(x)
+    }, [search])
+    useEffect(() => {
+        setListaVeiculos(vehiclesList)
+    }, [])
+
     return (
         <>
             <div className={styles.listVehicleContainer}>
@@ -31,7 +47,8 @@ export default function ListarIndisponiveis({ vehiclesListIndisp: vehiclesList, 
                                     <div className={styles.vehicleItemButtons}>
                                         <button>Editar</button>
                                         <button onClick={() => {
-                                            removeVehicle(String(vehicle.id)).then(() => {
+                                            removeVehicle(String(vehicle.id), user.token)
+                                            .then(() => {
                                                 refetch()
                                             })
                                         }}>Excluir</button>

@@ -62,8 +62,10 @@ export default function DashboardVehicle() {
                         <div className={styles.howUse}>
                             <h3 onClick={() => setShowHowUse(!showHowUse)}>Como Usar {showHowUse ? '?' : '+'}</h3>
                             {showHowUse && <div className={styles.howUseContent}>
-                                <p>Disponível: veiculos está disponível para realizar uma viagem.</p>
-                                <p>Indisponível: veiculos está indisponível para realizar uma viagem.</p>
+                                <hr/>
+                                <p><b>Disponível: </b>veiculos está disponível para realizar uma viagem.</p>
+                                <p><b>Indisponível: </b>veiculos está indisponível para realizar uma viagem.</p>
+                                <hr/>
                                 {user.management && (<><p>Esta página é responsável por listar todos os veiculos cadastrados no sistema, 
                                     além de permitir a inserção de novos veiculos.</p>
                                 <p>Para inserir um novo veiculos, basta clicar no botão "Adicionar veiculo" e preencher os campos com as informações do veiculos.</p></>)}

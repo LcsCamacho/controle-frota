@@ -21,6 +21,7 @@ export default function DashboardManutencao() {
     const [listarManutencao, setListarManutencao] = useState(false);
     const [inserirManutencao, setInserirManutencao] = useState(false);
     const [finalizarManutencao, setFinalizarManutencao] = useState(false);
+    const [showHowUse, setShowHowUse] = useState(false);
 
     const procuraTiposVeiculos = () => {
         const veiculosPasseio = listaVeiculosEmManutencao.filter(
@@ -64,6 +65,25 @@ export default function DashboardManutencao() {
         <>
             <div className={styles.dashboardManutencaoContainer}>
                 <h1>Manutenções</h1>
+
+                <div className={styles.header}>
+                        <div className={styles.howUse}>
+                            <h3 onClick={() => setShowHowUse(!showHowUse)}>Como Usar {showHowUse ? '?' : '+'}</h3>
+                            {showHowUse && <div className={styles.howUseContent}>
+                            <hr />
+                                <p><b>Em andamento:</b> manutenção está em andamento .</p>
+                                <p><b>Finalizada:</b> manutenção está finalizada.</p>
+                                <hr />
+                                {user.management && (<><p>Esta página é responsável por listar todos as manutenção cadastradas no sistema, 
+                                    além de permitir a inserção de novas manutenções.</p>
+                                 <p>Para inserir uma nova manutenção, basta clicar no botão "Adicionar Manutenção" 
+                                    e preencher os campos com as informações da manutenção.</p></>)}
+                                <p>Para listar todas as manutenções em andamento, basta clicar no botão "Listar Relatório de Manutenção".</p>
+                                <p>Para listar todas as manutenções, basta clicar no botão "Listar Relatório Geral".</p>
+                            </div>}
+                        </div>
+                    </div>
+                    
                 <div className={styles.dashboardManutencaoContent}>
                     <nav>
                         <h1 onClick={() => setListarManutencao(!listarManutencao)}
@@ -81,12 +101,12 @@ export default function DashboardManutencao() {
                                     strChartType="PieChart"
                                     data={[
                                         ['tipos', 'quantidade'],
+                                        ['Disponiveis', listaVeiculos.filter((veiculo) => veiculo.avaliable).length - listaVeiculosEmManutencao.length],
                                         ['Em manutenção', listaVeiculosEmManutencao.length],
-                                        ['Disponiveis', listaVeiculos.length - listaVeiculosEmManutencao.length],
                                     ]}
                                     title={'Veiculos em manutenção'}
                                 />
-                                <ChartModelPie
+                               { listaVeiculosEmManutencao.length > 0 && <ChartModelPie
                                     strChartType="PieChart"
                                     data={[
                                         ['tipos', 'quantidade'],
@@ -94,7 +114,7 @@ export default function DashboardManutencao() {
                                         ['Passeio', listaVeiculosPasseio.length],
                                     ]} 
                                     title={'Tipos de veiculos em manutenção'}                                
-                                    />
+                                    />}
                             </div>
                             <div className={styles.descText}>
                                     <span>Veiculos Pesados em manutenção : {listaVeiculosPesado.length}</span>

@@ -60,8 +60,10 @@ export default function DashboardMotorista() {
                         <div className={styles.howUse}>
                             <h3 onClick={() => setShowHowUse(!showHowUse)}>Como Usar {showHowUse ? '?' : '+'}</h3>
                             {showHowUse && <div className={styles.howUseContent}>
-                                <p>Disponível: Motorista está disponível para realizar uma viagem.</p>
-                                <p>Indisponível: Motorista está indisponível para realizar uma viagem.</p>
+                                <hr/>
+                                <p><b>Disponível:</b> Motorista está disponível para realizar uma viagem.</p>
+                                <p><b>Indisponível:</b> Motorista está indisponível para realizar uma viagem.</p>
+                                <hr/>
                                 {user.management && (<><p>Esta página é responsável por listar todos os motoristas cadastrados no sistema, além de permitir a inserção de novos motoristas.</p>
                                  <p>Para inserir um novo motorista, basta clicar no botão "Adicionar Motorista" 
                                     e preencher os campos com as informações do motorista.</p></>)}

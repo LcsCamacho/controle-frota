@@ -12,7 +12,6 @@ import { auth } from '../middlewares/middlewares'
 
 export const routerManutencao = express.Router()
 
-routerManutencao.post('*', auth)
 routerManutencao.put('*', auth)
 routerManutencao.delete('*', auth)
 
