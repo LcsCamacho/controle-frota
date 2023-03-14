@@ -24,7 +24,6 @@ model Driver {
   name       String
   avaliable  Boolean      @default(true)
   cnh        String       @unique
-  Operations Operations[]
 
   @@map("driver")
 }
@@ -36,7 +35,6 @@ model Vehicle {
   avaliable   Boolean       @default(true)
   type        String
   Maintenance Maintenance[]
-  Operations  Operations[]
 
   @@map("vehicle")
 }
@@ -54,18 +52,4 @@ model Maintenance {
   Vehicle     Vehicle   @relation(fields: [VehicleId], references: [id], onDelete: Cascade)
 
   @@map("maintenance")
-}
-
-model Operations {
-  id          Int      @id @default(autoincrement())
-  date        DateTime
-  driverId    Int
-  driver      Driver   @relation(fields: [driverId], references: [id], onDelete: Cascade)
-  VehicleId   Int
-  Vehicle     Vehicle  @relation(fields: [VehicleId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  description String
-
-  @@map("operations")
 }

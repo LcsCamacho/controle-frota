@@ -1,27 +1,39 @@
-import { openDashboardReducerVehicle } from 'features/redux/vehicle-slice';
-import { useDispatch } from 'react-redux';
 import styles from './style.module.scss';
-import { useState } from 'react';
 import { useAddVehicle } from 'hooks/UseAddVehicle';
-import { Vehicle } from 'types';
+import { z } from 'zod'
 
+const plateReg = new RegExp('[a-zA-Z]{3}[-][0-9][a-z0-9A-Z][0-9]{2}')
+const VehicleSchema = z.object({
+    model: z.string(),
+    plate: z.string().length(8).regex(plateReg),
+    type: z.string()
+})
 
-export default function InserirCarro() {
-    const dispatch = useDispatch();
+type VehicleType = z.infer<typeof VehicleSchema>
+
+export default function InserirCarro({refetch}: {refetch: () => any}) {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        let data:Vehicle = {
+        let result = VehicleSchema.safeParse({
             model: event.target.model.value,
             plate: event.target.plate.value,
             type: event.target.type.value,
-        }
-        console.log(data)
-        useAddVehicle(data).then(res => {
-            event.target.model.value = ''
-            event.target.plate.value = ''
         })
+        if (result.success) {
+            const data: VehicleType = result.data
+            useAddVehicle(data).then((res) => {
+                if (!res) alert('Erro ao inserir veículo')
+                event.target.model.value = ''
+                event.target.plate.value = ''
+                refetch()
+            })
+        }
+        else {
+            alert('Dados inválidos')
+        }
+
     }
 
     return (
@@ -34,7 +46,7 @@ export default function InserirCarro() {
                     <label htmlFor="plate">Placa</label>
                     <input type="text" placeholder='Insira a Placa' name="plate" id="plate" />
                     <label htmlFor="type">Tipo:</label>
-                    <select  name="type" id="type">
+                    <select name="type" id="type">
                         <option value="Passeio">Passeio</option>
                         <option value="Carga">Carga</option>
                     </select>

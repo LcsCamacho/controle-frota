@@ -1,7 +1,4 @@
-
 import { Vehicle } from 'types';
-
-
 
 export const useAddVehicle = async ({ model, plate, type }: Vehicle) => {
     console.log('Adding vehicle', model, plate, type);
@@ -16,4 +13,6 @@ export const useAddVehicle = async ({ model, plate, type }: Vehicle) => {
             type
         }),
     });
+    const data = response.ok? await response.json() : null;
+    return data;
 }

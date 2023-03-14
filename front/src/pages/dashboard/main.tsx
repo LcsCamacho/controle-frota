@@ -7,6 +7,7 @@ import DashboardMotorista from 'components/dashboard-motorista/dashboard';
 import DashboardManutencao from 'components/dashboard-manutencao/dashboard';
 import DashboardGeral from 'components/dashboard-descricao-geral';
 import { useQuery } from 'react-query';
+import { useState } from 'react';
 
 
 export default function Dashboard() {
@@ -14,32 +15,48 @@ export default function Dashboard() {
     const dashboardMotorista = useSelector((state: any) => state.driver.open);
     const dashboardManutencao = useSelector((state: any) => state.maintenance.open);
 
+    const [all, setAll] = useState({
+        vehicles: [],
+        drivers: [],
+        maintenances: [],
+        vehiclesInMaintenance: []
+    });
+
     const fetchs = async () => {
-        const [fvehicles, fdrivers, fmaintenances] = await Promise.all([
+        const [fvehicles, fdrivers, fmaintenances, fvehiclesInMaintenance] = await Promise.all([
             fetch('http://localhost:3000/veiculo'),
             fetch('http://localhost:3000/motorista'),
-            fetch('http://localhost:3000/manutencao')
+            fetch('http://localhost:3000/manutencao'),
+            fetch('http://localhost:3000/veiculos-manutencao')
         ]);
-        const [vehicles, drivers, maintenances] = await Promise.all([
+        const [vehicles, drivers, maintenances,vehiclesInMaintenance] = await Promise.all([
             fvehicles.json(),
             fdrivers.json(),
-            fmaintenances.json()
+            fmaintenances.json(),
+            fvehiclesInMaintenance.json()
         ]);
-        return { vehicles, drivers, maintenances }
+        setAll({
+            vehicles,
+            drivers,
+            maintenances,
+            vehiclesInMaintenance
+        })
+        
     };
 
     const queryOptions = {
-        retry: 5,
+        retry: 2,
         refetchOnWindowFocus: true,
         refetchInterval: 5000,
-        initialState: {
-            vehicles: ['', ''],
-            drivers: ['', ''],
-            maintenances: ['', '']
-        }
+        refetchOnMount: true,
+        refetchOnReconnect: true,
+        refetchIntervalInBackground: true,
     }
 
-    const { data, isLoading } = useQuery('dashboard', fetchs, queryOptions);
+    const { isLoading, isError } = useQuery('dashboard', fetchs, queryOptions);
+
+    if(isLoading) return <div>Carregando...</div>
+    if(isError) return <div>Erro ao carregar...</div>
 
     return (
         <>
@@ -47,7 +64,7 @@ export default function Dashboard() {
                 <HeaderUser />
                 <Header />
                 <div className={styles.dashboardContent}>
-                    {data !== undefined && <DashboardGeral dados={data} />}
+                    {<DashboardGeral dados={all} />}
                     {dashboardVeiculos && <DashboardVeiculos />}
                     {dashboardMotorista && <DashboardMotorista />}
                     {dashboardManutencao && <DashboardManutencao />}

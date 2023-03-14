@@ -1,5 +1,5 @@
 .dashboardVehicleContainer {
-    box-shadow:  0 0 0.5rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,6 +9,48 @@
     background-color: #f5f5f5;
     padding: 0 20px;
     border-radius: 1rem;
+
+    .header {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0 1rem;
+        background-color: #f5f5f5;
+
+        border: 1px dashed black;
+        padding: .75rem;
+
+        h3 {
+            cursor: pointer;
+
+            &:active,
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor:help;
+
+            &:active,
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
+
+        &:active,
+        &:hover,
+        &:focus {
+            background-color: #ffffff;
+        }
+    }
 
 }
 
@@ -90,11 +132,11 @@
             }
         }
     }
-    
+
 }
 
 @media screen and (max-width: 768px) {
-    
+
     .dashboardVehicleContainer {
 
         nav {
@@ -109,7 +151,7 @@
         flex-direction: column;
         gap: 1rem;
 
-        .descText{
+        .descText {
             align-items: center;
             justify-content: center;
         }

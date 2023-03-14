@@ -1,13 +1,17 @@
 import styles from './style.module.scss';
 import { FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
-import { ListarCarroIndispProps, Vehicle } from 'types';
+import { Vehicle } from 'types';
+import { useRemoveVehicle } from 'hooks/UseRemoveVehicle';
 
+export interface ListarCarroIndispProps {
+    vehiclesListIndisp: Vehicle[];
+    refetch: any;
+}
 
-
-export default function ListarIndisponiveis({vehiclesListIndisp:vehiclesList}:ListarCarroIndispProps) {
-    const {user} = useSelector((state: any) => state.user);
-
+export default function ListarIndisponiveis({ vehiclesListIndisp: vehiclesList, refetch }: ListarCarroIndispProps) {
+    const { user } = useSelector((state: any) => state.user);
+    const { removeVehicle } = useRemoveVehicle();
 
     return (
         <>
@@ -21,13 +25,17 @@ export default function ListarIndisponiveis({vehiclesListIndisp:vehiclesList}:Li
                                 <h2>Id:{String(vehicle.id)}</h2>
                                 <h2>{vehicle.model}</h2>
                                 <h2>{vehicle.plate}</h2>
-                                <h2><FcCancel/></h2>
+                                <h2><FcCancel /></h2>
 
                                 {user.management && (
                                     <div className={styles.vehicleItemButtons}>
-                                    <button>Editar</button>
-                                    <button>Excluir</button>
-                                </div>
+                                        <button>Editar</button>
+                                        <button onClick={() => {
+                                            removeVehicle(String(vehicle.id)).then(() => {
+                                                refetch()
+                                            })
+                                        }}>Excluir</button>
+                                    </div>
                                 )}
                             </div>
                         ))}

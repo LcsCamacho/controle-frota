@@ -3,7 +3,7 @@ import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
 import { Driver } from 'types';
 
-export default function InserirMotorista() {
+export default function InserirMotorista({refetch}:any) {
     const { user:{token} } = useSelector((state: any) => state.user);
 
     const handleSubmit = async (event: any) => {
@@ -18,6 +18,7 @@ export default function InserirMotorista() {
         .then(res => {
             event.target.name.value = ''
             event.target.cnh.value = ''
+            refetch()
         })
     }
 

@@ -6,18 +6,6 @@ export type usuario = {
     token?: string;
 }
 
-export interface ListarCarroProps {
-    vehiclesList: Vehicle[];
-}
-
-export interface ListarCarroDispProps {
-    vehiclesListDisp:Vehicle[];
-}
-
-export interface ListarCarroIndispProps {
-    vehiclesListIndisp:Vehicle[];
-}
-
 export interface reduxUsuario {
     user: {
         user: usuario;
@@ -40,6 +28,7 @@ export type Driver = {
 }
 
 export interface Maintenance {
+    checkout: any;
     id?: Number,
     date: String | Date,
     description: String,
@@ -47,6 +36,8 @@ export interface Maintenance {
     cost: Number,
     createdAt?: String,
     updatedAt?: String,
+    checkIn:Date,
+    checkOut:Date,
 }
 
 export interface VehiclesInMaintenance extends Maintenance {

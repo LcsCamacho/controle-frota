@@ -2,14 +2,16 @@ import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import { Driver } from 'types';
 import styles from './style.module.scss';
+import { useRemoveDriver } from 'hooks/UseRemoveDriver';
 
 interface driverListProps {
     driverList: Driver[];
+    refetch:any; 
 }
 
-export default function ListarMotoristas({driverList}:driverListProps) {
+export default function ListarMotoristas({driverList, refetch}:driverListProps) {
     const { user } = useSelector((state: any) => state.user);
-
+    const { removeDriver } = useRemoveDriver();
 
     return (
         <>
@@ -27,7 +29,11 @@ export default function ListarMotoristas({driverList}:driverListProps) {
                                 {user.management && (
                                     <div className={styles.driverItemButtons}>
                                         <button>Editar</button>
-                                        <button>Excluir</button>
+                                        <button onClick={() => {
+                                            removeDriver(String(driver.id)).then(()=>{
+                                                refetch()
+                                            })
+                                        }}>Excluir</button>
                                     </div>
                                 )}
                             </div>

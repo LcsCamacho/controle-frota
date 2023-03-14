@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Chart } from 'react-google-charts';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
-import { Driver, reduxUsuario } from 'types';
+import { reduxUsuario } from 'types';
 import styles from './dashboard.module.scss';
 
 
@@ -20,7 +20,7 @@ export default function DashboardMotorista() {
     const [listarMotoristaDisp, setListarMotoristaDisp] = useState(false);
     const [listarMotoristaIndisp, setListarMotoristaIndisp] = useState(false);
     const [inserirMotorista, setInserirMotorista] = useState(false);
-
+    const [showHowUse, setShowHowUse] = useState(false);
 
     const fetchs = async () => {
         const [motoristas, mtIndisponiveis, mtDisponiveis] = await Promise.all([
@@ -40,7 +40,7 @@ export default function DashboardMotorista() {
 
     let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
 
-    const { data, isLoading, isError } = useQuery('listDriver', fetchs, queryOptions)
+    const { data, isLoading, isError, refetch } = useQuery('listDriver', fetchs, queryOptions)
 
     if (isError) {
         return <h1>Error...</h1>
@@ -54,7 +54,24 @@ export default function DashboardMotorista() {
         data !== undefined ?
             <>
                 <div className={styles.dashboardMotoristaContainer}>
-                    <h1>Motoristas</h1>
+                    <h1>Veículos</h1>
+
+                    <div className={styles.header}>
+                        <div className={styles.howUse}>
+                            <h3 onClick={() => setShowHowUse(!showHowUse)}>Como Usar {showHowUse ? '?' : '+'}</h3>
+                            {showHowUse && <div className={styles.howUseContent}>
+                                <p>Disponível: Motorista está disponível para realizar uma viagem.</p>
+                                <p>Indisponível: Motorista está indisponível para realizar uma viagem.</p>
+                                {user.management && (<><p>Esta página é responsável por listar todos os motoristas cadastrados no sistema, além de permitir a inserção de novos motoristas.</p>
+                                 <p>Para inserir um novo motorista, basta clicar no botão "Adicionar Motorista" 
+                                    e preencher os campos com as informações do motorista.</p></>)}
+                                <p>Para listar todos os motoristas, basta clicar no botão "Listar Todos Motoristas".</p>
+                                <p>Para listar os motoristas disponíveis, basta clicar no botão "Listar Disponíveis".</p>
+                                <p>Para listar os motoristas indisponíveis, basta clicar no botão "Listar Indisponíveis".</p> 
+                            </div>}
+                        </div>
+                    </div>
+
                     <div className={styles.dashboardMotoristaContent}>
                         <nav>
                             <h1 onClick={() => setListarMotorista(!listarMotorista)}
@@ -121,21 +138,13 @@ export default function DashboardMotorista() {
                                     <span>Quantidade de motoristas indisponíveis : {data.listaMotoristaIndisp === undefined ? 0 : data.listaMotoristaIndisp.length}</span>
                                 </div>
 
-                                {/* 
-                            <p>Disponível: Motorista está disponível para realizar uma viagem.</p>
-                            <p>Indisponível: Motorista está indisponível para realizar uma viagem.</p>
-                            <p>Esta página é responsável por listar todos os motoristas cadastrados no sistema, além de permitir a inserção de novos motoristas.</p>
-                            <p>Para inserir um novo motorista, basta clicar no botão "Adicionar Motorista" e preencher os campos com as informações do motorista.</p>
-                            <p>Para listar todos os motoristas, basta clicar no botão "Listar Todos Motoristas".</p>
-                            <p>Para listar os motoristas disponíveis, basta clicar no botão "Listar Disponíveis".</p>
-                            <p>Para listar os motoristas indisponíveis, basta clicar no botão "Listar Indisponíveis".</p> */}
 
                             </div>
                         </div>
-                        {inserirMotorista && < InserirMotorista />}
-                        {data.listaMotoristaDisp !== undefined && listarMotoristaDisp && <ListarMotoristasDisponiveis driverListDisp={data.listaMotoristaDisp} />}
-                        {listarMotorista && <ListarMotoristas driverList={data.listaMotorista} />}
-                        {listarMotoristaIndisp && <ListarMotoristasIndisponiveis driverListIndisp={data.listaMotoristaIndisp} />}
+                        {inserirMotorista && < InserirMotorista refetch={refetch}/>}
+                        {data.listaMotoristaDisp !== undefined && listarMotoristaDisp && <ListarMotoristasDisponiveis driverListDisp={data.listaMotoristaDisp} refetch={refetch}/>}
+                        {listarMotorista && <ListarMotoristas driverList={data.listaMotorista} refetch={refetch} />}
+                        {listarMotoristaIndisp && <ListarMotoristasIndisponiveis driverListIndisp={data.listaMotoristaIndisp} refetch={refetch}/>}
 
                     </div>
                 </div>

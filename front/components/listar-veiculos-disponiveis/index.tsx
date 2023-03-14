@@ -1,12 +1,17 @@
 import styles from './style.module.scss';
 import { FcApproval } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
-import { ListarCarroDispProps, Vehicle } from 'types';
+import { Vehicle } from 'types';
+import { useRemoveVehicle } from 'hooks/UseRemoveVehicle';
 
+export interface ListarCarroDispProps {
+    vehiclesListDisp: Vehicle[];
+    refetch: any;
+}
 
-export default function ListarDisponiveis({vehiclesListDisp:vehiclesList}:ListarCarroDispProps) {
-    const {user} = useSelector((state: any) => state.user);
-
+export default function ListarDisponiveis({ vehiclesListDisp: vehiclesList, refetch }: ListarCarroDispProps) {
+    const { user } = useSelector((state: any) => state.user);
+    const { removeVehicle } = useRemoveVehicle();
 
     return (
         <>
@@ -20,13 +25,17 @@ export default function ListarDisponiveis({vehiclesListDisp:vehiclesList}:Listar
                                 <h2>Id:{String(vehicle.id)}</h2>
                                 <h2>{vehicle.model}</h2>
                                 <h2>{vehicle.plate}</h2>
-                                <h2><FcApproval/></h2>
+                                <h2><FcApproval /></h2>
 
                                 {user.management && (
                                     <div className={styles.vehicleItemButtons}>
-                                    <button>Editar</button>
-                                    <button>Excluir</button>
-                                </div>
+                                        <button>Editar</button>
+                                        <button onClick={() => {
+                                            removeVehicle(String(vehicle.id)).then(() => {
+                                                refetch()
+                                            })
+                                        }}>Excluir</button>
+                                    </div>
                                 )}
                             </div>
                         ))}

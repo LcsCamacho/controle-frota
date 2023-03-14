@@ -57,7 +57,7 @@
             padding: 1rem;
             box-shadow: 0 0 20px 1px #00000023;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             justify-content: center;
             align-items: center;
             gap: 1rem;
@@ -105,7 +105,7 @@
     .motoristasCharts,
     .manutencoesCharts {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
         width: 100%;
         gap: 1rem;
     }

@@ -1,15 +1,16 @@
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import styles from './style.module.scss';
-import { ListarCarroProps, Vehicle } from 'types';
+import { Vehicle } from 'types';
 import { useRemoveVehicle } from 'hooks/UseRemoveVehicle';
+export interface ListarCarroProps {
+    vehiclesList: Vehicle[];
+    refetch: any;
+}
 
-
-export default function ListarCarro({vehiclesList}:ListarCarroProps) {
+export default function ListarCarro({vehiclesList,refetch}:ListarCarroProps) {
     const { removeVehicle } = useRemoveVehicle();
     const { user } = useSelector((state: any) => state.user);
-
-
     return (
         <>
             <div className={styles.listVehicleContainer}>
@@ -29,7 +30,11 @@ export default function ListarCarro({vehiclesList}:ListarCarroProps) {
                                 {user.management && (
                                     <div className={styles.vehicleItemButtons}>
                                         <button>Editar</button>
-                                        <button onClick={() => removeVehicle(String(vehicle.id))}>Excluir</button>
+                                        <button onClick={() => {
+                                            removeVehicle(String(vehicle.id)).then(()=>{
+                                                refetch()
+                                            })
+                                        }}>Excluir</button>
                                     </div>
                                 )}
                             </div>
