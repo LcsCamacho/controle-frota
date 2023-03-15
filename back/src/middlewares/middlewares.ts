@@ -5,7 +5,11 @@ dotenv.config();
 
 export const auth = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
-    if(req.path === '/login') return
+    if(req.path === '/login') {
+        console.log('Login route. Skipping auth middleware.')
+        next()
+        return;
+    }
     if (!token) {
         console.log('Access denied. No token provided.');
         return res.status(401).send('Access denied. No token provided.');
