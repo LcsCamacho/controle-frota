@@ -3,9 +3,6 @@ import { listar, listarDisponiveis, ListarIndisponiveis, listarUm, inserir, alte
 import { auth } from '../middlewares/middlewares'
 
 export const routerMotorista = express.Router()
-routerMotorista.post('*', auth)
-routerMotorista.put('*', auth)
-routerMotorista.delete('*', auth)
 
 routerMotorista.get('/motorista', listar)
 routerMotorista.get('/motorista/:id', listarUm)

@@ -34,14 +34,14 @@ export const listarUm = (req: Request, res: Response) => {
 }
 
 export const inserir = (req: Request, res: Response) => {
+    console.log(req.body)
     prisma.$transaction([
         prisma.maintenance.create({
             data: {
                 date: new Date(req.body.date),
-                VehicleId: req.body.vehicleId,
+                VehicleId: Number(req.body.VehicleId),
                 description: req.body.description,
                 cost: req.body.cost,
-                Vehicle: {} 
             }
         }),
         prisma.vehicle.update({

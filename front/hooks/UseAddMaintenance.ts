@@ -14,7 +14,6 @@ export const useAddMaintenance = () => {
         const data = await response.json();
         console.log('Maintenance added', data);
         return data;
-
     };
 
     return { addMaintenance };

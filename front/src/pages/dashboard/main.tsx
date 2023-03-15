@@ -2,12 +2,12 @@ import Header from 'components/header-dashboard/header';
 import HeaderUser from 'components/header-user/header-user';
 import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
-import DashboardVeiculos from 'components/dashboard-veiculos/dashboard';
-import DashboardMotorista from 'components/dashboard-motorista/dashboard';
-import DashboardManutencao from 'components/dashboard-manutencao/dashboard';
 import DashboardGeral from 'components/dashboard-descricao-geral';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
+import DashboardManutencao from 'components/manutencoes/dashboard-manutencao/dashboard';
+import DashboardMotorista from 'components/motoristas/dashboard-motorista/dashboard';
+import DashboardVeiculo from 'components/veiculos/dashboard-veiculos/dashboard';
 
 
 export default function Dashboard() {
@@ -65,7 +65,7 @@ export default function Dashboard() {
                 <Header />
                 <div className={styles.dashboardContent}>
                     {<DashboardGeral dados={all} />}
-                    {dashboardVeiculos && <DashboardVeiculos />}
+                    {dashboardVeiculos && <DashboardVeiculo />}
                     {dashboardMotorista && <DashboardMotorista />}
                     {dashboardManutencao && <DashboardManutencao />}
                 </div>

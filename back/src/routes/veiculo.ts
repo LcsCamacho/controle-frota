@@ -11,9 +11,6 @@ import { auth } from '../middlewares/middlewares'
 
 export const routerVeiculo = express.Router()
 
-routerVeiculo.put('*', auth)
-routerVeiculo.delete('*', auth)
-
 routerVeiculo.get('/veiculo', listar)
 routerVeiculo.get('/veiculosFiltro', listarVarios)
 routerVeiculo.get('/veiculo/:id', listarUm)
