@@ -40,7 +40,6 @@ export default function DashboardVehicle() {
 
 
     let queryOptions = { retry: 5, refetchOnWindowFocus: true, refetchInterval: 5000, initialState: arr }
-
     const { data, isLoading, isError, refetch } = useQuery('listVehicle', fetchs, queryOptions)
 
     if (isError) {
@@ -59,13 +58,13 @@ export default function DashboardVehicle() {
                         <div className={styles.howUse}>
                             <h3 onClick={() => setShowHowUse(!showHowUse)}>Como Usar {showHowUse ? '?' : '+'}</h3>
                             {showHowUse && <div className={styles.howUseContent}>
-                                <hr/>
+                                <hr />
                                 <p><b>Disponível: </b>veiculos está disponível para realizar uma viagem.</p>
                                 <p><b>Indisponível: </b>veiculos está indisponível para realizar uma viagem.</p>
-                                <hr/>
-                                {user.management && (<><p>Esta página é responsável por listar todos os veiculos cadastrados no sistema, 
+                                <hr />
+                                {user.management && (<><p>Esta página é responsável por listar todos os veiculos cadastrados no sistema,
                                     além de permitir a inserção de novos veiculos.</p>
-                                <p>Para inserir um novo veiculos, basta clicar no botão "Adicionar veiculo" e preencher os campos com as informações do veiculos.</p></>)}
+                                    <p>Para inserir um novo veiculos, basta clicar no botão "Adicionar veiculo" e preencher os campos com as informações do veiculos.</p></>)}
                                 <p>Para listar todos os veiculos, basta clicar no botão "Listar Todos veiculos".</p>
                                 <p>Para listar os veiculos disponíveis, basta clicar no botão "Listar Disponíveis".</p>
                                 <p>Para listar os veiculos indisponíveis, basta clicar no botão "Listar Indisponíveis".</p>
@@ -140,7 +139,7 @@ export default function DashboardVehicle() {
 
                             </div>
                         </div>
-                        {user.management && inserirVeiculo && < InserirVeiculo refetch={refetch}/>}
+                        {user.management && inserirVeiculo && < InserirVeiculo refetch={refetch} />}
                         {listarVeiculosDisp && <ListarDisponiveis vehiclesListDisp={data.listaVeiculosDisp} refetch={refetch} />}
                         {listarVeiculos && <ListarVeiculos vehiclesList={data.listaVeiculos} refetch={refetch} />}
                         {listarVeiculosIndisp && <ListarIndisponiveis vehiclesListIndisp={data.listaVeiculosIndisp} refetch={refetch} />}

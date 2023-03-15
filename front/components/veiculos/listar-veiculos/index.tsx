@@ -17,12 +17,10 @@ export default function ListarCarro({ vehiclesList, refetch }: ListarCarroProps)
     const { user } = useSelector((state: any) => state.user);
 
     useEffect(() => {
-        
         if(search.length === 0) {
             setListaVeiculos(vehiclesList)
             return
         }
-            console.log("🚀 ~ file: index.tsx:24 ~ useEffect ~ setListaVeiculos:", setListaVeiculos)
         let x = listaVeiculos.filter((vehicle: Vehicle) => {
             return vehicle.plate.toLowerCase().includes(search.toLowerCase())
         })
@@ -36,7 +34,7 @@ export default function ListarCarro({ vehiclesList, refetch }: ListarCarroProps)
     return (<>
         <div className={styles.listVehicleContainer}>
             <div className={styles.listVehicleContent}>
-                <h1>Lista de Carros</h1>
+                <h1>Lista de Veículos</h1>
                 <div className={styles.buscar}>
                     <label htmlFor="search">Buscar por placa: </label>
                     <input type='search' id='search' placeholder="Digite a placa do veiculo" onChange={(e)=> {
@@ -61,6 +59,7 @@ export default function ListarCarro({ vehiclesList, refetch }: ListarCarroProps)
                                             removeVehicle(String(vehicle.id), user.token)
                                                 .then(() => {
                                                     refetch()
+                                                    setListaVeiculos(vehiclesList)
                                                 })
                                         }}>Excluir</button>
                                     </div>
@@ -71,7 +70,7 @@ export default function ListarCarro({ vehiclesList, refetch }: ListarCarroProps)
                 </div>
             </div>
         </div>
-    </>
+    </>     
     );
 
 }

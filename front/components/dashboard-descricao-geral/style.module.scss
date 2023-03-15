@@ -13,6 +13,7 @@
         justify-content: center;
         width: 100%;
         padding: .5rem;
+        position: relative;
 
         .dashboardGeralHeaderButtons {
             position: absolute;
@@ -99,6 +100,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
 
     .veiculosCharts,
@@ -108,5 +110,15 @@
         grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
         width: 100%;
         gap: 1rem;
+
+        h2 {
+            width: 100%;
+            padding: .5rem;
+            border-radius: 1rem;
+            align-items: center;
+            display: flex;
+            box-shadow: 0 0 20px 1px #00000023;
+            height: 100%;
+        }
     }
 }

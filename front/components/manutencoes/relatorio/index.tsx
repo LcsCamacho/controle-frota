@@ -1,20 +1,16 @@
-import { useRemoveMaintenance } from 'hooks/UseRemoveMaintenance';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { FcApproval, FcCancel } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import { Maintenance } from 'types';
-import styles from './dashboard.module.scss';
+import { MaintenanceProps } from '../listar-manutencoes';
+import styles from './style.module.scss'
+import { useRemoveMaintenance } from './../../../hooks/UseRemoveMaintenance';
 
-export interface MaintenanceProps {
-    data: Maintenance[],
-    refetch: any
-}
-
-export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
+export default function RelatorioManutencao({ data, refetch }: MaintenanceProps) {
     const { user } = useSelector((state: any) => state.user);
     const { removeMaintenance } = useRemoveMaintenance();
     const [newMaintenanceList, setNewMaintenanceList] = useState<Maintenance[]>([]);
     const [search, setSearch] = useState<String>('');
-
     useEffect(() => {
         if (search.length === 0) {
             setNewMaintenanceList(data)
@@ -30,12 +26,11 @@ export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
         console.log(data)
         setNewMaintenanceList(data)
     }, [])
-
     return (
         <>
             <div className={styles.listMaintenanceContainer}>
                 <div className={styles.listMaintenanceContent}>
-                    <h1>Lista de Manutenções</h1>
+                    <h1>Relatório Geral</h1>
                     <div className={styles.buscar}>
                         <label htmlFor="search">Buscar por placa: </label>
                         <input type='search' id='search' placeholder="Digite a placa do veiculo" onChange={(e) => {
@@ -53,6 +48,7 @@ export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
                                 <th>Data</th>
                                 <th>Criado em</th>
                                 <th>Atualizado em</th>
+                                <th>Finalizada</th>
                             </tr>
                         </thead>
                         <tbody className={styles.tbodyMaintenance}>
@@ -65,6 +61,7 @@ export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
                                     <td>{maintenance.date.slice(0, 10)}</td>
                                     <td>{new Date(maintenance.createdAt).toLocaleString()}</td>
                                     <td>{new Date(maintenance.updatedAt).toLocaleString()}</td>
+                                    <td>{maintenance.checkout ? <FcApproval /> : <FcCancel />}</td>
                                     {user.management && (
                                         <>
                                             <td onClick={() => {
@@ -82,3 +79,4 @@ export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
         </>
     )
 }
+

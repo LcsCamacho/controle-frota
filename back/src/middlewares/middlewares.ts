@@ -5,7 +5,7 @@ dotenv.config();
 
 export const auth = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
-
+    if(req.path === '/login') return
     if (!token) {
         console.log('Access denied. No token provided.');
         return res.status(401).send('Access denied. No token provided.');

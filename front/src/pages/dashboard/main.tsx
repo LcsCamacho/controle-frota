@@ -9,7 +9,6 @@ import DashboardManutencao from 'components/manutencoes/dashboard-manutencao/das
 import DashboardMotorista from 'components/motoristas/dashboard-motorista/dashboard';
 import DashboardVeiculo from 'components/veiculos/dashboard-veiculos/dashboard';
 
-
 export default function Dashboard() {
     const dashboardVeiculos = useSelector((state: any) => state.vehicle.open);
     const dashboardMotorista = useSelector((state: any) => state.driver.open);
@@ -63,8 +62,8 @@ export default function Dashboard() {
             <div className={styles.dashboardContainer}>
                 <HeaderUser />
                 <Header />
-                <div className={styles.dashboardContent}>
                     {<DashboardGeral dados={all} />}
+                <div className={styles.dashboardContent}>
                     {dashboardVeiculos && <DashboardVeiculo />}
                     {dashboardMotorista && <DashboardMotorista />}
                     {dashboardManutencao && <DashboardManutencao />}

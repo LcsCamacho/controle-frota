@@ -15,7 +15,11 @@ export const useAddVehicle = async ({ model, plate, type }: Vehicle, token:strin
             type
         }),
     });
-    const data = await response.json();
-    console.log('Vehicle added', data);
-    return data;
+    if(response.status === 500) {
+        alert("AI AI AI")
+    }else {
+        const data = await response.json();
+        console.log('Vehicle added', data);
+        return data;
+    }
 }

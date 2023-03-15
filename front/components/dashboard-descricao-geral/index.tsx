@@ -67,7 +67,9 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
         <div className={styles.dashboardGeralHeader}>
           <h1>Dashboard Geral</h1>
           <div className={styles.dashboardGeralHeaderButtons}>
-            <span onClick={() => setShowData(!showData)}>{showData ? <AiOutlineEyeInvisible /> : <MdOutlineVisibility />}</span>
+            <span onClick={() => {
+              setShowData(!showData)
+            }}>{showData ? <AiOutlineEyeInvisible /> : <MdOutlineVisibility />}</span>
           </div>
         </div>
         {showData && (
@@ -93,7 +95,7 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                 <div className={styles.totaisManutencoes}>
                   <h4>Manutenções</h4>
                   <span>Total: {maintenances.length}</span>
-                  <span>Em andamento: {maintenances.length}</span>
+                  <span>Em andamento: {veiculosEmManutencao.length}</span>
                   <span>Finalizadas: {manutencoesFinalizadas.length}</span>
                 </div>
 
@@ -117,25 +119,26 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                   <span>Veiculos de carga: {cargaVeiculos.length}</span>
                   <span>Veiculos de passeio: {passeioVeiculos.length}</span>
                 </div>
-
               </div>
             </div>
           </div>
-            <h2>Gráficos</h2>
+            <h1>Gráficos</h1>
             <div className={styles.chartsContainer}>
+              <h3>Motoristas</h3>
               <div className={styles.motoristasCharts}>
 
                 <ChartModelPie
                   strChartType='PieChart'
                   data={[
                     ['Total', 'Manutenções'],
-                    ['Motoristas ', drivers.length - motoristasEmViagem.length],
+                    ['Disponiveis ', drivers.length - motoristasEmViagem.length],
                     ['Em viagem', motoristasEmViagem.length]
                   ]}
                   title="Motoristas Disponiveis" />
 
               </div>
 
+              <h3>Veículos</h3>
               <div className={styles.veiculosCharts}>
 
                 <ChartModelPie
@@ -158,9 +161,10 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
 
               </div>
 
+              <h3>Manutenções</h3>
               <div className={styles.manutencoesCharts}>
 
-                <ChartModelColumn
+                {veiculosEmManutencao.length == 0 ? <h2>Nao há manutenções em andamento</h2> : <ChartModelColumn
                   strChartType='ColumnChart'
                   data={[
                     ['Tipo', 'Pesado', { role: 'style' }],
@@ -168,9 +172,9 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                     ['Passeio', passeioVeiculos.length, 'red'],
                   ]}
                   title='Tipos de Veículos em manutenção'
-                />
+                />}
 
-                <ChartModelPie
+                {veiculosEmManutencao.length == 0 ? <h2>Nao há manutenções em andamento</h2> : <ChartModelPie
                   strChartType='PieChart'
                   data={[
                     ['Total', 'Manutenções'],
@@ -178,6 +182,7 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                     ['Finalizadas', manutencoesFinalizadas.length],
                   ]}
                   title='Status das manutenções em andamento' />
+                }
               </div>
             </div>
           </>)}

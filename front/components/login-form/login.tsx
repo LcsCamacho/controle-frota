@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './login.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
@@ -14,8 +14,8 @@ export function LoginForm() {
     const dispatch = useDispatch();
     const [cadastroUsuario, setCadastroUsuario] = useState(false)
 
-
     const setUser = async ({token, name}:usuario) => {
+        console.log({token,name})
         let userFetch = await fetch('http://localhost:3000/usuario/' + name)
         let user:usuario = await userFetch.json()
         let newUser = {
@@ -24,11 +24,9 @@ export function LoginForm() {
             management:user.management,
             token: token
         }
-        console.log(newUser)
         dispatch(setUserReducer(newUser))
         router.push('/dashboard/main')
     }
-
 
     const { register, handleSubmit, formState: { errors } } = useForm<usuario>({
         defaultValues: {
@@ -37,7 +35,6 @@ export function LoginForm() {
             management: false
         }
     });
-
 
     const onSubmit: SubmitHandler<usuario> = (data: usuario) => {
         fetch('http://localhost:3000/login', {
@@ -48,12 +45,19 @@ export function LoginForm() {
             },
             body: JSON.stringify(data)
         })
-            .then(async (res) => {
-                res.ok ? await setUser(await res.json()) : alert('Falha no login')
+            .then((res) => {
+                if (res.status === 200) {
+                    res.json().then((res) => {
+                        console.log(res)
+                        setUser(res)
+                    })
+                }
+                else {
+                    alert('Usuário ou senha inválidos')
+                }
             })
             .catch(err => console.log(err))
     };
-
 
     return (
         <div className={styles.loginFormContainer}>
@@ -67,9 +71,11 @@ export function LoginForm() {
             </header>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" placeholder="Usuario"
+                    value="admin"
                     {...register('name', { required: true })} />
                 {errors.name && errors.name.type === "required" && <span>Este campo é obrigatório</span>}
                 <input type="password" placeholder="Senha"
+                    value="123456"
                     {...register('password', { required: true, minLength: 6 })} />
                 {errors.password && errors.password.type === "required" && <span>Este campo é obrigatório</span>}
                 {errors.password && errors.password.type === "minLength" && <i>A senha deve ter no mínimo 6 caracteres</i>}

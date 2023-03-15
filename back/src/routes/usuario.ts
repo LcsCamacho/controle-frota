@@ -11,6 +11,10 @@ import { auth } from '../middlewares/middlewares'
 
 export const routerUsuario = express.Router()
 
+routerUsuario.post('*', auth)
+routerUsuario.put('*', auth)
+routerUsuario.delete('*', auth)
+
 routerUsuario.get('/usuario', listar)
 routerUsuario.get('/usuario/:username', listarUm)
 routerUsuario.post('/usuario', inserir)

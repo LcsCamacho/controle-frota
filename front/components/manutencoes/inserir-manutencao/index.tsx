@@ -4,25 +4,19 @@ import styles from './style.module.scss';
 import { useAddMaintenance } from 'hooks/UseAddMaintenance';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
+import { MaintenanceProps } from '../listar-manutencoes';
 
-export default function InserirManutencao() {
+export interface VehicleProps {
+    data: Vehicle[],
+    refetch: any
+}
+
+export default function InserirManutencao({ data, refetch }: VehicleProps) {
     const { addMaintenance } = useAddMaintenance();
-    const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
-    const {user} = useSelector((state: any) => state.user)
+    const { user } = useSelector((state: any) => state.user)
 
-
-    const fetchVeiculos = async () => {
-        const response = await fetch('http://localhost:3000/veiculo',
-            { cache: 'default' });
-        const data = await response.json();
-        let avaliableVehicle = data.filter((veiculo: Vehicle) => veiculo.avaliable === true)
-        setVehicleList(avaliableVehicle)
-    }
-    let queryOptions = { retry: false, refetchOnWindowFocus: true, refetchInterval: 5000 }
-
-    const { isLoading, isError, refetch } = useQuery('inserirmanutencao', fetchVeiculos, queryOptions)
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
@@ -35,13 +29,13 @@ export default function InserirManutencao() {
             checkIn: new Date(),
         };
         console.log(data);
-        addMaintenance(data,user.token)
+        addMaintenance(data, user.token)
             .then((res) => {
+                refetch()
                 console.log(res)
                 setSuccess(true);
                 form.desc.value = '';
                 form.cost.value = '';
-                refetch()   
                 setTimeout(() => {
                     setSuccess(false);
                 }, 3000);
@@ -55,9 +49,6 @@ export default function InserirManutencao() {
             });
     }
 
-    if(isLoading) return <h1>Carregando...</h1>
-    if(isError) return <h1>Erro ao carregar</h1>
-
     return (
         <>
             <div className={styles.insertMaintenanceContainer}>
@@ -66,7 +57,7 @@ export default function InserirManutencao() {
                     <div className={styles.insertMaintenanceFormContent}>
                         <label htmlFor="vehicle">Veículo:</label>
                         <select name="vehicle" id={styles.vehicleSelect}>
-                            {vehicleList.map((vehicle: Vehicle, index: any) => (
+                            {data.filter((vehicle)=> !vehicle.avaliable).map((vehicle: Vehicle) => (
                                 <option key={String(vehicle.id)} value={String(vehicle.id)}>
                                     {String(vehicle.id)} {vehicle.model} {vehicle.plate}
                                 </option>

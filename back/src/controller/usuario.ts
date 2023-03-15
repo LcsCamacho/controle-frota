@@ -34,7 +34,7 @@ export const login = async (req: Request, res: Response) => {
                 jwt.sign(data, process.env.JWT_PRIVATE_KEY, { expiresIn: '60m' },(err, token) => {
                     if(!err) {
                         data.token = token;
-                        process.env.JWT_PRIVATE_KEY = token;
+                        //process.env.JWT_PRIVATE_KEY = token;
                         res.status(200).json(data).end();
                     }else {
                         console.log(err);

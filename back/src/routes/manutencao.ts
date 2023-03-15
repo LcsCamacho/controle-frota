@@ -12,6 +12,10 @@ import { auth } from '../middlewares/middlewares'
 
 export const routerManutencao = express.Router()
 
+routerManutencao.post('*', auth)
+routerManutencao.put('*', auth)
+routerManutencao.delete('*', auth)
+
 routerManutencao.get('/manutencao',listar)
 routerManutencao.get('/manutencao/:id', listarUm)
 routerManutencao.get('/veiculos-manutencao', listarVeiculoEmManutencao)

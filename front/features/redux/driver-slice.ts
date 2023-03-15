@@ -1,12 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { Driver } from "types"
 
-interface driverSlice {
+export interface driverSlice {
     open: boolean,
-}
-
-interface driverPayload {
-    payload: Driver
 }
 
 const initialState:driverSlice = {
