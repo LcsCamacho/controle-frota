@@ -12,7 +12,6 @@ export const useAddTrip = () => {
             body: JSON.stringify(trip),
         });
         const data = await response.json();
-        console.log('Trip added', data);
         return data;
     };
 

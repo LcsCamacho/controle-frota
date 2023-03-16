@@ -14,6 +14,7 @@ export const listar = (req: Request, res: Response) => {
             Driver: {
                 select: {
                     name: true,
+                    avaliable: true,
                 }
             }
         }
@@ -40,6 +41,7 @@ export const listarUm = (req: Request, res: Response) => {
             Driver: {
                 select: {
                     name: true,
+                    avaliable: true,
                 }
             }
         }
@@ -51,7 +53,7 @@ export const listarUm = (req: Request, res: Response) => {
 }
 
 export const criar = (req: Request, res: Response) => {
-    const { date, VehicleId, DriverId  } = req.body;
+    const { date, VehicleId, DriverId } = req.body;
     prisma.$transaction([
         prisma.trip.create({
             data: {
@@ -136,6 +138,7 @@ export const atualizar = (req: Request, res: Response) => {
 
 export const finalizar = (req: Request, res: Response) => {
     const { id } = req.params;
+    const { VehicleId, DriverId } = req.body;
     prisma.$transaction([
         prisma.trip.update({
             where: {
@@ -147,7 +150,7 @@ export const finalizar = (req: Request, res: Response) => {
         }),
         prisma.vehicle.update({
             where: {
-                id: Number(id)
+                id: Number(VehicleId)
             },
             data: {
                 avaliable: true
@@ -155,7 +158,7 @@ export const finalizar = (req: Request, res: Response) => {
         }),
         prisma.driver.update({
             where: {
-                id: Number(id)
+                id: Number(DriverId)
             },
             data: {
                 avaliable: true

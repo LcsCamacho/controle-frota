@@ -25,9 +25,8 @@ export default function InserirMotorista({refetch}:any) {
             avaliable: true
         })
         if(!result.success) {
-            alert('Dados inválidos')
-            console.log(result)
-            return
+            alert('Dados inválidos, insira usa cnh corretamente')
+            return  
         }
         useAddDriver(result.data, token)
         .then(() => {

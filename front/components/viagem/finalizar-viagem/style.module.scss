@@ -38,6 +38,14 @@
         gap: 1rem;
         width: 75%;
 
+        .currentTrip {
+            display: flex;
+            flex-direction: column;
+            gap: .75rem;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
         label {
             font-size: 1.5rem;
         }

@@ -1,8 +1,8 @@
-import { Maintenance } from "types";
+import { vehicleZodType } from "components/manutencoes/inserir-manutencao";
 
 export const useAddMaintenance = () => {
 
-    const addMaintenance = async (maintenance: Maintenance, token:string) => {
+    const addMaintenance = async (maintenance: vehicleZodType, token:string) => {
         const response = await fetch(`http://localhost:3000/manutencao`, {
             method: 'POST',
             headers: {
@@ -12,7 +12,7 @@ export const useAddMaintenance = () => {
             body: JSON.stringify(maintenance),
         });
         const data = await response.json();
-        console.log('Maintenance added', data);
+        if(!data.ok) return {error: data.status}
         return data;
     };
 

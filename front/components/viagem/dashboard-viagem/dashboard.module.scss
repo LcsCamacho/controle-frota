@@ -36,7 +36,7 @@
         p {
             font-size: 1.1rem;
             font-weight: 500;
-            cursor:help;
+            cursor: help;
             padding: .5rem;
 
             &:active,
@@ -117,11 +117,24 @@
 
 
             .chart {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                grid-gap: 1rem;
+                gap: 1rem;
 
                 * {
+                    min-width: none;
                     border-radius: 1rem;
 
                 }
+            }
+
+            @media (max-width: 470px) {
+                .chart {
+                    width: 110%;
+                }
+
             }
 
             .descText {

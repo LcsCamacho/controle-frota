@@ -17,7 +17,7 @@ interface CadastroFormProps {
     onRequestClose: () => void;
 }
 
-export function CadastroForm({modal, onRequestClose}: CadastroFormProps) {
+export function CadastroForm({ modal, onRequestClose }: CadastroFormProps) {
 
 
     const { register, handleSubmit, formState: { errors } } = useForm<usuario>({
@@ -34,7 +34,7 @@ export function CadastroForm({modal, onRequestClose}: CadastroFormProps) {
             alert('As senhas não conferem')
             return
         }
-        let usuarioCadastrado:usuario = {
+        let usuarioCadastrado: usuario = {
             name: data.name,
             password: data.password,
             management: false
@@ -47,16 +47,16 @@ export function CadastroForm({modal, onRequestClose}: CadastroFormProps) {
             },
             body: JSON.stringify(usuarioCadastrado)
         })
-        .then( () => {
-            alert('Usuario cadastrado com sucesso')
-            onRequestClose()
-        })
-        .catch(err => console.log(err))
+            .then(() => {
+                alert('Usuario cadastrado com sucesso')
+                onRequestClose()
+            })
+            .catch(err => console.log(err))
     };
 
 
     return (
-            <Modal
+        <Modal
             isOpen={modal}
             onRequestClose={onRequestClose}
             contentLabel="Modal"
@@ -64,30 +64,30 @@ export function CadastroForm({modal, onRequestClose}: CadastroFormProps) {
             className={styles.modal}
             ariaHideApp={false}
         >
-        <div className={styles.CadastroFormContainer}>
-            <header className={styles.header}>
-                <Image src={logo}
-                    width={50}
-                    height={50}
-                    alt="Agrotech" />
-                <h1>Agrotech - Cadastro de Usúario</h1>
+            <div className={styles.CadastroFormContainer}>
+                <header className={styles.header}>
+                    <Image src={logo}
+                        width={50}
+                        height={50}
+                        alt="Agrotech" />
+                    <h1>Agrotech - Cadastro de Usúario</h1>
 
-            </header>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input type="text" placeholder="Usuario"
-                    {...register('name', { required: true })} />
-                {errors.name && errors.name.type === "required" && <span>Este campo é obrigatório</span>}
-                <input type="password" placeholder="Senha"
-                    {...register('password', { required: true, minLength: 6 })} />
-                {errors.password && errors.password.type === "required" && <span>Este campo é obrigatório</span>}
-                {errors.password && errors.password.type === "minLength" && <i>A senha deve ter no mínimo 6 caracteres</i>}
-                <input type="password" placeholder="Confirme sua senha"
-                    {...register('confirmPassword', { required: true, minLength: 6 })} />
-                {errors.confirmPassword && errors.confirmPassword.type === "required" && <span>Este campo é obrigatório</span>}
-                {errors.confirmPassword && errors.confirmPassword.type === "minLength" && <i>A senha deve ter no mínimo 6 caracteres</i>}
-                <button type="submit">Cadastrar</button>
-            </form>
-        </div>
+                </header>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <input type="text" placeholder="Usuario"
+                        {...register('name', { required: true })} />
+                    {errors.name && errors.name.type === "required" && <span>Este campo é obrigatório</span>}
+                    <input type="password" placeholder="Senha"
+                        {...register('password', { required: true, minLength: 6 })} />
+                    {errors.password && errors.password.type === "required" && <span>Este campo é obrigatório</span>}
+                    {errors.password && errors.password.type === "minLength" && <i>A senha deve ter no mínimo 6 caracteres</i>}
+                    <input type="password" placeholder="Confirme sua senha"
+                        {...register('confirmPassword', { required: true, minLength: 6 })} />
+                    {errors.confirmPassword && errors.confirmPassword.type === "required" && <span>Este campo é obrigatório</span>}
+                    {errors.confirmPassword && errors.confirmPassword.type === "minLength" && <i>A senha deve ter no mínimo 6 caracteres</i>}
+                    <button type="submit">Cadastrar</button>
+                </form>
+            </div>
         </Modal>
     );
 }

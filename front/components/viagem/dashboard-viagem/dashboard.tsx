@@ -28,43 +28,39 @@ export default function DashboardViagem() {
     const [finalizarViagem, setFinalizarViagem] = useState(false);
     const [showHowUse, setShowHowUse] = useState(false);
 
-
-    const procuraViagensAndamento = () => {
-        let x = listaViagens.filter((viagem: Trip) => {
-            return !viagem.checkOut
-        })
-        setListaViagensAndamento(x)
-    }
-
-    const procuraViagensFinalizadas = () => {
-        let x = listaViagens.filter((viagem: Trip) => {
-            return viagem.checkOut
-        })
-        setListaViagensFinalizadas(x)
-    }
-
     const fetchs = async () => {
         const response = await fetch('http://localhost:3000/viagem');
         const data = await response.json();
         setListaViagens(data)
     }
+
     let queryOptions = { retry: 1, refetchOnWindowFocus: true, refetchInterval: 5000 }
     const { isLoading, isError, refetch } = useQuery('listarViagens', fetchs, queryOptions)
 
     useEffect(() => {
-        procuraViagensAndamento()
-        procuraViagensFinalizadas()
+        setListaViagensAndamento(() => {
+            return listaViagens.filter((viagem: Trip) => {
+                return !viagem.checkOut
+            })
+        })
+        setListaViagensFinalizadas(() => {
+            return listaViagens.filter((viagem: Trip) => {
+                return viagem.checkOut
+            })
+        })
     }, [listaViagens])
 
     useEffect(() => {
-        let x = listaViagensAndamento.filter((viagem: Trip) => {
-            return viagem.Vehicle.type.toLowerCase() === 'pesado'
+        setListaVeiculosAndamentoPesado(() => {
+            return listaViagensAndamento.filter((viagem: Trip) => {
+                return viagem.Vehicle.type.toLowerCase() === 'carga';
+            });
         })
-        let y = listaViagensAndamento.filter((viagem: Trip) => {
-            return viagem.Vehicle.type.toLowerCase() === 'passeio'
+        setListaVeiculosAndamentoPasseio(() => {
+            return listaViagensAndamento.filter((viagem: Trip) => {
+                return viagem.Vehicle.type.toLowerCase() === 'passeio';
+            });
         })
-        setListaVeiculosAndamentoPesado(x)
-        setListaVeiculosAndamentoPasseio(y)
     }, [listaViagensAndamento])
 
     if (isError) {
@@ -73,7 +69,6 @@ export default function DashboardViagem() {
     if (isLoading) {
         return <h1>Loading...</h1>
     }
-
 
     return (
         <>
@@ -116,7 +111,9 @@ export default function DashboardViagem() {
                             <div className={styles.descContent}>
                                 <h1>Status</h1>
                                 <div className={styles.chart}>
-                                    <ChartModelPie
+
+
+                                    {listaViagensAndamento.length > 0 && <ChartModelPie
                                         title="Tipos de Veiculos em Viagem"
                                         data={[
                                             ['Tipo', 'Quantidade'],
@@ -124,7 +121,20 @@ export default function DashboardViagem() {
                                             ['Carga', listaVeiculosAndamentoPesado.length],
                                         ]}
                                         strChartType='PieChart'
-                                    />
+                                    />}
+
+
+                                    {listaViagensFinalizadas.length > 0 && <ChartModelPie
+                                            title="Status das viagens do mês"
+                                            data={[
+                                                ['Tipo', 'Quantidade'],
+                                                ['Finalizadas', listaViagensFinalizadas.length],
+                                                ['Em Andamento', listaViagensAndamento.length],
+                                            ]}
+                                            strChartType='PieChart'
+                                        />}
+
+
                                 </div>
                                 <div className={styles.descText}>
                                     <p><b>Finalizadas no mês: </b>{listaViagensFinalizadas.length}</p>
@@ -132,7 +142,11 @@ export default function DashboardViagem() {
                                 </div>
                             </div>
                         </div>
-                        {user.management && finalizarViagem && <FinalizarViagem viagensAndamentoProps={listaViagensAndamento} refetch={refetch} />}
+
+
+                        {user.management && finalizarViagem && <FinalizarViagem 
+                            viagensAndamentoProps={listaViagensAndamento} 
+                            refetch={refetch} />}
 
 
                         {user.management && inserirViagem && <InserirViagem refetch={refetch} />}
@@ -141,14 +155,16 @@ export default function DashboardViagem() {
                         {listarViagens && <ListarViagem viagemListProps={listaViagens} refetch={refetch} />}
 
 
-                        {listarViagensFinalizadas && <ListarViagensFinalizadas viagemListProps={listaViagens.filter((trip) => {
-                            return trip.checkOut
-                        })} refetch={refetch} />}
+                        {listarViagensFinalizadas && <ListarViagensFinalizadas 
+                            viagemListProps={listaViagens.filter((trip) => {
+                                return trip.checkOut
+                            })} refetch={refetch} />}
 
 
-                        {listarViagensEmAndamento && <ListarViagensAndamento viagemListProps={listaViagens.filter((trip) => {
-                            return !trip.checkOut
-                        })} refetch={refetch} />}
+                        {listarViagensEmAndamento && <ListarViagensAndamento 
+                            viagemListProps={listaViagens.filter((trip) => {
+                                return !trip.checkOut
+                            })} refetch={refetch} />}
 
 
                     </div>

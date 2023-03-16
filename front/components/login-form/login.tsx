@@ -14,14 +14,13 @@ export function LoginForm() {
     const dispatch = useDispatch();
     const [cadastroUsuario, setCadastroUsuario] = useState(false)
 
-    const setUser = async ({token, name}:usuario) => {
-        console.log({token,name})
+    const setUser = async ({ token, name }: usuario) => {
         let userFetch = await fetch('http://localhost:3000/usuario/' + name)
-        let user:usuario = await userFetch.json()
+        let user: usuario = await userFetch.json()
         let newUser = {
             id: user.id,
             name: user.name,
-            management:user.management,
+            management: user.management,
             token: token
         }
         dispatch(setUserReducer(newUser))
@@ -47,16 +46,15 @@ export function LoginForm() {
         })
             .then((res) => {
                 if (res.status === 200) {
-                    res.json().then((res) => {
-                        console.log(res)
-                        setUser(res)
-                    })
+                    res.json()
+                        .then((res) => {
+                            setUser(res)
+                        })
                 }
                 else {
                     alert('Usuário ou senha inválidos')
                 }
             })
-            .catch(err => console.log(err))
     };
 
     return (
@@ -71,7 +69,7 @@ export function LoginForm() {
             </header>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" placeholder="Usuario"
-                    value="lcscamacho"
+                    value="admin"
                     {...register('name', { required: true })} />
                 {errors.name && errors.name.type === "required" && <span>Este campo é obrigatório</span>}
                 <input type="password" placeholder="Senha"

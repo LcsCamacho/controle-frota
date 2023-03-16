@@ -60,8 +60,27 @@
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             padding: .5rem;
+
+            button {
+                width: 100%;
+                max-width: 500px;
+                padding: 1rem;
+                border: none;
+                border-radius: 0.5rem;
+                background-color: #473b21;
+                color: #fff;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all .3s ease;
+    
+                &:hover,
+                &:focus,
+                &:active {
+                    transform: scale(.97);
+                }
+            }
         }	
     }
 }

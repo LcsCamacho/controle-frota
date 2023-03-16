@@ -10,43 +10,19 @@ interface ViagensAndamentoProps {
 
 export default function FinalizarViagem({ viagensAndamentoProps, refetch }: ViagensAndamentoProps) {
     const { user } = useSelector((state: any) => state.user);
+    const [loadingCurrentTrip, setLoadingCurrentTrip] = useState(true);
     const [success, setSuccess] = useState(false);
     const [selectedTrip, setSelectedTrip] = useState('');
-    const [currentTrip, setCurrentTrip] = useState<Trip>({
-
-    });
+    const [currentTrip, setCurrentTrip] = useState<Trip>(viagensAndamentoProps[0])
     const selectRef = useRef<HTMLSelectElement | null>(null);
 
+    useEffect(() => {
+        setSelectedTrip(selectRef.current?.value || '')
+    }, [])
 
-
-    const finalizarViagem = (id: string) => {
-        fetch('http://localhost:3000/viagem/finalizar/' + id, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': user.token
-            },
-            body: JSON.stringify({})
-        })
-    }
-
-    function submitForm(event: any): void {
-        event.preventDefault();
-        console.log(selectedTrip)
-        // finalizarViagem(selectedTrip)
-        refetch()
-    }
-
-    useLayoutEffect(() => {
-        if (selectRef.current) {
-            setCurrentTrip(selectRef.current.value)
-        }
-    },[])
-
-    useEffect(()=>{
-        console.log({currentTrip})
-    },[currentTrip])
-        
+    useEffect(() => {
+        setLoadingCurrentTrip(false)
+    }, [currentTrip])
 
     useEffect(() => {
         fetch('http://localhost:3000/viagem/' + selectedTrip)
@@ -55,6 +31,28 @@ export default function FinalizarViagem({ viagensAndamentoProps, refetch }: Viag
                 setCurrentTrip(data)
             })
     }, [selectedTrip])
+
+    const finalizarViagem = (id: string) => {
+        fetch('http://localhost:3000/viagem/finalizar/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': user.token
+            },
+            body: JSON.stringify({
+                DriverId: currentTrip.DriverId,
+                VehicleId: currentTrip.VehicleId,
+            })
+        })
+            .then(() => {
+                refetch()
+            })
+    }
+
+    function submitForm(event: any): void {
+        event.preventDefault();
+        finalizarViagem(selectedTrip)
+    }
 
     return (
         <>
@@ -65,24 +63,25 @@ export default function FinalizarViagem({ viagensAndamentoProps, refetch }: Viag
                         <div className={styles.formItem}>
                             <label htmlFor="veiculo">Veiculo</label>
                             <select ref={selectRef} onChange={(e) => setSelectedTrip(e.currentTarget.value)}>
-                                {viagensAndamentoProps.map((viagem: Trip) => {
+                                {viagensAndamentoProps.length > 0 ? viagensAndamentoProps.map((viagem: Trip) => {
                                     return (
-                                        <option key={Number(viagem.id)} value={String(viagem.id)}>{viagem.Vehicle.plate}</option>
+                                        <option key={Number(viagem.id)} value={String(viagem.id)}>{viagem.Driver.name} - {viagem.Vehicle.plate} </option>
                                     )
-                                })}
+                                }) : <option value="">Nenhuma viagem em andamento</option>}
                             </select>
                         </div>
-                        <div className={styles.formItem}>
-                            {/* {currentTrip.length > 0 && (
+                        {<div className={styles.formItem}>
+                            {loadingCurrentTrip ? <>Loading...</> : (<>
+                                <h3>Descrição da viagem</h3>
                                 <div className={styles.currentTrip}>
-                                    <span>Veiculo: {currentTrip.Vehicle.plate}</span>
-                                    <span>Data: {new Date(currentTrip.date).toLocaleString()}</span>
+                                    <span>Inicio da viagem: data e hora = {new Date(currentTrip.date).toLocaleString()}</span>
                                 </div>
-                            )} */}
-                        </div>
+                            </>)}
+                        </div>}
                         <div className={styles.formItem}>
                             <button type="submit">Enviar</button>
                         </div>
+
                         {success && <h1>Viagem adicionada com sucesso!</h1>}
                     </form>
                 </div>

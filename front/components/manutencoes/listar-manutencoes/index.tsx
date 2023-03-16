@@ -27,7 +27,6 @@ export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
     }, [search])
 
     useEffect(() => {
-        console.log(data)
         setNewMaintenanceList(data)
     }, [])
 

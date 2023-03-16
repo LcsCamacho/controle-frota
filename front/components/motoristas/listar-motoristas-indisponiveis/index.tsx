@@ -5,13 +5,12 @@ import styles from './style.module.scss';
 import { useRemoveDriver } from 'hooks/UseRemoveDriver';
 import { useState, useEffect } from 'react';
 
-
 interface driverListProps {
     driverListIndisp: Driver[];
-    refetch:any; 
+    refetch: any;
 }
 
-export default function ListarMotoristasIndisponiveis({driverListIndisp: driverList, refetch}: driverListProps) {
+export default function ListarMotoristasIndisponiveis({ driverListIndisp: driverList, refetch }: driverListProps) {
     const { user } = useSelector((state: any) => state.user);
     const { removeDriver } = useRemoveDriver();
 
@@ -19,7 +18,7 @@ export default function ListarMotoristasIndisponiveis({driverListIndisp: driverL
     const [search, setSearch] = useState<String>('');
 
     useEffect(() => {
-        if(search.length === 0) {
+        if (search.length === 0) {
             setListaMotorista(driverList)
             return
         }
@@ -33,6 +32,13 @@ export default function ListarMotoristasIndisponiveis({driverListIndisp: driverL
         setListaMotorista(driverList)
     }, [])
 
+    const handleRemoveDriver = (id: string) => {
+        removeDriver(id, user.token)
+            .then(() => {
+                refetch()
+            })
+    }
+
     return (
         <>
             <div className={styles.listDriverContainer}>
@@ -40,28 +46,22 @@ export default function ListarMotoristasIndisponiveis({driverListIndisp: driverL
                     <h1>Lista de Motoristas Indisponíveis</h1>
                     <div className={styles.buscar}>
                         <label htmlFor="search">Buscar por nome: </label>
-                        <input type='search' id='search' placeholder="Digite o nome do motorista" 
-                            onChange={(e)=> {
-                            setSearch(e.target.value)
-                        }} />
+                        <input type='search' id='search' placeholder="Digite o nome do motorista"
+                            onChange={(e) => {
+                                setSearch(e.target.value)
+                            }} />
                     </div>
                     <h2>Quantidade: {driverList.length}</h2>
                     <div className={styles.driverList}>
                         {listaMotorista.map((driver: Driver, index: any) => (
                             <div className={styles.driverItem} key={index}>
-                                <h2>Id:{String(driver.id)}</h2>
-                                <h2>{driver.name}</h2>
-                                <h2>{driver.avaliable ? <FcApproval /> : <FcCancel />}</h2>
+                                <span><b>Id:</b>{String(driver.id)}</span>
+                                <span><b>Nome: </b>{driver.name}</span>
+                                <span>{driver.avaliable ? <FcApproval /> : <FcCancel />}</span>
 
                                 {user.management && (
                                     <div className={styles.driverItemButtons}>
-                                        <button>Editar</button>
-                                        <button onClick={() => {
-                                            removeDriver(String(driver.id), user.token)
-                                            .then(()=>{
-                                                refetch()
-                                            })
-                                        }}>Excluir</button>
+                                        <button onClick={() => handleRemoveDriver(String(driver.id))}>Excluir</button>
                                     </div>
                                 )}
                             </div>

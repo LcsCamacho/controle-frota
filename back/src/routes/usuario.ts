@@ -1,10 +1,10 @@
 import express from 'express'
-import { 
-    listar, 
-    inserir, 
-    alterar, 
-    deletar, 
-    login, 
+import {
+    listar,
+    inserir,
+    alterar,
+    deletar,
+    login,
     listarUm
 } from '../controller/usuario'
 import { auth } from '../middlewares/middlewares'

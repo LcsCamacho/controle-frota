@@ -2,14 +2,24 @@ import { useState } from 'react';
 import { Maintenance, Vehicle } from 'types';
 import styles from './style.module.scss';
 import { useAddMaintenance } from 'hooks/UseAddMaintenance';
-import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
-import { MaintenanceProps } from '../listar-manutencoes';
+import { z } from 'zod';
 
 export interface VehicleProps {
     data: Vehicle[],
     refetch: any
 }
+
+const schema = z.object({
+    description: z.string(),
+    cost: z.number(),
+    date: z.date(),
+    VehicleId: z.number(),
+    checkIn: z.date(),
+})
+
+export type vehicleZodType = z.infer<typeof schema>
+ 
 
 export default function InserirManutencao({ data, refetch }: VehicleProps) {
     const { addMaintenance } = useAddMaintenance();
@@ -20,19 +30,21 @@ export default function InserirManutencao({ data, refetch }: VehicleProps) {
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
+
+        if(confirm('Deseja realmente inserir carro a manutenção?') === false) return;
+
         const form = event.target;
-        const data: Maintenance = {
+        const result = schema.parse({
             description: form.desc.value,
             cost: Number(form.cost.value),
             date: new Date(),
             VehicleId: Number(form.vehicle.value),
             checkIn: new Date(),
-        };
-        console.log(data);
-        addMaintenance(data, user.token)
+        })
+ 
+        addMaintenance(result, user.token)
             .then((res) => {
                 refetch()
-                console.log(res)
                 setSuccess(true);
                 form.desc.value = '';
                 form.cost.value = '';
@@ -41,7 +53,6 @@ export default function InserirManutencao({ data, refetch }: VehicleProps) {
                 }, 3000);
             })
             .catch((err) => {
-                console.log(err)
                 setError(true);
                 setTimeout(() => {
                     setError(false);
@@ -57,11 +68,12 @@ export default function InserirManutencao({ data, refetch }: VehicleProps) {
                     <div className={styles.insertMaintenanceFormContent}>
                         <label htmlFor="vehicle">Veículo:</label>
                         <select name="vehicle" id={styles.vehicleSelect}>
-                            {data.filter((vehicle)=> !vehicle.avaliable).map((vehicle: Vehicle) => (
+                            {data.filter((vehicle)=> vehicle.avaliable).length > 0 ? 
+                            data.filter((vehicle)=> vehicle.avaliable).map((vehicle: Vehicle) => (
                                 <option key={String(vehicle.id)} value={String(vehicle.id)}>
                                     {String(vehicle.id)} {vehicle.model} {vehicle.plate}
                                 </option>
-                            ))}
+                            )): <option>Nenhum veículo disponível</option>}
                         </select>
                         <label htmlFor="description">Descrição</label>
                         <textarea placeholder="Insira a descrição da Manutenção" id="desc" required />

@@ -30,6 +30,13 @@ export default function ListarDisponiveis({ vehiclesListDisp: vehiclesList, refe
         setListaVeiculos(vehiclesList)
     }, [])
 
+    const handleRemoveVehicle = (id: string) => {
+        removeVehicle(id, user.token)
+            .then(() => {
+                refetch()
+            })
+    }
+
     return (
         <>
             <div className={styles.listVehicleContainer}>
@@ -45,20 +52,16 @@ export default function ListarDisponiveis({ vehiclesListDisp: vehiclesList, refe
                     <div className={styles.vehicleList}>
                         {listaVeiculos.map((vehicle: Vehicle, index: any) => (
                             <div className={styles.vehicleItem} key={index}>
-                                <h2>Id:{String(vehicle.id)}</h2>
-                                <h2>{vehicle.model}</h2>
-                                <h2>{vehicle.plate}</h2>
-                                <h2><FcApproval /></h2>
+                                <span><b>Modelo:</b>{vehicle.model}</span>
+                                <span><b>Placa:</b>{vehicle.plate}</span>
+                                <span><b>Tipo:</b>{vehicle.type}</span>
+
+                                <span><FcApproval /></span>
 
                                 {user.management && (
                                     <div className={styles.vehicleItemButtons}>
-                                        <button>Editar</button>
-                                        <button onClick={() => {
-                                            removeVehicle(String(vehicle.id),user.token)
-                                            .then(() => {
-                                                refetch()
-                                            })
-                                        }}>Excluir</button>
+                                        <button 
+                                            onClick={() => handleRemoveVehicle(String(vehicle.id))}>Excluir</button>
                                     </div>
                                 )}
                             </div>

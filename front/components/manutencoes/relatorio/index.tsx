@@ -23,7 +23,6 @@ export default function RelatorioManutencao({ data, refetch }: MaintenanceProps)
     }, [search])
 
     useEffect(() => {
-        console.log(data)
         setNewMaintenanceList(data)
     }, [])
     return (

@@ -32,6 +32,13 @@ export default function ListarMotoristas({ driverList, refetch }: driverListProp
         setListaMotorista(driverList)
     }, [])
 
+    const handleRemoveDriver = (id: string) => {
+        removeDriver(id, user.token)
+            .then(() => {
+                refetch()
+            })
+    }
+
     return (
         <>
             <div className={styles.listDriverContainer}>
@@ -48,19 +55,13 @@ export default function ListarMotoristas({ driverList, refetch }: driverListProp
                     <div className={styles.driverList}>
                         {listaMotorista.map((driver: Driver, index: any) => (
                             <div className={styles.driverItem} key={index}>
-                                <h2>Id:{String(driver.id)}</h2>
-                                <h2>{driver.name}</h2>
-                                <h2>{driver.avaliable ? <FcApproval /> : <FcCancel />}</h2>
+                                <span><b>Id:</b>{String(driver.id)}</span>
+                                <span><b>Nome: </b>{driver.name}</span>
+                                <span>{driver.avaliable ? <FcApproval /> : <FcCancel />}</span>
 
                                 {user.management && (
                                     <div className={styles.driverItemButtons}>
-                                        <button>Editar</button>
-                                        <button onClick={() => {
-                                            removeDriver(String(driver.id), user.token)
-                                                .then(() => {
-                                                    refetch()
-                                                })
-                                        }}>Excluir</button>
+                                        <button onClick={() => handleRemoveDriver(String(driver.id))}>Excluir</button>
                                     </div>
                                 )}
                             </div>

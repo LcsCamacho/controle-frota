@@ -17,7 +17,7 @@ export default function ListarVeiculos({ vehiclesList, refetch }: ListarVeiculos
     const { user } = useSelector((state: any) => state.user);
 
     useEffect(() => {
-        if(search.length === 0) {
+        if (search.length === 0) {
             setListaVeiculos(vehiclesList)
             return
         }
@@ -31,13 +31,22 @@ export default function ListarVeiculos({ vehiclesList, refetch }: ListarVeiculos
         setListaVeiculos(vehiclesList)
     }, [])
 
+    const handleRemoveVehicle = (id: string) => {
+        removeVehicle(id, user.token)
+            .then(() => {
+                refetch()
+                setListaVeiculos(vehiclesList)
+            })
+    }
+
+
     return (<>
         <div className={styles.listVehicleContainer}>
             <div className={styles.listVehicleContent}>
                 <h1>Lista de Veículos</h1>
                 <div className={styles.buscar}>
                     <label htmlFor="search">Buscar por placa: </label>
-                    <input type='search' id='search' placeholder="Digite a placa do veiculo" onChange={(e)=> {
+                    <input type='search' id='search' placeholder="Digite a placa do veiculo" onChange={(e) => {
                         setSearch(e.target.value)
                     }} />
                 </div>
@@ -46,21 +55,14 @@ export default function ListarVeiculos({ vehiclesList, refetch }: ListarVeiculos
                     {listaVeiculos.map((vehicle: Vehicle, index: any) => {
                         return (
                             <div className={styles.vehicleItem} key={index}>
-                                <h2>Id:{String(vehicle.id)}</h2>
-                                <h2>{vehicle.model}</h2>
-                                <h2>{vehicle.plate}</h2>
-                                <h2>{vehicle.type}</h2>
-                                <h2>{vehicle.avaliable ? <FcApproval /> : <FcCancel />}</h2>
+                                <span><b>Modelo:</b>{vehicle.model}</span>
+                                <span><b>Placa:</b>{vehicle.plate}</span>
+                                <span><b>Tipo:</b>{vehicle.type}</span>
+                                <span>{vehicle.avaliable ? <FcApproval /> : <FcCancel />}</span>
 
                                 {user.management && (
                                     <div className={styles.vehicleItemButtons}>
-                                        <button onClick={() => {
-                                            removeVehicle(String(vehicle.id), user.token)
-                                                .then(() => {
-                                                    refetch()
-                                                    setListaVeiculos(vehiclesList)
-                                                })
-                                        }}>Excluir</button>
+                                        <button onClick={() => handleRemoveVehicle(String(vehicle.id))}>Excluir</button>
                                     </div>
                                 )}
                             </div>
@@ -69,7 +71,7 @@ export default function ListarVeiculos({ vehiclesList, refetch }: ListarVeiculos
                 </div>
             </div>
         </div>
-    </>     
+    </>
     );
 
 }

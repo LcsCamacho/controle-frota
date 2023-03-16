@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { Vehicle, VehiclesInMaintenance } from 'types';
 import styles from './style.module.scss';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 
 
 export default function FinalizarManutencao() {
-
+  const {user} = useSelector((state: any) => state.user)
   const [vehicleList, setVehicleList] = useState<VehiclesInMaintenance[]>([]);
 
   const fetchVehiclesInMaintenance = async () => {
@@ -17,7 +18,7 @@ export default function FinalizarManutencao() {
 
   let queryOptions = { retry: false, refetchOnWindowFocus: true, refetchInterval: 5000 }
 
-  const { isLoading, isError } = useQuery('finalizarManutencao', fetchVehiclesInMaintenance, queryOptions)
+  const { isLoading, isError, refetch } = useQuery('finalizarManutencao', fetchVehiclesInMaintenance, queryOptions)
 
   if (isLoading) return <h1>Carregando...</h1>
   if (isError) return <h1>Erro ao carregar</h1>
@@ -25,13 +26,16 @@ export default function FinalizarManutencao() {
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
+    if(confirm('Deseja realmente finalizar a manutenção?') === false) return;
+
     const vehicleId = event.target.vehicle.value;
     const idMaintenance = vehicleList.find(({ Vehicle }) => Vehicle.id === Number(vehicleId))?.id;
 
     let options = {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': user.token
       },
       body: JSON.stringify({
         id: idMaintenance,
@@ -40,10 +44,7 @@ export default function FinalizarManutencao() {
     }
 
     fetch(`http://localhost:3000/manutencao/finalizar/${vehicleId}`, options)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-      })
+      .then(()=> refetch())
   }
 
   return (

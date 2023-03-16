@@ -47,10 +47,10 @@ export default function ListarViagem({ viagemListProps, refetch }: ListarViagemP
                         {listaViagens.map((viagem: Trip, index: any) => {
                             return (
                                 <div className={styles.viagemItem} key={index}>
-                                    <h2>Carro: {String(viagem.Vehicle.plate)}</h2>
-                                    <h2>Motorista: {String(viagem.Driver.name)}</h2>
-                                    <h2>Saida: {new Date(viagem.date).toLocaleString()}</h2>
-                                    <h2>Chegada:{viagem.checkOut ? new Date(viagem.checkOut).toLocaleString() : <FcCancel />}</h2>
+                                    <span><b>Carro: </b>{String(viagem.Vehicle.plate)}</span>
+                                    <span><b>Motorista: </b>{String(viagem.Driver.name)}</span>
+                                    <span><b>Saida: </b>{new Date(viagem.date).toLocaleString()}</span>
+                                    <span><b>Chegada:</b>{viagem.checkOut ? new Date(viagem.checkOut).toLocaleString() : <FcCancel />}</span>
                                     {user.management && (
                                         <div className={styles.viagemItemButtons}>
                                             <button onClick={() => {
