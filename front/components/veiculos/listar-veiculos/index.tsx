@@ -29,13 +29,12 @@ export default function ListarVeiculos({ vehiclesList, refetch }: ListarVeiculos
 
     useEffect(() => {
         setListaVeiculos(vehiclesList)
-    }, [])
+    }, [vehiclesList])
 
     const handleRemoveVehicle = (id: string) => {
         removeVehicle(id, user.token)
             .then(() => {
                 refetch()
-                setListaVeiculos(vehiclesList)
             })
     }
 

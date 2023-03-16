@@ -21,27 +21,31 @@ export default function Dashboard() {
         vehicles: [],
         drivers: [],
         maintenances: [],
-        vehiclesInMaintenance: []
+        vehiclesInMaintenance: [],
+        vehiclesInTrip:[]
     });
 
     const fetchs = async () => {
-        const [fvehicles, fdrivers, fmaintenances, fvehiclesInMaintenance] = await Promise.all([
+        const [fvehicles, fdrivers, fmaintenances, fvehiclesInMaintenance, fvehiclesInTrip] = await Promise.all([
             fetch('http://localhost:3000/veiculo'),
             fetch('http://localhost:3000/motorista'),
             fetch('http://localhost:3000/manutencao'),
-            fetch('http://localhost:3000/veiculos-manutencao')
+            fetch('http://localhost:3000/veiculos-manutencao'),
+            fetch('http://localhost:3000/viagem')
         ]);
-        const [vehicles, drivers, maintenances,vehiclesInMaintenance] = await Promise.all([
+        const [vehicles, drivers, maintenances,vehiclesInMaintenance, vehiclesInTrip] = await Promise.all([
             fvehicles.json(),
             fdrivers.json(),
             fmaintenances.json(),
-            fvehiclesInMaintenance.json()
+            fvehiclesInMaintenance.json(),
+            fvehiclesInTrip.json()
         ]);
         setAll({
             vehicles,
             drivers,
             maintenances,
-            vehiclesInMaintenance
+            vehiclesInMaintenance,
+            vehiclesInTrip
         })
         
     };

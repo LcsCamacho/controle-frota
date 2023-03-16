@@ -2,7 +2,7 @@
 import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Driver, Vehicle, Maintenance } from 'types';
+import { Driver, Vehicle, Maintenance, Trip } from 'types';
 import ChartModelPie from 'components/Charts/ChartModelPie';
 import { MdOutlineVisibility } from 'react-icons/md';
 import { AiOutlineEyeInvisible } from 'react-icons/ai';
@@ -14,11 +14,11 @@ interface DashboardGeralProps {
     drivers: Driver[],
     maintenances: Maintenance[],
     vehiclesInMaintenance: Vehicle[],
+    vehiclesInTrip:Trip[]
   }
 }
 
-export default function DashboardGeral({ dados: { vehicles, drivers, maintenances, vehiclesInMaintenance } }: DashboardGeralProps) {
-  const { user } = useSelector((state: any) => state.user);
+export default function DashboardGeral({ dados: { vehicles, drivers, maintenances, vehiclesInMaintenance, vehiclesInTrip } }: DashboardGeralProps) {
   const [veiculosEmManutencao, setVeiculosEmManutencao] = useState<Vehicle[]>([]);
   const [veiculosIndisp, setVeiculosIndisp] = useState<Vehicle[]>([]);
   const [motoristasEmViagem, setMotoristasEmViagem] = useState<Driver[]>([]);
@@ -26,9 +26,11 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
   const [cargaVeiculos, setCargaVeiculos] = useState<Vehicle[]>([]);
   const [passeioVeiculos, setPasseioVeiculos] = useState<Vehicle[]>([]);
   const [manutencoesFinalizadas, setManutencoesFinalizadas] = useState<Maintenance[]>([])
+  const [veiculosEmViagem, setVeiculosEmViagem] = useState<Trip[]>([])
+  const [viagensFinalizadas, setViagensFinalizadas] = useState<Trip[]>([])
 
   const getManutencoesFinalizadas = () => {
-    let x = maintenances.filter((maintenance) => maintenance.checkOut)
+    let x = maintenances.filter((maintenance) => maintenance.checkout)
     setManutencoesFinalizadas(x)
   }
 
@@ -54,6 +56,7 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
 
   useEffect(() => {
     setVeiculosEmManutencao(vehiclesInMaintenance)
+    setVeiculosEmViagem(vehiclesInTrip)
     getMotoristasViagem()
     getVeiculosPasseio()
     getVeiculosCarga()
@@ -99,6 +102,13 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                   <span>Finalizadas: {manutencoesFinalizadas.length}</span>
                 </div>
 
+                <div className={styles.totaisViagens}>
+                  <h4>Viagens</h4>
+                  <span>Total: {veiculosEmViagem.length}</span>
+                  <span>Em andamento: {veiculosEmViagem.filter((viagem) => !viagem.checkOut).length}</span>
+                  <span>Finalizadas: {veiculosEmViagem.filter((viagem) => viagem.checkOut).length}</span>
+                </div>
+
               </div>
               <h2>Derivados</h2>
               <div className={styles.derivados}>
@@ -119,6 +129,13 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                   <span>Veiculos de carga: {cargaVeiculos.length}</span>
                   <span>Veiculos de passeio: {passeioVeiculos.length}</span>
                 </div>
+
+                <div className={styles.derivadosViagens}>
+                  <h4>Viagens</h4>
+                  <span>Veiculos de carga: {veiculosEmViagem.filter((viagem)=> viagem.Vehicle.type.toLowerCase() === "pesado").length}</span>
+                  <span>Veiculos de passeio: {veiculosEmViagem.filter((viagem)=> viagem.Vehicle.type.toLowerCase() === "passeio").length}</span>
+                </div>
+
               </div>
             </div>
           </div>
@@ -183,6 +200,32 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
                   ]}
                   title='Status das manutenções em andamento' />
                 }
+
+              </div>
+
+              <h3>Viagens</h3>
+              <div className={styles.viagensCharts}>
+
+                {veiculosEmViagem.length == 0 ? <h2>Nao há viagens em andamento</h2> : <ChartModelColumn
+                  strChartType='ColumnChart'
+                  data={[
+                    ['Tipo', 'Pesado', { role: 'style' }],
+                    ['Pesado', veiculosEmViagem.filter((viagem) => viagem.Vehicle.type.toLowerCase() === "pesado").length, 'blue'],
+                    ['Passeio', veiculosEmViagem.filter((viagem) => viagem.Vehicle.type.toLowerCase() === "passeio").length, 'red'],
+                  ]}
+                  title='Tipos de Veículos que mais viajam'
+                />}
+
+                {veiculosEmViagem.length == 0 ? <h2>Nao há viagens em andamento</h2> : <ChartModelPie
+                  strChartType='PieChart'
+                  data={[
+                    ['Total', 'Manutenções'],
+                    ['Em andamento ', veiculosEmViagem.filter((viagem) => !viagem.checkOut).length],
+                    ['Finalizadas', veiculosEmViagem.filter((viagem) => viagem.checkOut).length],
+                  ]}
+                  title='Status das viagens do mês' />
+                }
+
               </div>
             </div>
           </>)}

@@ -14,7 +14,7 @@ export default function ListarViagensAndamento({ viagemListProps, refetch }: Lis
     const [search, setSearch] = useState<String>('');
     const [listaViagens, setListaViagens] = useState<Trip[]>([]);
     const { removeTrip } = useRemoveTrip()
-    
+
     useEffect(() => {
         if (search.length === 0) {
             setListaViagens(viagemListProps)
@@ -29,6 +29,13 @@ export default function ListarViagensAndamento({ viagemListProps, refetch }: Lis
     useEffect(() => {
         setListaViagens(viagemListProps)
     }, [])
+
+    const handleDelete = (id: string) => {
+        removeTrip(id, user.token)
+            .then(() => {
+                refetch()
+            })
+    }
 
     return (
         <>
@@ -51,12 +58,8 @@ export default function ListarViagensAndamento({ viagemListProps, refetch }: Lis
                                     <span><b>Saida:</b> {new Date(viagem.date).toLocaleString()}</span>
                                     {user.management && (
                                         <div className={styles.viagemItemButtons}>
-                                            <button onClick={() => {
-                                                removeTrip(String(viagem.id), user.token)
-                                                    .then(() => {
-                                                        refetch()
-                                                    })
-                                            }}>Excluir</button>
+                                            <button onClick={() => handleDelete(String(viagem.id))}>Excluir</button>
+
                                         </div>
                                     )}
                                 </div>

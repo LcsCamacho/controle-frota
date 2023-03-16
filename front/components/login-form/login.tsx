@@ -69,7 +69,7 @@ export function LoginForm() {
             </header>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" placeholder="Usuario"
-                    value="admin"
+                    value="lcscamacho"
                     {...register('name', { required: true })} />
                 {errors.name && errors.name.type === "required" && <span>Este campo é obrigatório</span>}
                 <input type="password" placeholder="Senha"

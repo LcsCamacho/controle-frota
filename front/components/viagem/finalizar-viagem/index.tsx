@@ -1,7 +1,7 @@
 import { Trip } from 'types';
 import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
-import { useLayoutEffect, useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface ViagensAndamentoProps {
     viagensAndamentoProps: Trip[];
@@ -46,6 +46,7 @@ export default function FinalizarViagem({ viagensAndamentoProps, refetch }: Viag
         })
             .then(() => {
                 refetch()
+                setSuccess(true)
             })
     }
 
@@ -60,6 +61,8 @@ export default function FinalizarViagem({ viagensAndamentoProps, refetch }: Viag
                 <div className={styles.inserirViagemContent}>
                     <h1>Finalizar Viagem</h1>
                     <form onSubmit={submitForm} className={styles.form}>
+
+
                         <div className={styles.formItem}>
                             <label htmlFor="veiculo">Veiculo</label>
                             <select ref={selectRef} onChange={(e) => setSelectedTrip(e.currentTarget.value)}>
@@ -70,16 +73,21 @@ export default function FinalizarViagem({ viagensAndamentoProps, refetch }: Viag
                                 }) : <option value="">Nenhuma viagem em andamento</option>}
                             </select>
                         </div>
+
+
+
                         {<div className={styles.formItem}>
-                            {loadingCurrentTrip ? <>Loading...</> : (<>
+                            {viagensAndamentoProps.length > 0 && loadingCurrentTrip ? <>Loading...</> : (<>
                                 <h3>Descrição da viagem</h3>
                                 <div className={styles.currentTrip}>
                                     <span>Inicio da viagem: data e hora = {new Date(currentTrip.date).toLocaleString()}</span>
                                 </div>
                             </>)}
                         </div>}
+
+
                         <div className={styles.formItem}>
-                            <button type="submit">Enviar</button>
+                            <button type="submit">FinalizarAgora</button>
                         </div>
 
                         {success && <h1>Viagem adicionada com sucesso!</h1>}

@@ -31,6 +31,14 @@ export default function ListarViagensFinalizadas({ viagemListProps, refetch }: L
         setListaViagens(viagemListProps)
     }, [])
 
+    
+    const handleDelete = (id: string) => {
+        removeTrip(id, user.token)
+            .then(() => {
+                refetch()
+            })
+    }
+
     return (
         <>
             <div className={styles.listaViagemContainer}>
@@ -53,12 +61,7 @@ export default function ListarViagensFinalizadas({ viagemListProps, refetch }: L
                                     <span><b>Chegada:</b>{viagem.checkOut ? new Date(viagem.checkOut).toLocaleString() : <FcCancel />}</span>
                                     {user.management && (
                                         <div className={styles.viagemItemButtons}>
-                                            <button onClick={() => {
-                                                removeTrip(String(viagem.id), user.token)
-                                                    .then(() => {
-                                                        refetch()
-                                                    })
-                                            }}>Excluir</button>
+                                            <button onClick={() => handleDelete(String(viagem.id))}>Excluir</button>
                                         </div>
                                     )}
                                 </div>

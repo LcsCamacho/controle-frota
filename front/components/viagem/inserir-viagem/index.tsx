@@ -5,17 +5,34 @@ import { useAddTrip } from 'hooks/useAddTrip';
 import { useFetchAny } from 'hooks/UseFetchAny';
 import { Driver, Vehicle } from 'types';
 import { useState } from 'react';
+import { useQuery } from 'react-query';
 
 export default function InserirViagem({ refetch }: any) {
     const { user } = useSelector((state: any) => state.user);
+    const [drivers, setDrivers] = useState<Driver[]>([]);
+    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const { addTrip } = useAddTrip();
     const [success, setSuccess] = useState(false);
 
-    const { response: drivers, error: driversError } = useFetchAny('http://localhost:3000/motoristas-disp');
-    const { response: vehicles, error: vehiclesError} = useFetchAny('http://localhost:3000/veiculo-disp');
+    const fetchs = async () => {
+        const [driverFetch, vehicleFetch] = await Promise.all([
+            fetch('http://localhost:3000/motoristas-disp'),
+            fetch('http://localhost:3000/veiculo-disp')
+        ])
+        const [driverJson, vehicleJson] = await Promise.all([
+            driverFetch.json(),
+            vehicleFetch.json()
+        ])
+        setDrivers(driverJson)
+        setVehicles(vehicleJson)
+    }
+    const queryOptions = { retry: 1, refetchOnWindowFocus: true, refetchInterval: 5000 }
+
+    const { isLoading, isError, refetch:vehiclesAndDriversRefetch } = useQuery('inserirViagem',fetchs, queryOptions)
 
     const submitForm = (e: any) => {
         e.preventDefault();
+        if(!confirm("Deseja realmente adicionar uma viagem?")) return
         let selectedOptionDriver = e.target.querySelectorAll('div select')[0].value;
         let selectedOptionVehicle = e.target.querySelectorAll('div select')[1].value;
         const driver = Number(selectedOptionDriver);
@@ -41,6 +58,7 @@ export default function InserirViagem({ refetch }: any) {
         addTrip(result.data, user.token)
             .then(() => {
                 refetch()
+                vehiclesAndDriversRefetch()
                 e.target.reset();
                 setSuccess(true)
                 setTimeout(() => {
@@ -48,6 +66,9 @@ export default function InserirViagem({ refetch }: any) {
                 }, 5000)
             })
     }
+
+    if (isLoading) <h1>Carregando</h1>
+
     return (
         <>
             <div className={styles.inserirViagemContainer}>
@@ -56,7 +77,7 @@ export default function InserirViagem({ refetch }: any) {
                     <form onSubmit={submitForm} className={styles.form}>
                         <div className={styles.formItem}>
                             <label htmlFor="driver">Motorista</label>
-                            {driversError ? <span>Error</span> : (<select>
+                            {isError ? <span>Error</span> : (<select>
                                 {drivers.map((driver: Driver) => {
                                     return (
                                         <option key={Number(driver.id)} value={String(driver.id)}>{driver.name}</option>
@@ -66,7 +87,7 @@ export default function InserirViagem({ refetch }: any) {
                         </div>
                         <div className={styles.formItem}>
                             <label htmlFor="vehicle">Veiculo</label>
-                            {vehiclesError ? <span>Error</span> : (<select>
+                            {isError ? <span>Error</span> : (<select>
 
                                 {vehicles.length > 0 ? vehicles.map((vehicle: Vehicle) => {
                                     return (

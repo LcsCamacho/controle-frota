@@ -6,6 +6,7 @@
     width: 100%;
     background-color: #F5F5F5;
     gap: 1rem;
+    padding-bottom: 3rem;
 
     .dashboardGeralHeader {
         display: flex;
@@ -111,7 +112,8 @@
 
     .veiculosCharts,
     .motoristasCharts,
-    .manutencoesCharts {
+    .manutencoesCharts,
+    .viagensCharts {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
         width: 100%;

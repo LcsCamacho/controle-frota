@@ -31,18 +31,31 @@ export default function ListarViagem({ viagemListProps, refetch }: ListarViagemP
         setListaViagens(viagemListProps)
     }, [])
 
+    const handleDelete = (id: string) => {
+        removeTrip(id, user.token)
+            .then(() => {
+                refetch()
+            })
+    }
+
     return (
         <>
             <div className={styles.listaViagemContainer}>
                 <div className={styles.listaViagemContent}>
                     <h1>Lista de Viagens</h1>
+
+
                     <div className={styles.buscar}>
                         <label htmlFor="search">Buscar por placa: </label>
                         <input type='search' id='search' placeholder="Digite a placa do veiculo" onChange={(e) => {
                             setSearch(e.target.value)
                         }} />
                     </div>
+
+
                     <h2>Quantidade: {listaViagens.length}</h2>
+
+
                     <div className={styles.viagemList}>
                         {listaViagens.map((viagem: Trip, index: any) => {
                             return (
@@ -53,18 +66,15 @@ export default function ListarViagem({ viagemListProps, refetch }: ListarViagemP
                                     <span><b>Chegada:</b>{viagem.checkOut ? new Date(viagem.checkOut).toLocaleString() : <FcCancel />}</span>
                                     {user.management && (
                                         <div className={styles.viagemItemButtons}>
-                                            <button onClick={() => {
-                                                removeTrip(String(viagem.id), user.token)
-                                                    .then(() => {
-                                                        refetch()
-                                                    })
-                                            }}>Excluir</button>
+                                            <button onClick={() => handleDelete(String(viagem.id))}>Excluir</button>
                                         </div>
                                     )}
                                 </div>
                             )
                         })}
                     </div>
+
+
                 </div>
             </div>
         </>

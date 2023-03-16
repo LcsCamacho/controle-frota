@@ -66,7 +66,7 @@ export interface Maintenance {
     createdAt?: String,
     updatedAt?: String,
     checkIn:Date,
-    checkOut?:Date,
+    checkout?:Date,
 }
 
 export interface VehiclesInMaintenance extends Maintenance {

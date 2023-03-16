@@ -17,8 +17,6 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 
     if (process.env.JWT_PRIVATE_KEY === undefined) return res.status(500).send('Internal server error.');
 
-    console.log({key:process.env.JWT_PRIVATE_KEY, token:token})
-
     jwt.verify(token, process.env.JWT_PRIVATE_KEY, (err, decoded) => {
         if (err) {
             res.status(400).json({
