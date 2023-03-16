@@ -14,7 +14,6 @@ export default function HeaderUser() {
     const logout = () => {
         router.push('/');
         dispatch(logOffReducer());
-
     }
 
     return (

@@ -6,7 +6,7 @@
     gap: 1rem;
     align-items: center;
     padding: 1rem;
-    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
     justify-content: center;
 
     img {
@@ -50,9 +50,9 @@
         img {
             position: absolute;
             top:.5rem;
-            left: 1rem;
-            height: 3rem;
-            width: 3rem;
+            left: 1rem ;
+            width: 45px !important;
+            height: 45px !important;
             border-radius: .5rem 0 0 .5rem;
         }
     }

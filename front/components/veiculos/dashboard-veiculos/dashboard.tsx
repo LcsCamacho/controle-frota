@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import Chart from 'react-google-charts';
 import { useQuery } from 'react-query';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { reduxUsuario } from 'types';
 import styles from './dashboard.module.scss';
-import { setVeiculos } from 'features/redux/vehicle-slice';
 import { useToggleColor } from 'hooks/UseToogleColor';
 import InserirVeiculo from '../inserir-veiculo';
 import ListarVeiculos from '../listar-veiculos';
 import ListarDisponiveis from '../listar-veiculos-disponiveis';
 import ListarIndisponiveis from '../listar-veiculos-indisponiveis';
+import ChartModelPie from 'components/Charts/ChartModelPie';
 
 export default function DashboardVehicle() {
     const { user } = useSelector((state: reduxUsuario) => state.user);
-    const dispatch = useDispatch();
 
     const [listarVeiculos, setListarVeiculos] = useState(false);
     const [listarVeiculosDisp, setListarVeiculossDisp] = useState(false);
@@ -33,7 +31,6 @@ export default function DashboardVehicle() {
             veiculoDisponivel.json(),
             veiculoIndisponivel.json()
         ]);
-        dispatch(setVeiculos(listaVeiculos))
         return { listaVeiculos, listaVeiculosDisp, listaVeiculosIndisp }
     }
     let arr = ['', '', '', '']
@@ -87,46 +84,14 @@ export default function DashboardVehicle() {
                             <div className={styles.descContent}>
                                 <h1>Status</h1>
                                 <div className={styles.chart}>
-                                    <Chart
-                                        legendToggle
-                                        chartType="PieChart"
-                                        chartEvents={[
-                                            {
-                                                eventName: 'select',
-                                                callback: ({ chartWrapper }) => {
-                                                    const chart = chartWrapper.getChart();
-                                                    const selection = chart.getSelection();
-                                                    if (selection.length === 0) return;
-                                                    const [selectedItem] = selection;
-                                                    const { row } = selectedItem;
-                                                    const status = chartWrapper.getDataTable()?.getValue(row, 0);
-                                                    if (status === 'Disponível') {
-                                                        setListarVeiculossDisp(!listarVeiculosDisp);
-                                                    } else {
-                                                        setListarVeiculossIndisp(!listarVeiculosIndisp);
-                                                    }
-                                                }
-                                            }
-                                        ]}
-                                        loader={<div>Loading Chart</div>}
+                                    <ChartModelPie
                                         data={[
                                             ['Status', 'Quantidade'],
                                             ['Disponível', data.listaVeiculosDisp === undefined ? 0 : data.listaVeiculosDisp.length],
                                             ['Indisponível', data.listaVeiculosIndisp === undefined ? 0 : data.listaVeiculosIndisp.length],
                                         ]}
-                                        options={{
-                                            title: 'Status dos veiculos',
-                                            is3D: true,
-                                            legend: {
-                                                position: 'bottom',
-                                                alignment: 'center',
-                                                textStyle: {
-                                                    color: '233238',
-                                                    fontSize: 14
-                                                }
-                                            }
-
-                                        }}
+                                        title={'Status Veiculos'}
+                                        strChartType={'PieChart'}
                                     />
                                 </div>
                                 <div className={styles.descText}>
@@ -134,9 +99,6 @@ export default function DashboardVehicle() {
                                     <span>Quantidade de veiculos disponíveis : {data.listaVeiculosDisp === undefined ? 0 : data.listaVeiculosDisp.length}</span>
                                     <span>Quantidade de veiculos indisponíveis : {data.listaVeiculosIndisp === undefined ? 0 : data.listaVeiculosIndisp.length}</span>
                                 </div>
-
-
-
                             </div>
                         </div>
                         {user.management && inserirVeiculo && < InserirVeiculo refetch={refetch} />}

@@ -34,7 +34,6 @@ export const listarUm = (req: Request, res: Response) => {
 }
 
 export const inserir = (req: Request, res: Response) => {
-    console.log(req.body)
     prisma.$transaction([
         prisma.maintenance.create({
             data: {

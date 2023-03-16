@@ -12,6 +12,36 @@ export interface reduxUsuario {
     }
 }
 
+export type Trip = {
+    id?: Number,
+    date: Date,
+    VehicleId: Number,
+    DriverId: Number,
+    createdAt?: String,
+    updatedAt?: String,
+    checkIn:Date,
+    checkOut?:Date,
+    Vehicle:{
+        plate:string;
+        avaliable:boolean;
+        type:string;
+    },
+    Driver:{
+        name:string;
+    }
+}   
+
+export interface InsertTrip{
+    id?: Number,
+    date: Date,
+    VehicleId: Number,
+    DriverId: Number,
+    createdAt?: String,
+    updatedAt?: String,
+    checkIn:Date,
+    checkOut?:Date,
+}
+
 export type Vehicle = {
     id?: Number,
     model: String,

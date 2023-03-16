@@ -5,12 +5,12 @@ import { Vehicle } from 'types';
 import { useRemoveVehicle } from 'hooks/UseRemoveVehicle';
 import { useState, useEffect } from 'react';
 
-export interface ListarCarroProps {
+export interface ListarVeiculosProps {
     vehiclesList: Vehicle[];
     refetch: any;
 }
 
-export default function ListarCarro({ vehiclesList, refetch }: ListarCarroProps) {
+export default function ListarVeiculos({ vehiclesList, refetch }: ListarVeiculosProps) {
     const { removeVehicle } = useRemoveVehicle();
     const [listaVeiculos, setListaVeiculos] = useState<Vehicle[]>([]);
     const [search, setSearch] = useState<String>('');
@@ -54,7 +54,6 @@ export default function ListarCarro({ vehiclesList, refetch }: ListarCarroProps)
 
                                 {user.management && (
                                     <div className={styles.vehicleItemButtons}>
-                                        <button>Editar</button>
                                         <button onClick={() => {
                                             removeVehicle(String(vehicle.id), user.token)
                                                 .then(() => {

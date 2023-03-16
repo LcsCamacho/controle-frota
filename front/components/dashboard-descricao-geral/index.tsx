@@ -22,7 +22,7 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
   const [veiculosEmManutencao, setVeiculosEmManutencao] = useState<Vehicle[]>([]);
   const [veiculosIndisp, setVeiculosIndisp] = useState<Vehicle[]>([]);
   const [motoristasEmViagem, setMotoristasEmViagem] = useState<Driver[]>([]);
-  const [showData, setShowData] = useState(true);
+  const [showData, setShowData] = useState(false);
   const [cargaVeiculos, setCargaVeiculos] = useState<Vehicle[]>([]);
   const [passeioVeiculos, setPasseioVeiculos] = useState<Vehicle[]>([]);
   const [manutencoesFinalizadas, setManutencoesFinalizadas] = useState<Maintenance[]>([])

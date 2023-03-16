@@ -1,0 +1,85 @@
+.inserirViagemContainer {
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.inserirViagemContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 0;
+
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+
+    .formItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        width: 75%;
+
+        label {
+            font-size: 1.5rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            color: #333;
+            font-weight: 500;
+            outline: none;
+
+            option {
+                width: 100%;
+                border: none;
+                border-radius: 0.5rem;
+                color: #333;
+                font-weight: 500;
+                outline: none;
+            }
+        }
+
+        button {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: #473b21;
+            color: #fff;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .3s ease;
+
+            &:hover,
+            &:focus,
+            &:active {
+                transform: scale(.97);
+            }
+        }
+    }
+}

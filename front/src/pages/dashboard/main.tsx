@@ -8,11 +8,14 @@ import { useState } from 'react';
 import DashboardManutencao from 'components/manutencoes/dashboard-manutencao/dashboard';
 import DashboardMotorista from 'components/motoristas/dashboard-motorista/dashboard';
 import DashboardVeiculo from 'components/veiculos/dashboard-veiculos/dashboard';
+import DashboardViagem from 'components/viagem/dashboard-viagem/dashboard';
+
 
 export default function Dashboard() {
     const dashboardVeiculos = useSelector((state: any) => state.vehicle.open);
     const dashboardMotorista = useSelector((state: any) => state.driver.open);
     const dashboardManutencao = useSelector((state: any) => state.maintenance.open);
+    const dashboardViagem = useSelector((state: any) => state.trip.open);
 
     const [all, setAll] = useState({
         vehicles: [],
@@ -67,6 +70,7 @@ export default function Dashboard() {
                     {dashboardVeiculos && <DashboardVeiculo />}
                     {dashboardMotorista && <DashboardMotorista />}
                     {dashboardManutencao && <DashboardManutencao />}
+                    {dashboardViagem && <DashboardViagem />}
                 </div>
             </div>
         </>

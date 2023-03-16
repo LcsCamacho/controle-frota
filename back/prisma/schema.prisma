@@ -20,10 +20,11 @@ model User {
 }
 
 model Driver {
-  id         Int          @id @default(autoincrement())
-  name       String
-  avaliable  Boolean      @default(true)
-  cnh        String       @unique
+  id        Int     @id @default(autoincrement())
+  name      String
+  avaliable Boolean @default(true)
+  cnh       String  @unique
+  Trip      Trip[]
 
   @@map("driver")
 }
@@ -35,8 +36,24 @@ model Vehicle {
   avaliable   Boolean       @default(true)
   type        String
   Maintenance Maintenance[]
+  Trip        Trip[]
 
   @@map("vehicle")
+}
+
+model Trip {
+  id        Int       @id @default(autoincrement())
+  date      DateTime
+  VehicleId Int
+  DriverId  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  checkIn  DateTime @default(now())
+  checkOut DateTime?
+  Vehicle   Vehicle   @relation(fields: [VehicleId], references: [id], onDelete: Cascade)
+  Driver    Driver    @relation(fields: [DriverId], references: [id], onDelete: Cascade)
+
+  @@map("trip")
 }
 
 model Maintenance {

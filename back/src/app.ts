@@ -5,6 +5,7 @@ import { routerUsuario } from './routes/usuario'
 import { routerMotorista } from './routes/motorista'
 import { routerManutencao } from './routes/manutencao'
 import { routerVeiculo } from './routes/veiculo'
+import { routerViagem } from './routes/viagem'
 
 //app
 const app = express();
@@ -19,6 +20,7 @@ app.use(routerUsuario);
 app.use(routerMotorista);
 app.use(routerManutencao);
 app.use(routerVeiculo);
+app.use(routerViagem)
 
 
 app.listen(3000, () => {
