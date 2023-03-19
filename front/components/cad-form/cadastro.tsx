@@ -40,7 +40,6 @@ export function CadastroForm({ modal, onRequestClose }: CadastroFormProps) {
             management: false
         }
         await fetch('http://localhost:3000/usuario', {
-            cache: 'no-store',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

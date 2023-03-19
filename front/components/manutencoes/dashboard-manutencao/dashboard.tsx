@@ -46,7 +46,7 @@ export default function DashboardManutencao() {
             veiculosEmManutencao.json()
         ]);
         setListaRelatorioGeral(manutencaoJson);
-        let x = manutencaoJson.filter((maintenance: any) => maintenance.checkout === null);
+        let x = manutencaoJson.filter((maintenance: any) => !maintenance.checkout);
         setListaManutencao(x);
         setListaVeiculos(veiculosJson);
         setListaVeiculosEmManutencao(veiculosEmManutencaoJson);

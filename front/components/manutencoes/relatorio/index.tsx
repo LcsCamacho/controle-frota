@@ -25,6 +25,12 @@ export default function RelatorioManutencao({ data, refetch }: MaintenanceProps)
     useEffect(() => {
         setNewMaintenanceList(data)
     }, [])
+
+    const handleRemoveMaintenance = (maintenanceId: string, token: string) => {
+        removeMaintenance(maintenanceId, token)
+            .then(() => refetch())
+    }
+
     return (
         <>
             <div className={styles.listMaintenanceContainer}>
@@ -63,10 +69,7 @@ export default function RelatorioManutencao({ data, refetch }: MaintenanceProps)
                                     <td>{maintenance.checkout ? <FcApproval /> : <FcCancel />}</td>
                                     {user.management && (
                                         <>
-                                            <td onClick={() => {
-                                                removeMaintenance(maintenance.id)
-                                                    .then(() => refetch())
-                                            }} id={styles.del}>Excluir</td>
+                                            <td onClick={() => handleRemoveMaintenance(maintenance.id, user.token)} id={styles.del}>Excluir</td>
                                         </>
                                     )}
                                 </tr>

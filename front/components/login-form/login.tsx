@@ -41,23 +41,14 @@ export function LoginForm() {
 
     const onSubmit: SubmitHandler<usuario> = (data: usuario) => {
         fetch('http://localhost:3000/login', {
-            cache: 'no-store',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-            .then((res) => {
-                if (res.status === 200) {
-                    res.json()
-                        .then((res) => {
-                            setUser(res)
-                        })
-                }
-                else {
-                    alert('Usuário ou senha inválidos')
-                }
+            .then(async (res) => {
+                res.ok? setUser(await res.json()) : alert('Usuario ou senha incorretos')
             })
     };
 

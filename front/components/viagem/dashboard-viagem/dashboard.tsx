@@ -156,15 +156,11 @@ export default function DashboardViagem() {
 
 
                         {listarViagensFinalizadas && <ListarViagensFinalizadas 
-                            viagemListProps={listaViagens.filter((trip) => {
-                                return trip.checkOut
-                            })} refetch={refetch} />}
+                            viagemListProps={listaViagensFinalizadas} refetch={refetch} />}
 
 
                         {listarViagensEmAndamento && <ListarViagensAndamento 
-                            viagemListProps={listaViagens.filter((trip) => {
-                                return !trip.checkOut
-                            })} refetch={refetch} />}
+                            viagemListProps={listaViagensAndamento} refetch={refetch} />}
 
 
                     </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Maintenance, Vehicle } from 'types';
+import { Vehicle } from 'types';
 import styles from './style.module.scss';
 import { useAddMaintenance } from 'hooks/UseAddMaintenance';
 import { useSelector } from 'react-redux';
@@ -43,7 +43,7 @@ export default function InserirManutencao({ data, refetch }: VehicleProps) {
         })
  
         addMaintenance(result, user.token)
-            .then((res) => {
+            .then(() => {
                 refetch()
                 setSuccess(true);
                 form.desc.value = '';
@@ -52,7 +52,7 @@ export default function InserirManutencao({ data, refetch }: VehicleProps) {
                     setSuccess(false);
                 }, 3000);
             })
-            .catch((err) => {
+            .catch(() => {
                 setError(true);
                 setTimeout(() => {
                     setError(false);

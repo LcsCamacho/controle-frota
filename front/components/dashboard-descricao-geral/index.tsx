@@ -8,7 +8,7 @@ import { MdOutlineVisibility } from 'react-icons/md';
 import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import ChartModelColumn from 'components/Charts/ChartModelColumn';
 
-interface DashboardGeralProps {
+export interface DashboardGeralProps {
   dados: {
     vehicles: Vehicle[],
     drivers: Driver[],
@@ -27,7 +27,6 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
   const [passeioVeiculos, setPasseioVeiculos] = useState<Vehicle[]>([]);
   const [manutencoesFinalizadas, setManutencoesFinalizadas] = useState<Maintenance[]>([])
   const [veiculosEmViagem, setVeiculosEmViagem] = useState<Trip[]>([])
-  const [viagensFinalizadas, setViagensFinalizadas] = useState<Trip[]>([])
 
   const getManutencoesFinalizadas = () => {
     let x = maintenances.filter((maintenance) => maintenance.checkout)
@@ -40,12 +39,12 @@ export default function DashboardGeral({ dados: { vehicles, drivers, maintenance
   }
 
   const getVeiculosCarga = () => {
-    let x = veiculosEmManutencao.filter(({ Vehicle }: any) => Vehicle.type === 'Pesado')
+    let x = veiculosEmManutencao.filter(({ Vehicle }: any) => Vehicle.type.toLowerCase() === 'pesado')
     setCargaVeiculos(x);
   }
 
   const getVeiculosPasseio = () => {
-    let x = veiculosEmManutencao.filter(({ Vehicle }: any) => Vehicle.type === 'Passeio')
+    let x = veiculosEmManutencao.filter(({ Vehicle }: any) => Vehicle.type.toLowerCase() === 'passeio')
     setPasseioVeiculos(x);
   }
 

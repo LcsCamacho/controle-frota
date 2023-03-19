@@ -30,6 +30,11 @@ export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
         setNewMaintenanceList(data)
     }, [])
 
+    const handleRemoveMaintenance = (maintenanceId: string, token: string) => {
+        removeMaintenance(maintenanceId, token)
+            .then(() => refetch())
+    }
+
     return (
         <>
             <div className={styles.listMaintenanceContainer}>
@@ -66,10 +71,7 @@ export default function ListarManutencao({ data, refetch }: MaintenanceProps) {
                                     <td>{new Date(maintenance.updatedAt).toLocaleString()}</td>
                                     {user.management && (
                                         <>
-                                            <td onClick={() => {
-                                                removeMaintenance(maintenance.id)
-                                                    .then(() => refetch())
-                                            }} id={styles.del}>Excluir</td>
+                                            <td onClick={() => handleRemoveMaintenance(maintenance.id, user.token)} id={styles.del}>Excluir</td>
                                         </>
                                     )}
                                 </tr>
