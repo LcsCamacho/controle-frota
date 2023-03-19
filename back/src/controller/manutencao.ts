@@ -34,25 +34,28 @@ export const listarUm = (req: Request, res: Response) => {
 }
 
 export const inserir = (req: Request, res: Response) => {
+
+    const { date, VehicleId, description, cost } = req.body;
+
     prisma.$transaction([
         prisma.maintenance.create({
             data: {
-                date: new Date(req.body.date),
-                VehicleId: Number(req.body.VehicleId),
-                description: req.body.description,
-                cost: req.body.cost,
+                date: new Date(date),
+                VehicleId: Number(VehicleId),
+                description: description,
+                cost: cost,
             }
         }),
         prisma.vehicle.update({
             where: {
-                id: Number(req.body.VehicleId),
+                id: Number(VehicleId),
             },
             data: {
                 avaliable: false
             }
         })
     ]).then((manutencao) => {
-        res.json({response:manutencao}).status(201).end();
+        res.json({ response: manutencao }).status(201).end();
     }).catch((err) => {
         console.log(err)
         res.json(err).status(404).end();
@@ -60,14 +63,17 @@ export const inserir = (req: Request, res: Response) => {
 }
 
 export const alterar = (req: Request, res: Response) => {
+
+    const { description, cost } = req.body;
+
+
     prisma.maintenance.update({
         where: {
             id: Number(req.params.id)
         },
         data: {
-            description: req.body.description,
-            updatedAt: req.body.updatedAt,
-            cost: req.body.cost,
+            description: description,
+            cost: cost,
         }
     }).then((manutencao) => {
         res.json(manutencao).status(200).end();
@@ -91,13 +97,16 @@ export const deletar = (req: Request, res: Response) => {
 }
 
 export const finalizar = (req: Request, res: Response) => {
+
+    const { checkout, id } = req.body;
+
     prisma.$transaction([
         prisma.maintenance.update({
             where: {
-                id: req.body.id
+                id: Number(id)
             },
             data: {
-                checkout: req.body.checkout
+                checkout: checkout
             }
         }),
         prisma.vehicle.update({

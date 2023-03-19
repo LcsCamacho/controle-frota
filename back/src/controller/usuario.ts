@@ -13,29 +13,32 @@ type token = {
 
 
 export const login = async (req: Request, res: Response) => {
+
+    const { name, password } = req.body;
+
     prisma.user.findUnique({
         where: {
-            name: req.body.name,
+            name: name,
         },
     }).then((usuario) => {
         if (usuario) {
-            if (usuario.password === req.body.password) {
-                let data:token = {    
+            if (usuario.password === password) {
+                let data: token = {
                     id: usuario.id,
                     name: usuario.name,
                     management: usuario.management,
                     token: ''
                 };
 
-                if(process.env.JWT_PRIVATE_KEY === undefined) {
+                if (process.env.JWT_PRIVATE_KEY === undefined) {
                     console.log('Internal server error.');
                     return res.status(500).send('Internal server error.');
                 }
-                jwt.sign(data, process.env.JWT_PRIVATE_KEY, { expiresIn: '60m' },(err, token) => {
-                    if(!err) {
+                jwt.sign(data, process.env.JWT_PRIVATE_KEY, { expiresIn: '60m' }, (err, token) => {
+                    if (!err) {
                         data.token = token;
                         res.status(200).json(data).end();
-                    }else {
+                    } else {
                         console.log(err);
                         res.status(404).json(err).end();
                     }
@@ -73,11 +76,14 @@ export const listarUm = (req: Request, res: Response) => {
 };
 
 export const inserir = (req: Request, res: Response) => {
+
+    const { name, password, management } = req.body;
+
     prisma.user.create({
         data: {
-            name: req.body.name,
-            password: req.body.password,
-            management: req.body.management,
+            name: name,
+            password: password,
+            management: management,
         },
     }).then((usuario) => {
         res.json(usuario).status(201).end();
@@ -88,14 +94,17 @@ export const inserir = (req: Request, res: Response) => {
 }
 
 export const alterar = (req: Request, res: Response) => {
+
+    const { name, password, management } = req.body;
+
     prisma.user.update({
         where: {
             id: Number(req.params.id),
         },
         data: {
-            name: req.body.name,
-            password: req.body.password,
-            management: req.body.management,
+            name: name,
+            password: password,
+            management: management,
         },
     }).then((usuario) => {
         res.json(usuario).status(201).end();
@@ -105,12 +114,15 @@ export const alterar = (req: Request, res: Response) => {
 }
 
 export const alterarSenha = (req: Request, res: Response) => {
+
+    const { password } = req.body;
+
     prisma.user.update({
         where: {
             id: Number(req.params.id),
         },
         data: {
-            password: req.body.password,
+            password: password,
         },
     }).then((usuario) => {
         res.json(usuario).status(201).end();
@@ -120,12 +132,15 @@ export const alterarSenha = (req: Request, res: Response) => {
 }
 
 export const alterarGerencia = (req: Request, res: Response) => {
+
+    const { management } = req.body;
+
     prisma.user.update({
         where: {
             id: Number(req.params.id),
         },
         data: {
-            management: req.body.management,
+            management: management,
         },
     }).then((usuario) => {
         res.json(usuario).status(201).end();

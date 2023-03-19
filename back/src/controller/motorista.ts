@@ -45,11 +45,14 @@ export const ListarIndisponiveis = (req: Request, res: Response) => {
     });
 }
 export const inserir = (req: Request, res: Response) => {
+
+    const { name, cnh, avaliable } = req.body;
+
     prisma.driver.create({
         data: {
-            name: req.body.name,
-            cnh: req.body.cnh,
-            avaliable: req.body.avaliable,
+            name: name,
+            cnh: cnh,
+            avaliable: avaliable,
         },
     }).then((motorista) => {
         res.json(motorista).status(201).end();
@@ -61,14 +64,18 @@ export const inserir = (req: Request, res: Response) => {
 }
 
 export const alterar = (req: Request, res: Response) => {
+
+    const { name, cnh, avaliable } = req.body;
+
+
     prisma.driver.update({
         where: {
             id: Number(req.params.id),
         },
         data: {
-            name: req.body.name,
-            cnh: req.body.cnh,
-            avaliable: req.body.avaliable,
+            name: name,
+            cnh: cnh,
+            avaliable: avaliable,
         },
     }).then((motorista) => {
         res.json(motorista).status(201).end();
@@ -78,12 +85,15 @@ export const alterar = (req: Request, res: Response) => {
 }
 
 export const alterarDisponibilidade = (req: Request, res: Response) => {
+
+    const { avaliable } = req.body;
+
     prisma.driver.update({
         where: {
             id: Number(req.params.id),
         },
         data: {
-            avaliable: req.body.avaliable,
+            avaliable: avaliable,
         },
     }).then((motorista) => {
         res.json(motorista).status(201).end();

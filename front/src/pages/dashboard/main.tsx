@@ -4,20 +4,46 @@ import styles from './style.module.scss';
 import { useSelector } from 'react-redux';
 import DashboardGeral from 'components/dashboard-descricao-geral';
 import { useQuery } from 'react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardManutencao from 'components/manutencoes/dashboard-manutencao/dashboard';
 import DashboardMotorista from 'components/motoristas/dashboard-motorista/dashboard';
 import DashboardVeiculo from 'components/veiculos/dashboard-veiculos/dashboard';
 import DashboardViagem from 'components/viagem/dashboard-viagem/dashboard';
+import { Vehicle, Driver, Maintenance, Trip } from 'types';
+import { GetServerSideProps } from 'next';
+import { parseCookies} from 'nookies';
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const { ['auth-token']: token } = parseCookies(ctx)
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+    return {
+        props: {}
+    }
+}
 
 
 export default function Dashboard() {
+
     const dashboardVeiculos = useSelector((state: any) => state.vehicle.open);
     const dashboardMotorista = useSelector((state: any) => state.driver.open);
     const dashboardManutencao = useSelector((state: any) => state.maintenance.open);
     const dashboardViagem = useSelector((state: any) => state.trip.open);
 
-    const [all, setAll] = useState({
+    const [all, setAll] = useState<{
+        vehicles: Vehicle[],
+        drivers: Driver[],
+        maintenances: Maintenance[],
+        vehiclesInMaintenance: Vehicle[],
+        vehiclesInTrip:Trip[]
+    }>({
         vehicles: [],
         drivers: [],
         maintenances: [],

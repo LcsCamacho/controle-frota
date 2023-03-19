@@ -69,7 +69,7 @@ export interface Maintenance {
     checkout?:Date,
 }
 
-export interface VehiclesInMaintenance extends Maintenance {
+export interface VehiclesInMaintenance {
     Vehicle: Vehicle
     id?: Number,
     date: String,

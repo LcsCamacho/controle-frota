@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './style.module.scss';
 import avatar from '/public/avatar.png';
+import { setCookie } from 'nookies';
 
 
 export default function HeaderUser() {
@@ -13,6 +14,7 @@ export default function HeaderUser() {
 
     const logout = () => {
         router.push('/');
+        setCookie(undefined, 'auth-token', '', {})
         dispatch(logOffReducer());
     }
 

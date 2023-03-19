@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setUserReducer } from 'features/redux/user-slice';
 import { CadastroForm } from './../cad-form/cadastro';
 import { usuario } from 'types';
+import {setCookie} from 'nookies'
 
 export function LoginForm() {
     const router = useRouter();
@@ -23,6 +24,9 @@ export function LoginForm() {
             management: user.management,
             token: token
         }
+        setCookie(undefined, 'auth-token', String(token), {
+            maxAge: 24 * 60 * 60, // 1 day
+        })
         dispatch(setUserReducer(newUser))
         router.push('/dashboard/main')
     }
@@ -61,6 +65,7 @@ export function LoginForm() {
         <div className={styles.loginFormContainer}>
             <header className={styles.header}>
                 <Image src={logo}
+                    priority
                     width={50}
                     height={50}
                     alt="Agrotech" />

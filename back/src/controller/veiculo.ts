@@ -62,12 +62,15 @@ export const buscarIndisponivel = (req: Request, res: Response) => {
 }
 
 export const inserir = (req: Request, res: Response) => {
+
+    const { model, plate, avaliable, type } = req.body;
+
     prisma.vehicle.create({
         data: {
-            model: req.body.model,
-            plate: req.body.plate,
-            avaliable: req.body.avaliable,
-            type: req.body.type
+            model: model,
+            plate: plate,
+            avaliable: avaliable,
+            type: type
         },
     }).then((vehicle) => {
         res.json(vehicle).status(201).end();
@@ -77,14 +80,18 @@ export const inserir = (req: Request, res: Response) => {
 }
 
 export const alterar = (req: Request, res: Response) => {
+
+    const { model, plate, avaliable, type } = req.body;
+
     prisma.vehicle.update({
         where: {
             id: Number(req.params.id),
         },
         data: {
-            model: req.body.model,
-            plate: req.body.plate,
-            avaliable: req.body.avaliable,
+            model: model,
+            plate: plate,
+            avaliable: avaliable,
+            type: type
         },
     }).then((vehicle) => {
         res.json(vehicle).status(201).end();

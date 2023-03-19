@@ -1,7 +1,10 @@
 import express from 'express'
 import {
-    listar, inserir, alterar,
-    deletar, listarUm,
+    listar, 
+    inserir, 
+    alterar,
+    deletar, 
+    listarUm,
     alterarDisponibilidade,
     buscarDisponivel,
     buscarIndisponivel,
@@ -10,7 +13,6 @@ import {
 import { auth } from '../middlewares/middlewares'
 
 export const routerVeiculo = express.Router()
-
 
 routerVeiculo.get('/veiculo', listar)
 routerVeiculo.get('/veiculosFiltro', listarVarios)
